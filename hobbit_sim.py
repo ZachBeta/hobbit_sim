@@ -56,6 +56,24 @@ def find_nearest_hobbit(nazgul_x, nazgul_y, hobbits):
 
     return nearest
 
+def update_hobbits(hobbits, rivendell):
+    """Move all hobbits toward Rivendell. Returns new hobbit positions."""
+    new_hobbits = []
+    for hx, hy in hobbits:
+        new_x, new_y = move_toward(hx, hy, rivendell[0], rivendell[1])
+        new_hobbits.append((new_x, new_y))
+    return new_hobbits
+
+def update_nazgul(nazgul, hobbits):
+    """Move all Nazgûl toward nearest hobbit. Returns new Nazgûl positions."""
+    new_nazgul = []
+    for nx, ny in nazgul:
+        target = find_nearest_hobbit(nx, ny, hobbits)
+        if target:
+            new_x, new_y = move_toward(nx, ny, target[0], target[1])
+            new_nazgul.append((new_x, new_y))
+    return new_nazgul
+
 def run_simulation():
     """Run the main simulation"""
     WIDTH = 20
@@ -119,21 +137,9 @@ def run_simulation():
             print("💀 Defeat! All hobbits were caught!")
             break
 
-        # Move hobbits toward Rivendell
-        new_hobbits = []
-        for hx, hy in hobbits:
-            new_x, new_y = move_toward(hx, hy, rivendell[0], rivendell[1])
-            new_hobbits.append((new_x, new_y))
-        hobbits = new_hobbits
-
-        # Move Nazgûl toward nearest hobbit
-        new_nazgul = []
-        for nx, ny in nazgul:
-            target = find_nearest_hobbit(nx, ny, hobbits)
-            if target:
-                new_x, new_y = move_toward(nx, ny, target[0], target[1])
-                new_nazgul.append((new_x, new_y))
-        nazgul = new_nazgul
+        # Move entities
+        hobbits = update_hobbits(hobbits, rivendell)
+        nazgul = update_nazgul(nazgul, hobbits)
 
         # Check for captures (Nazgûl on same square as hobbit)
         hobbits_to_remove = []
