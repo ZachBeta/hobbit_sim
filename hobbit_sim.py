@@ -56,21 +56,39 @@ def find_nearest_hobbit(nazgul_x, nazgul_y, hobbits):
 
     return nearest
 
-def update_hobbits(hobbits, rivendell):
-    """Move all hobbits toward Rivendell. Returns new hobbit positions."""
+def move_with_speed(x, y, target_x, target_y, speed, width, height):
+    """Move toward target for 'speed' steps, stopping at boundaries."""
+    current_x, current_y = x, y
+
+    for step in range(speed):
+        new_x, new_y = move_toward(current_x, current_y, target_x, target_y)
+
+        # Check boundaries
+        if 0 <= new_x < width and 0 <= new_y < height:
+            current_x, current_y = new_x, new_y
+        else:
+            # Hit boundary, stop moving
+            break
+
+    return current_x, current_y
+
+def update_hobbits(hobbits, rivendell, width, height):
+    """Move all hobbits toward Rivendell at speed 2. Returns new hobbit positions."""
     new_hobbits = []
     for hx, hy in hobbits:
-        new_x, new_y = move_toward(hx, hy, rivendell[0], rivendell[1])
+        new_x, new_y = move_with_speed(hx, hy, rivendell[0], rivendell[1],
+                                       speed=2, width=width, height=height)
         new_hobbits.append((new_x, new_y))
     return new_hobbits
 
-def update_nazgul(nazgul, hobbits):
-    """Move all Nazgûl toward nearest hobbit. Returns new Nazgûl positions."""
+def update_nazgul(nazgul, hobbits, width, height):
+    """Move all Nazgûl toward nearest hobbit at speed 1. Returns new Nazgûl positions."""
     new_nazgul = []
     for nx, ny in nazgul:
         target = find_nearest_hobbit(nx, ny, hobbits)
         if target:
-            new_x, new_y = move_toward(nx, ny, target[0], target[1])
+            new_x, new_y = move_with_speed(nx, ny, target[0], target[1],
+                                          speed=1, width=width, height=height)
             new_nazgul.append((new_x, new_y))
     return new_nazgul
 
@@ -138,8 +156,8 @@ def run_simulation():
             break
 
         # Move entities
-        hobbits = update_hobbits(hobbits, rivendell)
-        nazgul = update_nazgul(nazgul, hobbits)
+        hobbits = update_hobbits(hobbits, rivendell, WIDTH, HEIGHT)
+        nazgul = update_nazgul(nazgul, hobbits, WIDTH, HEIGHT)
 
         # Check for captures (Nazgûl on same square as hobbit)
         hobbits_to_remove = []
