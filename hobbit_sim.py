@@ -193,13 +193,11 @@ def run_simulation():
         print(f"Hobbits remaining: {len(hobbits)}")
         print_grid(grid)
 
-        # Check win condition
-        hobbits_at_rivendell = [h for h in hobbits if h == rivendell]
-        if hobbits_at_rivendell:
-            print("🎉 Victory! A hobbit reached Rivendell!")
+        # Check win condition if all hobbits are at Rivendell
+        if all(h == rivendell for h in hobbits):
+            print("🎉 Victory! All hobbits reached Rivendell!")
             break
-
-        # Check lose condition
+        # Check lose condition if all hobbits are caught
         if not hobbits:
             print("💀 Defeat! All hobbits were caught!")
             break
