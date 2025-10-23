@@ -32,8 +32,8 @@ def move_toward(current_x, current_y, target_x, target_y):
         new_x += 1
     elif current_x > target_x:
         new_x -= 1
-    # Then Y axis if X is aligned
-    elif current_y < target_y:
+
+    if current_y < target_y:
         new_y += 1
     elif current_y > target_y:
         new_y -= 1
@@ -72,13 +72,62 @@ def move_with_speed(x, y, target_x, target_y, speed, width, height):
 
     return current_x, current_y
 
-def update_hobbits(hobbits, rivendell, width, height):
+def find_nearest_nazgul(hobbit_x, hobbit_y, nazgul):
+    """Find nearest Nazgûl and distance. Returns (nazgul_pos, distance) or (None, infinity)"""
+    if not nazgul:
+        return None, float('inf')
+
+    nearest = nazgul[0]
+    min_dist = abs(hobbit_x - nearest[0]) + abs(hobbit_y - nearest[1])
+
+    for naz in nazgul[1:]:
+        dist = abs(hobbit_x - naz[0]) + abs(hobbit_y - naz[1])
+        if dist < min_dist:
+            min_dist = dist
+            nearest = naz
+
+    return nearest, min_dist
+
+def move_away_from(current_x, current_y, threat_x, threat_y):
+    """Move one step AWAY from threat. Returns new (x, y)"""
+    new_x = current_x
+    new_y = current_y
+
+    # Move opposite direction on X axis first
+    if current_x < threat_x:
+        new_x -= 1
+    elif current_x > threat_x:
+        new_x += 1
+
+    if current_y < threat_y:
+        new_y -= 1
+    elif current_y > threat_y:
+        new_y += 1
+
+    return new_x, new_y
+
+def update_hobbits(hobbits, rivendell, nazgul, width, height):
     """Move all hobbits toward Rivendell at speed 2. Returns new hobbit positions."""
     new_hobbits = []
+    DANGER_DISTANCE = 6
+
     for hx, hy in hobbits:
-        new_x, new_y = move_with_speed(hx, hy, rivendell[0], rivendell[1],
-                                       speed=2, width=width, height=height)
-        new_hobbits.append((new_x, new_y))
+        nearest_naz, distance = find_nearest_nazgul(hx, hy, nazgul)
+
+        if distance <= DANGER_DISTANCE:
+            # PANIC! Run away from Nazgûl
+            current_x, current_y = hx, hy
+            for step in range(2):  # speed 2
+                new_x, new_y = move_away_from(current_x, current_y, nearest_naz[0], nearest_naz[1])
+                if 0 <= new_x < width and 0 <= new_y < height:
+                    current_x, current_y = new_x, new_y
+            new_hobbits.append((current_x, current_y))
+        else:
+            # Safe - move toward Rivendell
+            new_x, new_y = move_with_speed(hx, hy, rivendell[0], rivendell[1],
+                                           speed=2, width=width, height=height)
+            new_hobbits.append((new_x, new_y))
+
     return new_hobbits
 
 def update_nazgul(nazgul, hobbits, width, height):
@@ -102,23 +151,23 @@ def run_simulation():
 
     # Initialize hobbits (x, y)
     hobbits = [
-        (1, 0),
-        (0, 1),
-        (1, 1),
-        (2, 1)
+        (1, 0), # Pippin
+        (0, 1), # Sam
+        (1, 1), # Frodo
+        # (2, 1) # Merry
     ]
 
     # Initialize Nazgûl
     nazgul = [
-        (10, 10),
-        (15, 5),
-        (8, 15),
-        (12, 3),
-        (5, 8),
-        (18, 12),
-        (7, 7),
-        (14, 14),
-        (11, 18)
+        # (10, 10), # manhattan distance 20
+        # (15, 5), # manhattan distance 20
+        # (8, 15), # manhattan distance 23
+        # (12, 3), # manhattan distance 15
+        # (5, 8), # manhattan distance 13
+        (18, 12), # manhattan distance 30
+        #(7, 7), # manhattan distance 14
+        # (14, 14), # manhattan distance 28
+        #(11, 18) # manhattan distance 29
     ]
 
     tick = 0
@@ -156,7 +205,7 @@ def run_simulation():
             break
 
         # Move entities
-        hobbits = update_hobbits(hobbits, rivendell, WIDTH, HEIGHT)
+        hobbits = update_hobbits(hobbits, rivendell, nazgul, WIDTH, HEIGHT)
         nazgul = update_nazgul(nazgul, hobbits, WIDTH, HEIGHT)
 
         # Check for captures (Nazgûl on same square as hobbit)
