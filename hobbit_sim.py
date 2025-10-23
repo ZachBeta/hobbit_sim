@@ -1,8 +1,11 @@
 # hobbit_sim.py
 import time
 
+Position = tuple[int, int]
+Grid = list[list[str]]
+EntityPositions = list[Position]
 
-def create_grid(width=20, height=20):
+def create_grid(width: int = 20, height: int = 20) -> Grid:
     """Create a 2D grid filled with empty spaces"""
     grid = []
     for _y in range(height):
@@ -13,20 +16,20 @@ def create_grid(width=20, height=20):
     return grid
 
 
-def print_grid(grid):
+def print_grid(grid: Grid) -> None:
     """Print the grid with all entities"""
     for row in grid:
         print(" ".join(row))
     print()
 
 
-def place_entity(grid, x, y, symbol):
+def place_entity(grid: Grid, x: int, y: int, symbol: str) -> None:
     """Place an entity on the grid at position (x, y)"""
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         grid[y][x] = symbol
 
 
-def move_toward(current_x, current_y, target_x, target_y):
+def move_toward(current_x: int, current_y: int, target_x: int, target_y: int) -> Position:
     """Move one step toward target. Returns new (x, y)"""
     new_x = current_x
     new_y = current_y
@@ -45,7 +48,7 @@ def move_toward(current_x, current_y, target_x, target_y):
     return new_x, new_y
 
 
-def find_nearest_hobbit(nazgul_x, nazgul_y, hobbits):
+def find_nearest_hobbit(nazgul_x: int, nazgul_y: int, hobbits: EntityPositions) -> Position | None:
     """Find the nearest hobbit to this Nazgûl"""
     if not hobbits:
         return None
@@ -62,7 +65,7 @@ def find_nearest_hobbit(nazgul_x, nazgul_y, hobbits):
     return nearest
 
 
-def move_with_speed(x, y, target_x, target_y, speed, width, height):
+def move_with_speed(x: int, y: int, target_x: int, target_y: int, speed: int, width: int, height: int) -> Position:
     """Move toward target for 'speed' steps, stopping at boundaries."""
     current_x, current_y = x, y
 
@@ -79,7 +82,7 @@ def move_with_speed(x, y, target_x, target_y, speed, width, height):
     return current_x, current_y
 
 
-def find_nearest_nazgul(hobbit_x, hobbit_y, nazgul):
+def find_nearest_nazgul(hobbit_x: int, hobbit_y: int, nazgul: EntityPositions) -> tuple[Position | None, float]:
     """Find nearest Nazgûl and distance. Returns (nazgul_pos, distance) or (None, infinity)"""
     if not nazgul:
         return None, float("inf")
@@ -96,7 +99,7 @@ def find_nearest_nazgul(hobbit_x, hobbit_y, nazgul):
     return nearest, min_dist
 
 
-def move_away_from(current_x, current_y, threat_x, threat_y):
+def move_away_from(current_x: int, current_y: int, threat_x: int, threat_y: int) -> Position:
     """Move one step AWAY from threat. Returns new (x, y)"""
     new_x = current_x
     new_y = current_y
@@ -115,7 +118,7 @@ def move_away_from(current_x, current_y, threat_x, threat_y):
     return new_x, new_y
 
 
-def update_hobbits(hobbits, rivendell, nazgul, width, height):
+def update_hobbits(hobbits: EntityPositions, rivendell: Position, nazgul: EntityPositions, width: int, height: int) -> EntityPositions:
     """Move all hobbits toward Rivendell at speed 2. Returns new hobbit positions."""
     new_hobbits = []
     DANGER_DISTANCE = 6
@@ -149,7 +152,7 @@ def update_hobbits(hobbits, rivendell, nazgul, width, height):
     return new_hobbits
 
 
-def update_nazgul(nazgul, hobbits, width, height):
+def update_nazgul(nazgul: EntityPositions, hobbits: EntityPositions, width: int, height: int) -> EntityPositions:
     """Move all Nazgûl toward nearest hobbit at speed 1. Returns new Nazgûl positions."""
     new_nazgul = []
     for nx, ny in nazgul:
@@ -162,7 +165,7 @@ def update_nazgul(nazgul, hobbits, width, height):
     return new_nazgul
 
 
-def run_simulation():
+def run_simulation() -> None:
     """Run the main simulation"""
     WIDTH = 20
     HEIGHT = 20

@@ -100,3 +100,39 @@ def test_hobbit_can_move_onto_nazgul_square_for_capture():
 
     # Movement should happen (even though it leads to capture)
     assert new_hobbits[0] != (9, 10), "Hobbit should be able to move"
+
+# test_hobbit_sim.py
+
+def test_system_three_hobbits_escape_single_rider():
+    """
+    System test: Full simulation scenario
+    - 3 hobbits start near (0,0)
+    - 1 Nazgûl at (18, 12) - far away
+    - All hobbits should reach Rivendell (19, 19)
+    """
+    # Starting positions (match current simulation)
+    hobbits = [(1, 0), (0, 1), (1, 1)]
+    nazgul = [(18, 12)]
+    rivendell = (19, 19)
+    WIDTH, HEIGHT = 20, 20
+
+    # Run simulation (max 100 ticks to prevent infinite loop)
+    for tick in range(100):
+        # Check win condition
+        if all(h == rivendell for h in hobbits):
+            assert len(hobbits) == 3, "All 3 hobbits should escape"
+            return  # Success!
+
+        # Check lose condition
+        if not hobbits:
+            pytest.fail("All hobbits were caught - simulation failed")
+
+        # Move entities
+        hobbits = update_hobbits(hobbits, rivendell, nazgul, WIDTH, HEIGHT)
+        nazgul = update_nazgul(nazgul, hobbits, WIDTH, HEIGHT)
+
+        # Check captures
+        hobbits_to_remove = [h for h in hobbits if h in nazgul]
+        hobbits = [h for h in hobbits if h not in hobbits_to_remove]
+
+    pytest.fail("Simulation didn't complete in 100 ticks")
