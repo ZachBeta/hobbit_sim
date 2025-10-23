@@ -136,3 +136,16 @@ def test_system_three_hobbits_escape_single_rider():
         hobbits = [h for h in hobbits if h not in hobbits_to_remove]
 
     pytest.fail("Simulation didn't complete in 100 ticks")
+
+def test_create_world_returns_valid_state():
+    """World initialization returns all required components"""
+    from hobbit_sim import create_world
+
+    world = create_world()
+
+    assert world["width"] == 20
+    assert world["height"] == 20
+    assert world["rivendell"] == (19, 19)
+    assert len(world["hobbits"]) == 3
+    assert len(world["nazgul"]) == 1
+    assert isinstance(world["terrain"], set)

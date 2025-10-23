@@ -193,37 +193,55 @@ def update_nazgul(nazgul: EntityPositions, hobbits: EntityPositions, width: int,
     return new_nazgul
 
 
-def run_simulation() -> None:
-    """Run the main simulation"""
-    WIDTH = 20
-    HEIGHT = 20
+def create_world():
+    """Initialize world state (terrain, entities, landmarks)
 
-    # Goal location
+    Returns dict with:
+    - width, height: grid dimensions
+    - rivendell: goal position
+    - terrain: set of impassable coordinates (empty for now)
+    - hobbits: list of hobbit positions
+    - nazgul: list of nazgul positions
+    """
+    WIDTH, HEIGHT = 20, 20
     rivendell = (19, 19)
 
-    # Initialize hobbits (x, y)
+    # Terrain (empty set for now - we'll add borders in next step)
+    terrain = set()
+
+    # Initialize hobbits
     hobbits = [
         (1, 0),  # Pippin
         (0, 1),  # Sam
         (1, 1),  # Frodo
-        # (2, 1) # Merry
     ]
 
     # Initialize Nazgûl
     nazgul = [
-        # (10, 10), # manhattan distance 20
-        # (15, 5), # manhattan distance 20
-        # (8, 15), # manhattan distance 23
-        # (12, 3), # manhattan distance 15
-        # (5, 8), # manhattan distance 13
-        (18, 12),  # manhattan distance 30
-        # (7, 7), # manhattan distance 14
-        # (14, 14), # manhattan distance 28
-        # (11, 18) # manhattan distance 29
+        (18, 12),  # Far from hobbits
     ]
 
-    tick = 0
+    return {
+        "width": WIDTH,
+        "height": HEIGHT,
+        "rivendell": rivendell,
+        "terrain": terrain,
+        "hobbits": hobbits,
+        "nazgul": nazgul,
+    }
 
+def run_simulation() -> None:
+    """Run the main simulation"""
+
+    # Goal location
+    world = create_world()
+    WIDTH = world["width"]
+    HEIGHT = world["height"]
+    rivendell = world["rivendell"]
+    hobbits = world["hobbits"]
+    nazgul = world["nazgul"]
+
+    tick = 0
     while True:
         # Create fresh grid
         grid = create_grid(WIDTH, HEIGHT)
