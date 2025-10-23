@@ -1,9 +1,18 @@
 # hobbit_sim.py
 import time
+import json
 
 Position = tuple[int, int]
 Grid = list[list[str]]
 EntityPositions = list[Position]
+
+LOG_FILENAME = f"logs/simulation_{time.strftime('%Y-%m-%d_%H-%M-%S')}.jsonl"
+
+def log_event(tick: int, event_type: str, event_data: dict) -> None:
+    """Log an event to the log file"""
+    with open(LOG_FILENAME, "a") as f:
+        json.dump({"tick": tick, "event_type": event_type, "event_data": event_data}, f)
+        f.write("\n")
 
 def create_grid(width: int = 20, height: int = 20) -> Grid:
     """Create a 2D grid filled with empty spaces"""
@@ -118,7 +127,7 @@ def move_away_from(current_x: int, current_y: int, threat_x: int, threat_y: int)
     return new_x, new_y
 
 
-def update_hobbits(hobbits: EntityPositions, rivendell: Position, nazgul: EntityPositions, width: int, height: int) -> EntityPositions:
+def update_hobbits(hobbits: EntityPositions, rivendell: Position, nazgul: EntityPositions, width: int, height: int, tick: int) -> EntityPositions:
     """Move all hobbits toward Rivendell at speed 2. Returns new hobbit positions."""
     new_hobbits = []
     DANGER_DISTANCE = 6
@@ -130,12 +139,15 @@ def update_hobbits(hobbits: EntityPositions, rivendell: Position, nazgul: Entity
             # PANIC! Run away from Nazgûl
             current_x, current_y = hx, hy
             for _step in range(2):  # speed 2
+                log_event(tick, "evasion_attempt", {"hobbit": (hx, hy), "nazgul": nearest_naz})
                 new_x, new_y = move_away_from(current_x, current_y, nearest_naz[0], nearest_naz[1])
 
                 # Check if evasion move is valid
                 if 0 <= new_x < width and 0 <= new_y < height:
                     current_x, current_y = new_x, new_y
+                    log_event(tick, "evasion_success", {"hobbit": (hx, hy), "nazgul": nearest_naz, "new_position": (current_x, current_y)})
                 else:
+                    log_event(tick, "evasion_failure", {"hobbit": (hx, hy), "nazgul": nearest_naz, "new_position": (current_x, current_y)})
                     # Can't evade in that direction - try moving toward goal instead
                     new_x, new_y = move_toward(current_x, current_y, rivendell[0], rivendell[1])
                     if 0 <= new_x < width and 0 <= new_y < height:
@@ -144,6 +156,7 @@ def update_hobbits(hobbits: EntityPositions, rivendell: Position, nazgul: Entity
             new_hobbits.append((current_x, current_y))
         else:
             # Safe - move toward Rivendell
+            log_event(tick, "hobbit_movement_attempt", {"hobbit": (hx, hy), "rivendell": rivendell})
             new_x, new_y = move_with_speed(
                 hx, hy, rivendell[0], rivendell[1], speed=2, width=width, height=height
             )
@@ -152,12 +165,14 @@ def update_hobbits(hobbits: EntityPositions, rivendell: Position, nazgul: Entity
     return new_hobbits
 
 
-def update_nazgul(nazgul: EntityPositions, hobbits: EntityPositions, width: int, height: int) -> EntityPositions:
+def update_nazgul(nazgul: EntityPositions, hobbits: EntityPositions, width: int, height: int, tick: int) -> EntityPositions:
     """Move all Nazgûl toward nearest hobbit at speed 1. Returns new Nazgûl positions."""
     new_nazgul = []
     for nx, ny in nazgul:
+        log_event(tick, "nazgul_movement_attempt", {"nazgul": (nx, ny), "hobbits": hobbits})
         target = find_nearest_hobbit(nx, ny, hobbits)
         if target:
+            log_event(tick, "nazgul_movement", {"nazgul": (nx, ny), "hobbit": target})
             new_x, new_y = move_with_speed(
                 nx, ny, target[0], target[1], speed=1, width=width, height=height
             )
@@ -219,16 +234,18 @@ def run_simulation() -> None:
 
         # Check win condition if all hobbits are at Rivendell
         if all(h == rivendell for h in hobbits):
+            log_event(tick, "victory", {"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell})
             print("🎉 Victory! All hobbits reached Rivendell!")
             break
         # Check lose condition if all hobbits are caught
         if not hobbits:
+            log_event(tick, "defeat", {"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell})
             print("💀 Defeat! All hobbits were caught!")
             break
 
         # Move entities
-        hobbits = update_hobbits(hobbits, rivendell, nazgul, WIDTH, HEIGHT)
-        nazgul = update_nazgul(nazgul, hobbits, WIDTH, HEIGHT)
+        hobbits = update_hobbits(hobbits, rivendell, nazgul, WIDTH, HEIGHT, tick=tick)
+        nazgul = update_nazgul(nazgul, hobbits, WIDTH, HEIGHT, tick=tick)
 
         # Check for captures (Nazgûl on same square as hobbit)
         hobbits_to_remove = []
@@ -236,12 +253,13 @@ def run_simulation() -> None:
             for naz in nazgul:
                 if hobbit == naz:
                     hobbits_to_remove.append(hobbit)
+                    log_event(tick, "hobbit_captured", {"hobbit": hobbit, "nazgul": naz})
                     print(f"💀 Hobbit caught at {hobbit}!")
                     break
 
         for h in hobbits_to_remove:
             hobbits.remove(h)
-
+        log_event(tick, "hobbits_removed", {"hobbits": hobbits_to_remove})
         tick += 1
         time.sleep(0.3)  # Slow down for readability
 
