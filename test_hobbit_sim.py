@@ -1,5 +1,5 @@
 # test_hobbit_sim.py
-from hobbit_sim import move_away_from, move_with_speed, update_hobbits
+from hobbit_sim import move_away_from, move_with_speed, update_hobbits, find_nearest_nazgul, move_toward, find_nearest_hobbit
 
 def test_hobbit_evading_at_south_edge_doesnt_get_stuck():
     """
@@ -21,3 +21,22 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck():
     # Assert: Hobbit moved laterally toward goal (east), not stuck going south
     assert new_hobbits[0][0] > 10, "Hobbit should move east toward goal"
     assert new_hobbits[0][1] == 19, "Hobbit should stay on south edge"
+
+def test_move_toward_moves_diagonally():
+    assert move_toward(10, 10, 11, 11) == (11, 11)
+
+def test_move_away_from_moves_opposite_direction():
+    assert move_away_from(10, 10, 11, 11) == (9, 9)
+
+def test_find_nearest_nazgul_returns_closest():
+    assert find_nearest_nazgul(10, 10, [(11, 11), (9, 10)]) == ((9, 10), 1)
+
+def test_move_with_speed_stops_at_boundary():
+    assert move_with_speed(10, 10, 11, 11, 1, 20, 20) == (11, 11)
+
+
+def test_find_nearest_hobbit_returns_closest():
+    assert find_nearest_hobbit(10, 10, [(11, 11), (9, 10)]) == (9, 10)
+
+def test_find_nearest_hobbit_with_no_hobbits():
+    assert find_nearest_hobbit(10, 10, []) is None
