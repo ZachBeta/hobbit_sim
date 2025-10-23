@@ -1,6 +1,15 @@
 # test_hobbit_sim.py
 import pytest
-from hobbit_sim import move_away_from, move_with_speed, update_hobbits, find_nearest_nazgul, move_toward, find_nearest_hobbit, update_nazgul
+from hobbit_sim import (
+    move_away_from,
+    move_with_speed,
+    update_hobbits,
+    find_nearest_nazgul,
+    move_toward,
+    find_nearest_hobbit,
+    update_nazgul,
+)
+
 
 def test_hobbit_evading_at_south_edge_doesnt_get_stuck():
     """
@@ -10,7 +19,7 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck():
     """
     # Setup: Hobbit at south edge, Nazgûl to the north
     hobbits = [(10, 19)]  # At south edge
-    nazgul = [(10, 15)]   # 4 squares north (within danger distance 6)
+    nazgul = [(10, 15)]  # 4 squares north (within danger distance 6)
     rivendell = (19, 19)  # Goal is east along same edge
 
     # Move hobbits (should evade)
@@ -23,14 +32,18 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck():
     assert new_hobbits[0][0] > 10, "Hobbit should move east toward goal"
     assert new_hobbits[0][1] == 19, "Hobbit should stay on south edge"
 
+
 def test_move_toward_moves_diagonally():
     assert move_toward(10, 10, 11, 11) == (11, 11)
+
 
 def test_move_away_from_moves_opposite_direction():
     assert move_away_from(10, 10, 11, 11) == (9, 9)
 
+
 def test_find_nearest_nazgul_returns_closest():
     assert find_nearest_nazgul(10, 10, [(11, 11), (9, 10)]) == ((9, 10), 1)
+
 
 def test_move_with_speed_stops_at_boundary():
     assert move_with_speed(10, 10, 11, 11, 1, 20, 20) == (11, 11)
@@ -39,8 +52,10 @@ def test_move_with_speed_stops_at_boundary():
 def test_find_nearest_hobbit_returns_closest():
     assert find_nearest_hobbit(10, 10, [(11, 11), (9, 10)]) == (9, 10)
 
+
 def test_find_nearest_hobbit_with_no_hobbits():
     assert find_nearest_hobbit(10, 10, []) is None
+
 
 # skip
 @pytest.mark.skip(reason="Not implemented")
@@ -57,6 +72,7 @@ def test_hobbits_cannot_stack_on_same_square():
     # Should have 2 distinct positions (no stacking)
     assert len(set(new_hobbits)) == 2, "Hobbits should not stack"
 
+
 @pytest.mark.skip(reason="Not implemented")
 def test_nazgul_cannot_stack_on_same_square():
     """Two Nazgûl chasing same hobbit shouldn't stack"""
@@ -68,6 +84,7 @@ def test_nazgul_cannot_stack_on_same_square():
 
     # Should have 2 distinct positions
     assert len(set(new_nazgul)) == 2, "Nazgûl should not stack"
+
 
 @pytest.mark.skip(reason="Not implemented")
 def test_hobbit_can_move_onto_nazgul_square_for_capture():

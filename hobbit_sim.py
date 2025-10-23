@@ -1,26 +1,30 @@
 # hobbit_sim.py
 import time
 
+
 def create_grid(width=20, height=20):
     """Create a 2D grid filled with empty spaces"""
     grid = []
     for y in range(height):
         row = []
         for x in range(width):
-            row.append('.')
+            row.append(".")
         grid.append(row)
     return grid
+
 
 def print_grid(grid):
     """Print the grid with all entities"""
     for row in grid:
-        print(' '.join(row))
+        print(" ".join(row))
     print()
+
 
 def place_entity(grid, x, y, symbol):
     """Place an entity on the grid at position (x, y)"""
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         grid[y][x] = symbol
+
 
 def move_toward(current_x, current_y, target_x, target_y):
     """Move one step toward target. Returns new (x, y)"""
@@ -40,6 +44,7 @@ def move_toward(current_x, current_y, target_x, target_y):
 
     return new_x, new_y
 
+
 def find_nearest_hobbit(nazgul_x, nazgul_y, hobbits):
     """Find the nearest hobbit to this Nazgûl"""
     if not hobbits:
@@ -55,6 +60,7 @@ def find_nearest_hobbit(nazgul_x, nazgul_y, hobbits):
             nearest = hobbit
 
     return nearest
+
 
 def move_with_speed(x, y, target_x, target_y, speed, width, height):
     """Move toward target for 'speed' steps, stopping at boundaries."""
@@ -72,10 +78,11 @@ def move_with_speed(x, y, target_x, target_y, speed, width, height):
 
     return current_x, current_y
 
+
 def find_nearest_nazgul(hobbit_x, hobbit_y, nazgul):
     """Find nearest Nazgûl and distance. Returns (nazgul_pos, distance) or (None, infinity)"""
     if not nazgul:
-        return None, float('inf')
+        return None, float("inf")
 
     nearest = nazgul[0]
     min_dist = abs(hobbit_x - nearest[0]) + abs(hobbit_y - nearest[1])
@@ -87,6 +94,7 @@ def find_nearest_nazgul(hobbit_x, hobbit_y, nazgul):
             nearest = naz
 
     return nearest, min_dist
+
 
 def move_away_from(current_x, current_y, threat_x, threat_y):
     """Move one step AWAY from threat. Returns new (x, y)"""
@@ -105,6 +113,7 @@ def move_away_from(current_x, current_y, threat_x, threat_y):
         new_y += 1
 
     return new_x, new_y
+
 
 def update_hobbits(hobbits, rivendell, nazgul, width, height):
     """Move all hobbits toward Rivendell at speed 2. Returns new hobbit positions."""
@@ -132,11 +141,13 @@ def update_hobbits(hobbits, rivendell, nazgul, width, height):
             new_hobbits.append((current_x, current_y))
         else:
             # Safe - move toward Rivendell
-            new_x, new_y = move_with_speed(hx, hy, rivendell[0], rivendell[1],
-                                           speed=2, width=width, height=height)
+            new_x, new_y = move_with_speed(
+                hx, hy, rivendell[0], rivendell[1], speed=2, width=width, height=height
+            )
             new_hobbits.append((new_x, new_y))
 
     return new_hobbits
+
 
 def update_nazgul(nazgul, hobbits, width, height):
     """Move all Nazgûl toward nearest hobbit at speed 1. Returns new Nazgûl positions."""
@@ -144,10 +155,12 @@ def update_nazgul(nazgul, hobbits, width, height):
     for nx, ny in nazgul:
         target = find_nearest_hobbit(nx, ny, hobbits)
         if target:
-            new_x, new_y = move_with_speed(nx, ny, target[0], target[1],
-                                          speed=1, width=width, height=height)
+            new_x, new_y = move_with_speed(
+                nx, ny, target[0], target[1], speed=1, width=width, height=height
+            )
             new_nazgul.append((new_x, new_y))
     return new_nazgul
+
 
 def run_simulation():
     """Run the main simulation"""
@@ -159,9 +172,9 @@ def run_simulation():
 
     # Initialize hobbits (x, y)
     hobbits = [
-        (1, 0), # Pippin
-        (0, 1), # Sam
-        (1, 1), # Frodo
+        (1, 0),  # Pippin
+        (0, 1),  # Sam
+        (1, 1),  # Frodo
         # (2, 1) # Merry
     ]
 
@@ -172,10 +185,10 @@ def run_simulation():
         # (8, 15), # manhattan distance 23
         # (12, 3), # manhattan distance 15
         # (5, 8), # manhattan distance 13
-        (18, 12), # manhattan distance 30
-        #(7, 7), # manhattan distance 14
+        (18, 12),  # manhattan distance 30
+        # (7, 7), # manhattan distance 14
         # (14, 14), # manhattan distance 28
-        #(11, 18) # manhattan distance 29
+        # (11, 18) # manhattan distance 29
     ]
 
     tick = 0
@@ -185,16 +198,16 @@ def run_simulation():
         grid = create_grid(WIDTH, HEIGHT)
 
         # Place landmarks
-        place_entity(grid, 0, 0, 'S')  # Shire
-        place_entity(grid, rivendell[0], rivendell[1], 'R')  # Rivendell
+        place_entity(grid, 0, 0, "S")  # Shire
+        place_entity(grid, rivendell[0], rivendell[1], "R")  # Rivendell
 
         # Place hobbits
         for hx, hy in hobbits:
-            place_entity(grid, hx, hy, 'H')
+            place_entity(grid, hx, hy, "H")
 
         # Place Nazgûl
         for nx, ny in nazgul:
-            place_entity(grid, nx, ny, 'N')
+            place_entity(grid, nx, ny, "N")
 
         # Print state
         print(f"=== Tick {tick} ===")
@@ -228,6 +241,7 @@ def run_simulation():
 
         tick += 1
         time.sleep(0.3)  # Slow down for readability
+
 
 if __name__ == "__main__":
     print("Hobbit Nazgûl Escape Simulation - v0")
