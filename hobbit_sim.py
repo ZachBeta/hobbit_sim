@@ -40,10 +40,18 @@ def create_grid(width: int = 20, height: int = 20) -> Grid:
 
 def print_grid(grid: Grid) -> None:
     """Print the grid with all entities"""
-    for row in grid:
-        print(" ".join(row))
+    print(render_grid(grid))
     print()
 
+def render_grid(grid: Grid) -> str:
+    """Return grid as string (for testing and printing)
+
+    Format: "H . .\nN . .\n. . ."
+    """
+    lines = []
+    for row in grid:
+        lines.append(" ".join(row))
+    return "\n".join(lines)
 
 def place_entity(grid: Grid, x: int, y: int, symbol: str) -> None:
     """Place an entity on the grid at position (x, y)"""

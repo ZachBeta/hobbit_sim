@@ -149,3 +149,89 @@ def test_create_world_returns_valid_state():
     assert len(world["hobbits"]) == 3
     assert len(world["nazgul"]) == 1
     assert isinstance(world["terrain"], set)
+
+def test_render_empty_3x3_grid():
+    """Baseline: Can we render an empty grid?"""
+    from hobbit_sim import create_grid, render_grid
+
+    grid = create_grid(3, 3)
+    result = render_grid(grid)
+
+    expected = (
+        ". . .\n"
+        ". . .\n"
+        ". . ."
+    )
+    assert result == expected
+
+def test_render_grid_with_single_hobbit():
+    """Can we see a hobbit on the grid?"""
+    from hobbit_sim import create_grid, place_entity, render_grid
+
+    grid = create_grid(3, 3)
+    place_entity(grid, 1, 1, "H")  # Center
+    result = render_grid(grid)
+
+    expected = (
+        ". . .\n"
+        ". H .\n"
+        ". . ."
+    )
+    assert result == expected
+
+def test_render_grid_with_hobbits_and_nazgul():
+    """Can we see hobbits and nazgul together?"""
+    from hobbit_sim import create_grid, place_entity, render_grid
+
+    grid = create_grid(4, 4)
+    place_entity(grid, 0, 0, "H")  # Hobbit top-left
+    place_entity(grid, 3, 3, "N")  # Nazgul bottom-right
+    place_entity(grid, 1, 2, "H")  # Another hobbit
+    result = render_grid(grid)
+
+    expected = (
+        "H . . .\n"
+        ". . . .\n"
+        ". H . .\n"
+        ". . . N"
+    )
+    assert result == expected
+
+def test_render_grid_with_landmarks():
+    """Complete scene: Shire, Rivendell, entities"""
+    from hobbit_sim import create_grid, place_entity, render_grid
+
+    grid = create_grid(5, 5)
+    place_entity(grid, 0, 0, "S")  # Shire
+    place_entity(grid, 4, 4, "R")  # Rivendell
+    place_entity(grid, 1, 1, "H")  # Hobbit
+    place_entity(grid, 3, 2, "N")  # Nazgul
+    result = render_grid(grid)
+
+    expected = (
+        "S . . . .\n"
+        ". H . . .\n"
+        ". . . N .\n"
+        ". . . . .\n"
+        ". . . . R"
+    )
+    assert result == expected
+
+@pytest.mark.skip(reason="Not implemented")
+# FUTURE: When we add individual hobbit symbols
+def test_render_grid_with_named_hobbits():
+    """RED: This will fail until we implement Phase 3"""
+    from hobbit_sim import create_grid, place_entity, render_grid
+    grid = create_grid(4, 4)
+    place_entity(grid, 0, 0, "F")  # Frodo
+    place_entity(grid, 1, 0, "S")  # Sam
+    place_entity(grid, 0, 1, "P")  # Pippin
+    result = render_grid(grid)
+
+    expected = (
+        "F S . .\n"
+        "P . . .\n"
+        ". . . .\n"
+        ". . . ."
+    )
+    assert result == expected  # Will pass once Phase 3 done!
