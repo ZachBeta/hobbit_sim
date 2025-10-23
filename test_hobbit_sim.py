@@ -1,5 +1,6 @@
 # test_hobbit_sim.py
-from hobbit_sim import move_away_from, move_with_speed, update_hobbits, find_nearest_nazgul, move_toward, find_nearest_hobbit
+import pytest
+from hobbit_sim import move_away_from, move_with_speed, update_hobbits, find_nearest_nazgul, move_toward, find_nearest_hobbit, update_nazgul
 
 def test_hobbit_evading_at_south_edge_doesnt_get_stuck():
     """
@@ -40,3 +41,44 @@ def test_find_nearest_hobbit_returns_closest():
 
 def test_find_nearest_hobbit_with_no_hobbits():
     assert find_nearest_hobbit(10, 10, []) is None
+
+# skip
+@pytest.mark.skip(reason="Not implemented")
+def test_hobbits_cannot_stack_on_same_square():
+    """Two hobbits trying to move to same square - second one should be blocked"""
+    hobbits = [(0, 0), (1, 0)]  # Side by side
+    nazgul = [(10, 10)]  # Far away
+    rivendell = (2, 0)  # East
+
+    # Both want to move to (2, 0)
+    # First hobbit gets there, second should be blocked
+    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, width=20, height=20)
+
+    # Should have 2 distinct positions (no stacking)
+    assert len(set(new_hobbits)) == 2, "Hobbits should not stack"
+
+@pytest.mark.skip(reason="Not implemented")
+def test_nazgul_cannot_stack_on_same_square():
+    """Two Nazgûl chasing same hobbit shouldn't stack"""
+    hobbits = [(10, 10)]
+    nazgul = [(8, 10), (12, 10)]  # Both sides of hobbit
+
+    # Both want to move toward (10, 10)
+    new_nazgul = update_nazgul(nazgul, hobbits, width=20, height=20)
+
+    # Should have 2 distinct positions
+    assert len(set(new_nazgul)) == 2, "Nazgûl should not stack"
+
+@pytest.mark.skip(reason="Not implemented")
+def test_hobbit_can_move_onto_nazgul_square_for_capture():
+    """Hobbits and Nazgûl CAN overlap (that's how captures work)"""
+    hobbits = [(9, 10)]
+    nazgul = [(10, 10)]
+    rivendell = (19, 19)
+
+    # Hobbit moving toward Rivendell will pass through Nazgûl
+    # This should be ALLOWED (capture detection happens after movement)
+    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, width=20, height=20)
+
+    # Movement should happen (even though it leads to capture)
+    assert new_hobbits[0] != (9, 10), "Hobbit should be able to move"
