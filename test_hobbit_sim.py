@@ -1,12 +1,13 @@
 # test_hobbit_sim.py
 import pytest
+
 from hobbit_sim import (
+    find_nearest_hobbit,
+    find_nearest_nazgul,
     move_away_from,
+    move_toward,
     move_with_speed,
     update_hobbits,
-    find_nearest_nazgul,
-    move_toward,
-    find_nearest_hobbit,
     update_nazgul,
 )
 
