@@ -1,18 +1,31 @@
 # hobbit_sim.py
 import time
 import json
+import os
+import sys
 
 Position = tuple[int, int]
 Grid = list[list[str]]
 EntityPositions = list[Position]
 
-LOG_FILENAME = f"logs/simulation_{time.strftime('%Y-%m-%d_%H-%M-%S')}.jsonl"
+# Auto-detect environment (Rails-style)
+def _get_log_filename() -> str:
+    """Determine log filename based on environment"""
+    if "pytest" in sys.modules or "PYTEST_CURRENT_TEST" in os.environ:
+        # Test environment - single overwritable log
+        return f"logs/test_{time.strftime('%Y-%m-%d_%H-%M-%S')}.jsonl"
+    else:
+        # Development - timestamped log per run
+        return f"logs/simulation_{time.strftime('%Y-%m-%d_%H-%M-%S')}.jsonl"
+
+LOG_FILENAME = _get_log_filename()
 
 def log_event(tick: int, event_type: str, event_data: dict) -> None:
     """Log an event to the log file"""
     with open(LOG_FILENAME, "a") as f:
         json.dump({"tick": tick, "event_type": event_type, "event_data": event_data}, f)
         f.write("\n")
+
 
 def create_grid(width: int = 20, height: int = 20) -> Grid:
     """Create a 2D grid filled with empty spaces"""

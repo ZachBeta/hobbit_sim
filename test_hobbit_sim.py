@@ -24,7 +24,7 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck():
     rivendell = (19, 19)  # Goal is east along same edge
 
     # Move hobbits (should evade)
-    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, width=20, height=20)
+    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, width=20, height=20, tick=0)
 
     # Assert: Hobbit should have moved (not stuck at same position)
     assert new_hobbits[0] != (10, 19), "Hobbit should move when evading at edge"
@@ -68,7 +68,7 @@ def test_hobbits_cannot_stack_on_same_square():
 
     # Both want to move to (2, 0)
     # First hobbit gets there, second should be blocked
-    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, width=20, height=20)
+    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, width=20, height=20, tick=0)
 
     # Should have 2 distinct positions (no stacking)
     assert len(set(new_hobbits)) == 2, "Hobbits should not stack"
@@ -128,8 +128,8 @@ def test_system_three_hobbits_escape_single_rider():
             pytest.fail("All hobbits were caught - simulation failed")
 
         # Move entities
-        hobbits = update_hobbits(hobbits, rivendell, nazgul, WIDTH, HEIGHT)
-        nazgul = update_nazgul(nazgul, hobbits, WIDTH, HEIGHT)
+        hobbits = update_hobbits(hobbits, rivendell, nazgul, WIDTH, HEIGHT, tick=tick)
+        nazgul = update_nazgul(nazgul, hobbits, WIDTH, HEIGHT, tick=tick)
 
         # Check captures
         hobbits_to_remove = [h for h in hobbits if h in nazgul]
