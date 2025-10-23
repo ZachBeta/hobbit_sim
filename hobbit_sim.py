@@ -5,9 +5,9 @@ import time
 def create_grid(width=20, height=20):
     """Create a 2D grid filled with empty spaces"""
     grid = []
-    for y in range(height):
+    for _y in range(height):
         row = []
-        for x in range(width):
+        for _x in range(width):
             row.append(".")
         grid.append(row)
     return grid
@@ -66,7 +66,7 @@ def move_with_speed(x, y, target_x, target_y, speed, width, height):
     """Move toward target for 'speed' steps, stopping at boundaries."""
     current_x, current_y = x, y
 
-    for step in range(speed):
+    for _step in range(speed):
         new_x, new_y = move_toward(current_x, current_y, target_x, target_y)
 
         # Check boundaries
@@ -126,7 +126,7 @@ def update_hobbits(hobbits, rivendell, nazgul, width, height):
         if distance <= DANGER_DISTANCE:
             # PANIC! Run away from Nazgûl
             current_x, current_y = hx, hy
-            for step in range(2):  # speed 2
+            for _step in range(2):  # speed 2
                 new_x, new_y = move_away_from(current_x, current_y, nearest_naz[0], nearest_naz[1])
 
                 # Check if evasion move is valid
