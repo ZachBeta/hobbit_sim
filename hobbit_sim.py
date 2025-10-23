@@ -119,8 +119,16 @@ def update_hobbits(hobbits, rivendell, nazgul, width, height):
             current_x, current_y = hx, hy
             for step in range(2):  # speed 2
                 new_x, new_y = move_away_from(current_x, current_y, nearest_naz[0], nearest_naz[1])
+
+                # Check if evasion move is valid
                 if 0 <= new_x < width and 0 <= new_y < height:
                     current_x, current_y = new_x, new_y
+                else:
+                    # Can't evade in that direction - try moving toward goal instead
+                    new_x, new_y = move_toward(current_x, current_y, rivendell[0], rivendell[1])
+                    if 0 <= new_x < width and 0 <= new_y < height:
+                        current_x, current_y = new_x, new_y
+
             new_hobbits.append((current_x, current_y))
         else:
             # Safe - move toward Rivendell
