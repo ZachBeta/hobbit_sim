@@ -1,4 +1,11 @@
-* [ ] collision handling
+# Known Issues
+## Terrain
+- [ ] Hobbits get stuck on walls (need pathfinding)
+- [ ] Victory condition counts wrong after captures
+
+##
+* [ ] collision handling of entities - hobbit stacking
+* [ ] distance handling of manhattan distance vs diagonals and speed calculations
 * [ ] Inconsistent signatures:
 ```
 find_nearest_hobbit() -> Position | None          # No distance
