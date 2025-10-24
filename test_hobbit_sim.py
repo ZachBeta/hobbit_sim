@@ -12,7 +12,7 @@ from hobbit_sim import (
 )
 
 
-def test_hobbit_evading_at_south_edge_doesnt_get_stuck():
+def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
     """
     Scenario: Hobbit at bottom edge (y=19), Nazgûl approaching from north
     Bug: Hobbit tries to move south (away), hits boundary, doesn't move at all
@@ -34,33 +34,33 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck():
     assert new_hobbits[0][1] == 19, "Hobbit should stay on south edge"
 
 
-def test_move_toward_moves_diagonally():
+def test_move_toward_moves_diagonally() -> None:
     assert move_toward(10, 10, 11, 11) == (11, 11)
 
 
-def test_move_away_from_moves_opposite_direction():
+def test_move_away_from_moves_opposite_direction() -> None:
     assert move_away_from(10, 10, 11, 11) == (9, 9)
 
 
-def test_find_nearest_nazgul_returns_closest():
+def test_find_nearest_nazgul_returns_closest() -> None:
     assert find_nearest_nazgul(10, 10, [(11, 11), (9, 10)]) == ((9, 10), 1)
 
 
-def test_move_with_speed_stops_at_boundary():
+def test_move_with_speed_stops_at_boundary() -> None:
     assert move_with_speed(10, 10, 11, 11, 1, 20, 20) == (11, 11)
 
 
-def test_find_nearest_hobbit_returns_closest():
+def test_find_nearest_hobbit_returns_closest() -> None:
     assert find_nearest_hobbit(10, 10, [(11, 11), (9, 10)]) == (9, 10)
 
 
-def test_find_nearest_hobbit_with_no_hobbits():
+def test_find_nearest_hobbit_with_no_hobbits() -> None:
     assert find_nearest_hobbit(10, 10, []) is None
 
 
 # skip
 @pytest.mark.skip(reason="Not implemented")
-def test_hobbits_cannot_stack_on_same_square():
+def test_hobbits_cannot_stack_on_same_square() -> None:
     """Two hobbits trying to move to same square - second one should be blocked"""
     hobbits = [(0, 0), (1, 0)]  # Side by side
     nazgul = [(10, 10)]  # Far away
@@ -75,20 +75,20 @@ def test_hobbits_cannot_stack_on_same_square():
 
 
 @pytest.mark.skip(reason="Not implemented")
-def test_nazgul_cannot_stack_on_same_square():
+def test_nazgul_cannot_stack_on_same_square() -> None:
     """Two Nazgûl chasing same hobbit shouldn't stack"""
     hobbits = [(10, 10)]
     nazgul = [(8, 10), (12, 10)]  # Both sides of hobbit
 
     # Both want to move toward (10, 10)
-    new_nazgul = update_nazgul(nazgul, hobbits, width=20, height=20)
+    new_nazgul = update_nazgul(nazgul, hobbits, width=20, height=20, tick=0)
 
     # Should have 2 distinct positions
     assert len(set(new_nazgul)) == 2, "Nazgûl should not stack"
 
 
 @pytest.mark.skip(reason="Not implemented")
-def test_hobbit_can_move_onto_nazgul_square_for_capture():
+def test_hobbit_can_move_onto_nazgul_square_for_capture() -> None:
     """Hobbits and Nazgûl CAN overlap (that's how captures work)"""
     hobbits = [(9, 10)]
     nazgul = [(10, 10)]
@@ -96,14 +96,16 @@ def test_hobbit_can_move_onto_nazgul_square_for_capture():
 
     # Hobbit moving toward Rivendell will pass through Nazgûl
     # This should be ALLOWED (capture detection happens after movement)
-    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, width=20, height=20)
+    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, width=20, height=20, tick=0)
 
     # Movement should happen (even though it leads to capture)
     assert new_hobbits[0] != (9, 10), "Hobbit should be able to move"
 
+
 # test_hobbit_sim.py
 
-def test_system_three_hobbits_escape_single_rider():
+
+def test_system_three_hobbits_escape_single_rider() -> None:
     """
     System test: Full simulation scenario
     - 3 hobbits start near (0,0)
@@ -137,7 +139,8 @@ def test_system_three_hobbits_escape_single_rider():
 
     pytest.fail("Simulation didn't complete in 100 ticks")
 
-def test_create_world_returns_valid_state():
+
+def test_create_world_returns_valid_state() -> None:
     """World initialization returns all required components"""
     from hobbit_sim import create_world
 
@@ -150,21 +153,19 @@ def test_create_world_returns_valid_state():
     assert len(world["nazgul"]) == 1
     assert isinstance(world["terrain"], set)
 
-def test_render_empty_3x3_grid():
+
+def test_render_empty_3x3_grid() -> None:
     """Baseline: Can we render an empty grid?"""
     from hobbit_sim import create_grid, render_grid
 
     grid = create_grid(3, 3)
     result = render_grid(grid)
 
-    expected = (
-        ". . .\n"
-        ". . .\n"
-        ". . ."
-    )
+    expected = ". . .\n. . .\n. . ."
     assert result == expected
 
-def test_render_grid_with_single_hobbit():
+
+def test_render_grid_with_single_hobbit() -> None:
     """Can we see a hobbit on the grid?"""
     from hobbit_sim import create_grid, place_entity, render_grid
 
@@ -172,14 +173,11 @@ def test_render_grid_with_single_hobbit():
     place_entity(grid, 1, 1, "H")  # Center
     result = render_grid(grid)
 
-    expected = (
-        ". . .\n"
-        ". H .\n"
-        ". . ."
-    )
+    expected = ". . .\n. H .\n. . ."
     assert result == expected
 
-def test_render_grid_with_hobbits_and_nazgul():
+
+def test_render_grid_with_hobbits_and_nazgul() -> None:
     """Can we see hobbits and nazgul together?"""
     from hobbit_sim import create_grid, place_entity, render_grid
 
@@ -189,15 +187,11 @@ def test_render_grid_with_hobbits_and_nazgul():
     place_entity(grid, 1, 2, "H")  # Another hobbit
     result = render_grid(grid)
 
-    expected = (
-        "H . . .\n"
-        ". . . .\n"
-        ". H . .\n"
-        ". . . N"
-    )
+    expected = "H . . .\n. . . .\n. H . .\n. . . N"
     assert result == expected
 
-def test_render_grid_with_landmarks():
+
+def test_render_grid_with_landmarks() -> None:
     """Complete scene: Shire, Rivendell, entities"""
     from hobbit_sim import create_grid, place_entity, render_grid
 
@@ -208,30 +202,110 @@ def test_render_grid_with_landmarks():
     place_entity(grid, 3, 2, "N")  # Nazgul
     result = render_grid(grid)
 
-    expected = (
-        "S . . . .\n"
-        ". H . . .\n"
-        ". . . N .\n"
-        ". . . . .\n"
-        ". . . . R"
-    )
+    expected = "S . . . .\n. H . . .\n. . . N .\n. . . . .\n. . . . R"
     assert result == expected
+
 
 @pytest.mark.skip(reason="Not implemented")
 # FUTURE: When we add individual hobbit symbols
-def test_render_grid_with_named_hobbits():
+def test_render_grid_with_named_hobbits() -> None:
     """RED: This will fail until we implement Phase 3"""
     from hobbit_sim import create_grid, place_entity, render_grid
+
     grid = create_grid(4, 4)
     place_entity(grid, 0, 0, "F")  # Frodo
     place_entity(grid, 1, 0, "S")  # Sam
     place_entity(grid, 0, 1, "P")  # Pippin
     result = render_grid(grid)
 
-    expected = (
-        "F S . .\n"
-        "P . . .\n"
-        ". . . .\n"
-        ". . . ."
-    )
+    expected = "F S . .\nP . . .\n. . . .\n. . . ."
     assert result == expected  # Will pass once Phase 3 done!
+
+
+def test_terrain_creates_borders_with_openings() -> None:
+    """Terrain should have border walls except at Shire and Rivendell"""
+    from hobbit_sim import create_world
+
+    world = create_world()
+    terrain = world["terrain"]
+
+    # Check that borders exist
+    assert (5, 0) in terrain, "Top border should exist"
+    assert (5, 19) in terrain, "Bottom border should exist"
+    assert (0, 5) in terrain, "Left border should exist"
+    assert (19, 5) in terrain, "Right border should exist"
+
+    # Check that Shire and Rivendell are NOT blocked
+    assert (0, 0) not in terrain, "Shire should be passable"
+    assert (19, 19) not in terrain, "Rivendell should be passable"
+
+
+def test_render_world_shows_terrain() -> None:
+    """render_world() should display terrain as # symbols"""
+    from hobbit_sim import create_world, render_world
+
+    world = create_world()
+    result = render_world(world)
+
+    # Check that first row has terrain (borders) and Shire
+    # Row 0: S (Shire), # (borders), ..., # (border)
+    lines = result.split("\n")
+    first_row = lines[0]
+
+    assert "S" in first_row, "Should show Shire"
+    assert "#" in first_row, "Should show terrain borders"
+
+
+def test_hobbit_cannot_move_through_terrain() -> None:
+    """Hobbits should be blocked by terrain walls"""
+    from hobbit_sim import update_hobbits
+
+    # Place hobbit next to a wall
+    hobbits = [(5, 5)]
+    rivendell = (10, 10)
+    nazgul = [(20, 20)]  # Far away, not in danger
+
+    # Create a wall blocking the path
+    terrain = {(6, 5), (6, 6), (5, 6)}  # Wall to the right and diagonal
+
+    # Hobbit wants to move toward (10, 10) but terrain blocks (6, 6)
+    new_hobbits = update_hobbits(
+        hobbits, rivendell, nazgul, width=20, height=20, tick=0, terrain=terrain
+    )
+
+    # Hobbit should NOT be at (6, 6) because terrain blocks it
+    assert new_hobbits[0] != (6, 6), "Hobbit should not move into terrain"
+    # Hobbit should still be at original position or moved to a valid adjacent square
+    assert new_hobbits[0] in [(5, 5), (6, 5), (5, 6)] or (new_hobbits[0] not in terrain), (
+        "Hobbit position should be valid"
+    )
+
+
+def test_nazgul_cannot_move_through_terrain() -> None:
+    """Nazgûl should be blocked by terrain walls"""
+    from hobbit_sim import update_nazgul
+
+    # Place nazgul next to a wall
+    nazgul = [(5, 5)]
+    hobbits = [(10, 10)]  # Target
+
+    # Create a wall blocking the path
+    terrain = {(6, 5), (6, 6), (5, 6)}  # Wall to the right and diagonal
+
+    # Nazgul wants to move toward (10, 10) but terrain blocks
+    new_nazgul = update_nazgul(nazgul, hobbits, width=20, height=20, tick=0, terrain=terrain)
+
+    # Nazgul should NOT be at terrain positions
+    assert new_nazgul[0] not in terrain, "Nazgul should not move into terrain"
+
+
+def test_move_with_speed_stops_at_terrain() -> None:
+    """move_with_speed should stop when hitting terrain"""
+    from hobbit_sim import move_with_speed
+
+    terrain = {(12, 10)}  # Single wall in the path
+
+    # Try to move from (10, 10) to (15, 10) - should stop at (11, 10)
+    result = move_with_speed(10, 10, 15, 10, speed=5, width=20, height=20, terrain=terrain)
+
+    assert result == (11, 10), f"Should stop before terrain at (12, 10), got {result}"
