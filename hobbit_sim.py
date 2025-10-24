@@ -334,6 +334,9 @@ def create_world() -> dict:
         (18, 12),  # Far from hobbits
     ]
 
+    starting_hobbit_count = len(hobbits)
+    starting_nazgul_count = len(nazgul)
+
     return {
         "width": WIDTH,
         "height": HEIGHT,
@@ -341,7 +344,10 @@ def create_world() -> dict:
         "terrain": terrain,
         "hobbits": hobbits,
         "nazgul": nazgul,
+        "starting_hobbit_count": starting_hobbit_count,
+        "starting_nazgul_count": starting_nazgul_count,
     }
+
 
 
 def run_simulation() -> None:
@@ -389,12 +395,11 @@ def run_simulation() -> None:
             )
             print("🎉 Victory! All hobbits reached Rivendell!")
             break
-        # Check lose condition if all hobbits are caught
-        if not hobbits:
+        if len(hobbits) != world["starting_hobbit_count"]:
             log_event(
                 tick, "defeat", {"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell}
             )
-            print("💀 Defeat! All hobbits were caught!")
+            print("💀 Defeat! Some hobbits were caught!")
             break
 
         # Move entities
