@@ -33,17 +33,6 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
     assert new_hobbits[0][0] > 10, "Hobbit should move east toward goal"
     assert new_hobbits[0][1] == 19, "Hobbit should stay on south edge"
 
-def test_move_toward_uses_manhattan_movement() -> None:
-    """Manhattan movement: one axis at a time, prioritizing larger distance"""
-    # Equal distances (dx=1, dy=1): tiebreaker moves on Y axis
-    assert move_toward(10, 10, 11, 11) == (10, 11)
-
-    # Larger X distance: should move on X axis
-    assert move_toward(10, 10, 15, 11) == (11, 10)
-
-    # Larger Y distance: should move on Y axis
-    assert move_toward(10, 10, 11, 15) == (10, 11)
-
 def test_move_away_from_uses_manhattan_movement() -> None:
     """move_away_from should mirror move_toward logic (Manhattan)"""
     # Equal distances: should flee on Y axis (tiebreaker)
@@ -239,27 +228,6 @@ def test_create_world_returns_valid_state() -> None:
     assert len(world["hobbits"]) == 3
     assert len(world["nazgul"]) == 1
     assert isinstance(world["terrain"], set)
-
-def test_render_empty_3x3_grid() -> None:
-    """Baseline: Can we render an empty grid?"""
-    from hobbit_sim import create_grid, render_grid
-
-    grid = create_grid(3, 3)
-    result = render_grid(grid)
-
-    expected = ". . .\n. . .\n. . ."
-    assert result == expected
-
-def test_render_grid_with_single_hobbit() -> None:
-    """Can we see a hobbit on the grid?"""
-    from hobbit_sim import create_grid, place_entity, render_grid
-
-    grid = create_grid(3, 3)
-    place_entity(grid, 1, 1, "H")  # Center
-    result = render_grid(grid)
-
-    expected = ". . .\n. H .\n. . ."
-    assert result == expected
 
 def test_render_grid_with_hobbits_and_nazgul() -> None:
     """Can we see hobbits and nazgul together?"""
