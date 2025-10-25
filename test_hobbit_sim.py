@@ -249,7 +249,7 @@ def test_render_grid_with_hobbits_and_nazgul() -> None:
     """Can we see hobbits and nazgul together?"""
     from hobbit_sim import create_grid, place_entity, render_grid
 
-    grid = create_grid(4, 4)
+    grid = create_grid(dimensions=(4, 4))
     place_entity(grid, (0, 0), "H")  # Hobbit top-left
     place_entity(grid, (3, 3), "N")  # Nazgul bottom-right
     place_entity(grid, (1, 2), "H")  # Another hobbit
@@ -263,7 +263,7 @@ def test_render_grid_with_landmarks() -> None:
     """Complete scene: Shire, Rivendell, entities"""
     from hobbit_sim import create_grid, place_entity, render_grid
 
-    grid = create_grid(5, 5)
+    grid = create_grid(dimensions=(5, 5))
     place_entity(grid, (0, 0), "S")  # Shire
     place_entity(grid, (4, 4), "R")  # Rivendell
     place_entity(grid, (1, 1), "H")  # Hobbit
@@ -280,7 +280,7 @@ def test_render_grid_with_named_hobbits() -> None:
     """RED: This will fail until we implement Phase 3"""
     from hobbit_sim import create_grid, place_entity, render_grid
 
-    grid = create_grid(4, 4)
+    grid = create_grid(dimensions=(4, 4))
     place_entity(grid, (0, 0), "F")  # Frodo
     place_entity(grid, (1, 0), "S")  # Sam
     place_entity(grid, (0, 1), "P")  # Pippin

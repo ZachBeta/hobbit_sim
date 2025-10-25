@@ -31,8 +31,9 @@ def log_event(tick: int, event_type: str, event_data: dict) -> None:
         f.write("\n")
 
 
-def create_grid(width: int = 20, height: int = 20) -> Grid:
+def create_grid(dimensions: GridDimensions = (20, 20)) -> Grid:
     """Create a 2D grid filled with empty spaces"""
+    width, height = dimensions
     grid = []
     for _y in range(height):
         row = []
@@ -58,7 +59,7 @@ def render_world(world: dict) -> str:
     HEIGHT = world["height"]
 
     # Create fresh grid
-    grid = create_grid(WIDTH, HEIGHT)
+    grid = create_grid(dimensions=(WIDTH, HEIGHT))
 
     # Place terrain (if any)
     for terrain_pos in world.get("terrain", []):
@@ -542,7 +543,7 @@ def run_simulation() -> None:
         log_event(tick, "hobbits_removed", {"hobbits": hobbits_to_remove})
 
         # Create fresh grid with NEW positions
-        grid = create_grid(WIDTH, HEIGHT)
+        grid = create_grid(dimensions=(WIDTH, HEIGHT))
 
         # Place terrain
         for terrain_pos in terrain:
