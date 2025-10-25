@@ -24,9 +24,7 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
     rivendell = (18, 18)  # Goal is east along same edge
 
     # Move hobbits (should evade)
-    new_hobbits = update_hobbits(
-        hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0
-    )
+    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0)
 
     # Assert: Hobbit should have moved (not stuck at same position)
     assert new_hobbits[0] != (10, 19), "Hobbit should move when evading at edge"
@@ -39,13 +37,13 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
 def test_move_away_from_uses_manhattan_movement() -> None:
     """move_away_from should mirror move_toward logic (Manhattan)"""
     # Equal distances: should flee on Y axis (tiebreaker)
-    assert move_away_from((10, 10), (11, 11)) == (9, 10)
+    assert move_away_from(current=(10, 10), threat=(11, 11)) == (9, 10)
 
     # Threat to the east (larger dx): flee west
-    assert move_away_from((10, 10), (15, 11)) == (9, 10)
+    assert move_away_from(current=(10, 10), threat=(15, 11)) == (9, 10)
 
     # Threat to the south (larger dy): flee north
-    assert move_away_from((10, 10), (11, 15)) == (10, 9)
+    assert move_away_from(current=(10, 10), threat=(11, 15)) == (10, 9)
 
 
 def test_find_nearest_nazgul_returns_closest() -> None:
@@ -55,29 +53,16 @@ def test_find_nearest_nazgul_returns_closest() -> None:
 def test_move_with_speed_uses_manhattan_movement() -> None:
     """move_with_speed should use Manhattan movement (one axis at a time)"""
     # Equal distances: should move on Y axis (tiebreaker)
-    assert (
-        move_with_speed((10, 10), (11, 11), speed=1, dimensions=(20, 20), tick=0)
-        == (10, 11)
-    )
+    assert move_with_speed((10, 10), (11, 11), speed=1, dimensions=(20, 20), tick=0) == (10, 11)
 
     # With speed=2, should move Y then X (alternating)
-    result = move_with_speed(
-        (10, 10), (12, 12), speed=2, dimensions=(20, 20), tick=0
-    )
-    assert result in [(11, 11), (10, 12)], (
-        f"Should move 2 steps Manhattan-style, got {result}"
-    )
+    result = move_with_speed((10, 10), (12, 12), speed=2, dimensions=(20, 20), tick=0)
+    assert result in [(11, 11), (10, 12)], f"Should move 2 steps Manhattan-style, got {result}"
 
 
 def test_move_with_speed_uses_manhattan_movement_with_speed() -> None:
-    assert (
-        move_with_speed((10, 10), (11, 11), speed=1, dimensions=(20, 20), tick=0)
-        == (10, 11)
-    )
-    assert (
-        move_with_speed((10, 10), (11, 11), speed=2, dimensions=(20, 20), tick=0)
-        == (11, 11)
-    )
+    assert move_with_speed((10, 10), (11, 11), speed=1, dimensions=(20, 20), tick=0) == (10, 11)
+    assert move_with_speed((10, 10), (11, 11), speed=2, dimensions=(20, 20), tick=0) == (11, 11)
 
 
 def test_find_nearest_hobbit_returns_closest() -> None:
@@ -97,9 +82,7 @@ def test_hobbits_cannot_stack_on_same_square() -> None:
 
     # Both want to move to (2, 0)
     # First hobbit gets there, second should be blocked
-    new_hobbits = update_hobbits(
-        hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0
-    )
+    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0)
 
     # Should have 2 distinct positions (no stacking)
     assert len(set(new_hobbits)) == 2, "Hobbits should not stack"
@@ -127,9 +110,7 @@ def test_hobbit_can_move_onto_nazgul_square_for_capture() -> None:
 
     # Hobbit moving toward Rivendell will pass through Nazgûl
     # This should be ALLOWED (capture detection happens after movement)
-    new_hobbits = update_hobbits(
-        hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0
-    )
+    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0)
 
     # Movement should happen (even though it leads to capture)
     assert new_hobbits[0] != (9, 10), "Hobbit should be able to move"
@@ -380,9 +361,7 @@ def test_nazgul_cannot_move_through_terrain() -> None:
     terrain = {(6, 5), (6, 6), (5, 6)}  # Wall to the right and diagonal
 
     # Nazgul wants to move toward (10, 10) but terrain blocks
-    new_nazgul = update_nazgul(
-        nazgul, hobbits, dimensions=(20, 20), tick=0, terrain=terrain
-    )
+    new_nazgul = update_nazgul(nazgul, hobbits, dimensions=(20, 20), tick=0, terrain=terrain)
 
     # Nazgul should NOT be at terrain positions
     assert new_nazgul[0] not in terrain, "Nazgul should not move into terrain"

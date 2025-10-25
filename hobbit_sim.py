@@ -62,20 +62,20 @@ def render_world(world: dict) -> str:
 
     # Place terrain (if any)
     for terrain_pos in world.get("terrain", []):
-        place_entity(grid, terrain_pos, "#")
+        place_entity(grid=grid, position=terrain_pos, symbol="#")
 
     # Place landmarks
-    place_entity(grid, (0, 0), "S")  # Shire
+    place_entity(grid=grid, position=(0, 0), symbol="S")  # Shire
     rivendell = world["rivendell"]
-    place_entity(grid, rivendell, "R")
+    place_entity(grid=grid, position=rivendell, symbol="R")
 
     # Place hobbits
     for hobbit_pos in world["hobbits"]:
-        place_entity(grid, hobbit_pos, "H")
+        place_entity(grid=grid, position=hobbit_pos, symbol="H")
 
     # Place nazgul
     for nazgul_pos in world["nazgul"]:
-        place_entity(grid, nazgul_pos, "N")
+        place_entity(grid=grid, position=nazgul_pos, symbol="N")
 
     return render_grid(grid)
 
@@ -164,14 +164,10 @@ def move_with_speed(
         terrain = set()
 
     for _step in range(speed):
-        new_x, new_y = move_toward((current_x, current_y), target)
+        new_x, new_y = move_toward(current=(current_x, current_y), target=target)
 
         # Check boundaries and terrain
-        if (
-            0 <= new_x < width
-            and 0 <= new_y < height
-            and (new_x, new_y) not in terrain
-        ):
+        if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
             current_x, current_y = new_x, new_y
             log_event(
                 tick,
@@ -283,7 +279,7 @@ def update_hobbits(
             print(msg)
 
     for hobbit_index, hobbit_pos in enumerate(hobbits):
-        nearest_naz, distance = find_nearest_nazgul(hobbit_pos, nazgul)
+        nearest_naz, distance = find_nearest_nazgul(hobbit=hobbit_pos, nazgul=nazgul)
 
         if distance <= DANGER_DISTANCE and nearest_naz is not None:
             # PANIC! Run away from Nazgûl
@@ -296,8 +292,8 @@ def update_hobbits(
                     {"hobbit": hobbit_pos, "nazgul": nearest_naz, "goal": rivendell},
                 )
                 new_x, new_y = move_away_from(
-                    (current_x, current_y),
-                    nearest_naz,
+                    current=(current_x, current_y),
+                    threat=nearest_naz,
                     goal=rivendell,
                 )
                 debug(
@@ -338,7 +334,7 @@ def update_hobbits(
                         },
                     )
                     # Can't evade in that direction - try moving toward goal
-                    new_x, new_y = move_toward((current_x, current_y), rivendell)
+                    new_x, new_y = move_toward(current=(current_x, current_y), target=rivendell)
                     debug(
                         f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
                         f"moving toward goal from ({current_x},{current_y}) "
@@ -373,8 +369,8 @@ def update_hobbits(
             # TODO: pull steps above out a layer so they don't accidentally
             # move into the danger zone
             new_x, new_y = move_with_speed(
-                hobbit_pos,
-                rivendell,
+                current=hobbit_pos,
+                target=rivendell,
                 speed=2,
                 dimensions=dimensions,
                 tick=tick,
@@ -406,14 +402,22 @@ def update_nazgul(
             print(msg)
 
     for nazgul_index, nazgul_pos in enumerate(nazgul):
-        log_event(tick, "nazgul_movement_attempt", {"nazgul": nazgul_pos, "hobbits": hobbits})
-        target, distance = find_nearest_hobbit(nazgul_pos, hobbits)
+        log_event(
+            tick=tick,
+            event_type="nazgul_movement_attempt",
+            event_data={"nazgul": nazgul_pos, "hobbits": hobbits},
+        )
+        target, distance = find_nearest_hobbit(nazgul=nazgul_pos, hobbits=hobbits)
         if target:
             debug(f"  Nazgûl[{nazgul_index}] chasing Hobbit at {target}")
-            log_event(tick, "nazgul_movement", {"nazgul": nazgul_pos, "hobbit": target})
+            log_event(
+                tick=tick,
+                event_type="nazgul_movement",
+                event_data={"nazgul": nazgul_pos, "hobbit": target},
+            )
             new_x, new_y = move_with_speed(
-                nazgul_pos,
-                target,
+                current=nazgul_pos,
+                target=target,
                 speed=1,
                 dimensions=dimensions,
                 tick=tick,
@@ -506,18 +510,18 @@ def run_simulation() -> None:
 
         # Move entities
         hobbits = update_hobbits(
-            hobbits,
-            rivendell,
-            nazgul,
-            dimensions,
+            hobbits=hobbits,
+            rivendell=rivendell,
+            nazgul=nazgul,
+            dimensions=dimensions,
             tick=tick,
             terrain=terrain,
             debug_output=debug_buffer,
         )
         nazgul = update_nazgul(
-            nazgul,
-            hobbits,
-            dimensions,
+            nazgul=nazgul,
+            hobbits=hobbits,
+            dimensions=dimensions,
             tick=tick,
             terrain=terrain,
             debug_output=debug_buffer,
@@ -542,19 +546,19 @@ def run_simulation() -> None:
 
         # Place terrain
         for terrain_pos in terrain:
-            place_entity(grid, terrain_pos, "#")
+            place_entity(grid=grid, position=terrain_pos, symbol="#")
 
         # Place landmarks
-        place_entity(grid, (1, 1), "S")  # Shire
-        place_entity(grid, rivendell, "R")  # Rivendell
+        place_entity(grid=grid, position=(1, 1), symbol="S")  # Shire
+        place_entity(grid=grid, position=rivendell, symbol="R")  # Rivendell
 
         # Place hobbits
         for hobbit_pos in hobbits:
-            place_entity(grid, hobbit_pos, "H")
+            place_entity(grid=grid, position=hobbit_pos, symbol="H")
 
         # Place Nazgûl
         for nazgul_pos in nazgul:
-            place_entity(grid, nazgul_pos, "N")
+            place_entity(grid=grid, position=nazgul_pos, symbol="N")
 
         # Print state
         print(f"=== Tick {tick} ===")
