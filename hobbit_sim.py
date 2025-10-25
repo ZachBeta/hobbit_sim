@@ -96,11 +96,13 @@ def place_entity(grid: Grid, x: int, y: int, symbol: str) -> None:
         grid[y][x] = symbol
 
 
-def move_toward(current_x: int, current_y: int, target_x: int, target_y: int) -> Position:
+def move_toward(current: Position, target: Position) -> Position:
     """Move one step toward target using Manhattan distance (no diagonals).
 
     Prioritizes moving on the axis with greater distance first.
     """
+    current_x, current_y = current
+    target_x, target_y = target
     dx = abs(target_x - current_x)
     dy = abs(target_y - current_y)
 
@@ -123,7 +125,7 @@ def move_toward(current_x: int, current_y: int, target_x: int, target_y: int) ->
 
 
 def find_nearest_hobbit(
-    nazgul_x: int, nazgul_y: int, hobbits: EntityPositions
+    nazgul: Position, hobbits: EntityPositions
 ) -> tuple[Position | None, float]:
     """Find nearest Hobbit and distance.
 
@@ -132,6 +134,7 @@ def find_nearest_hobbit(
     if not hobbits:
         return None, float("inf")
 
+    nazgul_x, nazgul_y = nazgul
     nearest = hobbits[0]
     min_dist = abs(nazgul_x - nearest[0]) + abs(nazgul_y - nearest[1])
 
@@ -145,10 +148,8 @@ def find_nearest_hobbit(
 
 
 def move_with_speed(
-    x: int,
-    y: int,
-    target_x: int,
-    target_y: int,
+    current: Position,
+    target: Position,
     speed: int,
     width: int,
     height: int,
@@ -156,12 +157,12 @@ def move_with_speed(
     terrain: set[Position] | None = None,
 ) -> Position:
     """Move toward target for 'speed' steps, stopping at boundaries or terrain."""
-    current_x, current_y = x, y
+    current_x, current_y = current
     if terrain is None:
         terrain = set()
 
     for _step in range(speed):
-        new_x, new_y = move_toward(current_x, current_y, target_x, target_y)
+        new_x, new_y = move_toward((current_x, current_y), target)
 
         # Check boundaries and terrain
         if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
@@ -169,13 +170,13 @@ def move_with_speed(
             log_event(
                 tick,
                 "movement",
-                {"entity": (x, y), "new_position": (current_x, current_y)},
+                {"entity": current, "new_position": (current_x, current_y)},
             )
         else:
             log_event(
                 tick,
                 "movement_blocked",
-                {"entity": (x, y), "new_position": (current_x, current_y)},
+                {"entity": current, "new_position": (current_x, current_y)},
             )
             # Hit boundary or terrain, stop moving
             break
@@ -183,13 +184,15 @@ def move_with_speed(
     return current_x, current_y
 
 
-def find_nearest_nazgul(
-    hobbit_x: int, hobbit_y: int, nazgul: EntityPositions
-) -> tuple[Position | None, float]:
-    """Find nearest Nazgûl and distance. Returns (nazgul_pos, distance) or (None, infinity)"""
+def find_nearest_nazgul(hobbit: Position, nazgul: EntityPositions) -> tuple[Position | None, float]:
+    """Find nearest Nazgûl and distance.
+
+    Returns (nazgul_pos, distance) or (None, infinity)
+    """
     if not nazgul:
         return None, float("inf")
 
+    hobbit_x, hobbit_y = hobbit
     nearest = nazgul[0]
     min_dist = abs(hobbit_x - nearest[0]) + abs(hobbit_y - nearest[1])
 
@@ -203,12 +206,9 @@ def find_nearest_nazgul(
 
 
 def move_away_from(
-    current_x: int,
-    current_y: int,
-    threat_x: int,
-    threat_y: int,
-    goal_x: int | None = None,
-    goal_y: int | None = None,
+    current: Position,
+    threat: Position,
+    goal: Position | None = None,
 ) -> Position:
     """Move away from threat, with bias toward goal if provided.
 
@@ -217,6 +217,8 @@ def move_away_from(
     2. If goal provided, prefer the axis that also moves toward goal
     3. Otherwise, use normal distance priority
     """
+    current_x, current_y = current
+    threat_x, threat_y = threat
     dx = abs(threat_x - current_x)
     dy = abs(threat_y - current_y)
 
@@ -225,7 +227,8 @@ def move_away_from(
     y_away = -1 if current_y < threat_y else 1 if current_y > threat_y else 0
 
     # If we have a goal, check which away-direction also moves toward goal
-    if goal_x is not None and goal_y is not None:
+    if goal is not None:
+        goal_x, goal_y = goal
         x_toward_goal = 1 if current_x < goal_x else -1 if current_x > goal_x else 0
         y_toward_goal = 1 if current_y < goal_y else -1 if current_y > goal_y else 0
 
@@ -273,26 +276,23 @@ def update_hobbits(
         else:
             print(msg)
 
-    for hobbit_index, (hx, hy) in enumerate(hobbits):
-        nearest_naz, distance = find_nearest_nazgul(hx, hy, nazgul)
+    for hobbit_index, hobbit_pos in enumerate(hobbits):
+        nearest_naz, distance = find_nearest_nazgul(hobbit_pos, nazgul)
 
         if distance <= DANGER_DISTANCE and nearest_naz is not None:
             # PANIC! Run away from Nazgûl
-            current_x, current_y = hx, hy
+            current_x, current_y = hobbit_pos
             for step in range(2):  # speed 2
                 debug(f"  Hobbit[{hobbit_index}] step {step + 1}/2: at ({current_x},{current_y})")
                 log_event(
                     tick,
                     "evasion_attempt",
-                    {"hobbit": (hx, hy), "nazgul": nearest_naz, "goal": rivendell},
+                    {"hobbit": hobbit_pos, "nazgul": nearest_naz, "goal": rivendell},
                 )
                 new_x, new_y = move_away_from(
-                    current_x,
-                    current_y,
-                    threat_x=nearest_naz[0],
-                    threat_y=nearest_naz[1],
-                    goal_x=rivendell[0],
-                    goal_y=rivendell[1],
+                    (current_x, current_y),
+                    nearest_naz,
+                    goal=rivendell,
                 )
                 debug(
                     f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
@@ -311,7 +311,7 @@ def update_hobbits(
                         tick,
                         "evasion_success",
                         {
-                            "hobbit": (hx, hy),
+                            "hobbit": hobbit_pos,
                             "nazgul": nearest_naz,
                             "new_position": (current_x, current_y),
                         },
@@ -326,13 +326,13 @@ def update_hobbits(
                         tick,
                         "evasion_failure",
                         {
-                            "hobbit": (hx, hy),
+                            "hobbit": hobbit_pos,
                             "nazgul": nearest_naz,
                             "new_position": (current_x, current_y),
                         },
                     )
                     # Can't evade in that direction - try moving toward goal
-                    new_x, new_y = move_toward(current_x, current_y, rivendell[0], rivendell[1])
+                    new_x, new_y = move_toward((current_x, current_y), rivendell)
                     debug(
                         f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
                         f"moving toward goal from ({current_x},{current_y}) "
@@ -356,21 +356,19 @@ def update_hobbits(
         else:
             debug(
                 f"  Hobbit[{hobbit_index}] safe - move toward Rivendell "
-                f"from ({hx},{hy}) to ({rivendell[0]},{rivendell[1]})"
+                f"from {hobbit_pos} to {rivendell}"
             )
             # Safe - move toward Rivendell
             log_event(
                 tick,
                 "hobbit_movement_attempt",
-                {"hobbit": (hx, hy), "rivendell": rivendell},
+                {"hobbit": hobbit_pos, "rivendell": rivendell},
             )
             # TODO: pull steps above out a layer so they don't accidentally
             # move into the danger zone
             new_x, new_y = move_with_speed(
-                hx,
-                hy,
-                rivendell[0],
-                rivendell[1],
+                hobbit_pos,
+                rivendell,
                 speed=2,
                 width=width,
                 height=height,
@@ -402,17 +400,15 @@ def update_nazgul(
         else:
             print(msg)
 
-    for nazgul_index, (nx, ny) in enumerate(nazgul):
-        log_event(tick, "nazgul_movement_attempt", {"nazgul": (nx, ny), "hobbits": hobbits})
-        target, distance = find_nearest_hobbit(nx, ny, hobbits)
+    for nazgul_index, nazgul_pos in enumerate(nazgul):
+        log_event(tick, "nazgul_movement_attempt", {"nazgul": nazgul_pos, "hobbits": hobbits})
+        target, distance = find_nearest_hobbit(nazgul_pos, hobbits)
         if target:
             debug(f"  Nazgûl[{nazgul_index}] chasing Hobbit at {target}")
-            log_event(tick, "nazgul_movement", {"nazgul": (nx, ny), "hobbit": target})
+            log_event(tick, "nazgul_movement", {"nazgul": nazgul_pos, "hobbit": target})
             new_x, new_y = move_with_speed(
-                nx,
-                ny,
-                target[0],
-                target[1],
+                nazgul_pos,
+                target,
                 speed=1,
                 width=width,
                 height=height,

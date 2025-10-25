@@ -37,40 +37,40 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
 def test_move_away_from_uses_manhattan_movement() -> None:
     """move_away_from should mirror move_toward logic (Manhattan)"""
     # Equal distances: should flee on Y axis (tiebreaker)
-    assert move_away_from(10, 10, 11, 11) == (9, 10)
+    assert move_away_from((10, 10), (11, 11)) == (9, 10)
 
     # Threat to the east (larger dx): flee west
-    assert move_away_from(10, 10, 15, 11) == (9, 10)
+    assert move_away_from((10, 10), (15, 11)) == (9, 10)
 
     # Threat to the south (larger dy): flee north
-    assert move_away_from(10, 10, 11, 15) == (10, 9)
+    assert move_away_from((10, 10), (11, 15)) == (10, 9)
 
 
 def test_find_nearest_nazgul_returns_closest() -> None:
-    assert find_nearest_nazgul(10, 10, [(11, 11), (9, 10)]) == ((9, 10), 1)
+    assert find_nearest_nazgul((10, 10), [(11, 11), (9, 10)]) == ((9, 10), 1)
 
 
 def test_move_with_speed_uses_manhattan_movement() -> None:
     """move_with_speed should use Manhattan movement (one axis at a time)"""
     # Equal distances: should move on Y axis (tiebreaker)
-    assert move_with_speed(10, 10, 11, 11, speed=1, width=20, height=20, tick=0) == (10, 11)
+    assert move_with_speed((10, 10), (11, 11), speed=1, width=20, height=20, tick=0) == (10, 11)
 
     # With speed=2, should move Y then X (alternating)
-    result = move_with_speed(10, 10, 12, 12, speed=2, width=20, height=20, tick=0)
+    result = move_with_speed((10, 10), (12, 12), speed=2, width=20, height=20, tick=0)
     assert result in [(11, 11), (10, 12)], f"Should move 2 steps Manhattan-style, got {result}"
 
 
 def test_move_with_speed_uses_manhattan_movement_with_speed() -> None:
-    assert move_with_speed(10, 10, 11, 11, speed=1, width=20, height=20, tick=0) == (10, 11)
-    assert move_with_speed(10, 10, 11, 11, speed=2, width=20, height=20, tick=0) == (11, 11)
+    assert move_with_speed((10, 10), (11, 11), speed=1, width=20, height=20, tick=0) == (10, 11)
+    assert move_with_speed((10, 10), (11, 11), speed=2, width=20, height=20, tick=0) == (11, 11)
 
 
 def test_find_nearest_hobbit_returns_closest() -> None:
-    assert find_nearest_hobbit(10, 10, [(11, 11), (9, 10)]) == ((9, 10), 1)
+    assert find_nearest_hobbit((10, 10), [(11, 11), (9, 10)]) == ((9, 10), 1)
 
 
 def test_find_nearest_hobbit_with_no_hobbits() -> None:
-    assert find_nearest_hobbit(10, 10, []) == (None, float("inf"))
+    assert find_nearest_hobbit((10, 10), []) == (None, float("inf"))
 
 
 @pytest.mark.skip(reason="Not implemented")
@@ -374,7 +374,9 @@ def test_move_with_speed_stops_at_terrain() -> None:
     terrain = {(12, 10)}  # Single wall in the path
 
     # Try to move from (10, 10) to (15, 10) - should stop at (11, 10)
-    result = move_with_speed(10, 10, 15, 10, speed=5, width=20, height=20, tick=0, terrain=terrain)
+    result = move_with_speed(
+        (10, 10), (15, 10), speed=5, width=20, height=20, tick=0, terrain=terrain
+    )
 
     assert result == (11, 10), f"Should stop before terrain at (12, 10), got {result}"
 
@@ -394,17 +396,17 @@ def test_manhattan_movement_creates_staircase_pattern() -> None:
     3. Creates characteristic "staircase" pattern
     """
     path = []
-    current_x, current_y = 0, 0
-    target_x, target_y = 5, 5
+    current = (0, 0)
+    target = (5, 5)
 
     # Simulate 10 moves (enough to reach (5,5))
     for _ in range(11):  # 11 moves needed to go 10 Manhattan-distance
-        path.append((current_x, current_y))
+        path.append(current)
 
-        if current_x == target_x and current_y == target_y:
+        if current == target:
             break
 
-        current_x, current_y = move_toward(current_x, current_y, target_x, target_y)
+        current = move_toward(current, target)
 
     # Verify we reached the target
     assert path[-1] == (5, 5), f"Should reach target, final position: {path[-1]}"
@@ -446,11 +448,11 @@ def test_manhattan_movement_creates_staircase_pattern() -> None:
 def test_move_away_from_without_goal_uses_distance_priority() -> None:
     """When no goal provided, should behave like original move_away_from"""
     # Threat to the east and south (dx=5, dy=2) - larger X distance
-    result = move_away_from(10, 10, 15, 12)
+    result = move_away_from((10, 10), (15, 12))
     assert result == (9, 10), "Should flee on X axis when dx > dy"
 
     # Threat to the east and south (dx=2, dy=5) - larger Y distance
-    result = move_away_from(10, 10, 12, 15)
+    result = move_away_from((10, 10), (12, 15))
     assert result == (10, 9), "Should flee on Y axis when dy > dx"
 
 
@@ -461,7 +463,7 @@ def test_move_away_from_with_goal_prefers_goal_aligned_direction() -> None:
     # Threat at (8, 8) - northwest
     # Goal at (15, 15) - southeast
     # Both fleeing E and fleeing S work, but both also move toward goal!
-    result = move_away_from(10, 10, 8, 8, goal_x=15, goal_y=15)
+    result = move_away_from((10, 10), (8, 8), goal=(15, 15))
 
     # Should flee on one of the axes (both are good)
     assert result in [(11, 10), (10, 11)], f"Should flee toward goal, got {result}"
@@ -470,7 +472,7 @@ def test_move_away_from_with_goal_prefers_goal_aligned_direction() -> None:
     # Let's test a clearer case:
     # Threat at (10, 8) - directly north (dy=2, dx=0)
     # Goal at (15, 15) - southeast
-    result = move_away_from(10, 10, 10, 8, goal_x=15, goal_y=15)
+    result = move_away_from((10, 10), (10, 8), goal=(15, 15))
     assert result == (10, 11), "Should flee south (away + toward goal)"
 
 
@@ -480,7 +482,7 @@ def test_move_away_from_flees_even_if_away_from_goal() -> None:
     # Hobbit at (10, 10)
     # Threat at (11, 11) - SE, close!
     # Goal at (18, 18) - SE, far
-    result = move_away_from(10, 10, 11, 11, goal_x=18, goal_y=18)
+    result = move_away_from((10, 10), (11, 11), goal=(18, 18))
 
     # Should flee NW (away from threat), even though goal is SE
     assert result in [(9, 10), (10, 9)], f"Should flee away from threat, got {result}"
@@ -496,7 +498,7 @@ def test_move_away_from_chooses_goal_aligned_axis_when_both_axes_flee() -> None:
 
     # Can flee: East (away from threat + toward goal) ✅
     # Can flee: North (away from threat, perpendicular to goal) ⚠️
-    result = move_away_from(10, 10, 8, 12, goal_x=18, goal_y=10)
+    result = move_away_from((10, 10), (8, 12), goal=(18, 10))
 
     # Should prefer fleeing east because it helps with goal
     assert result == (11, 10), f"Should prefer east (toward goal), got {result}"
@@ -511,7 +513,7 @@ def test_move_away_from_perpendicular_threat_and_goal() -> None:
     # Must flee: North (away from threat)
     # Goal says: East
     # These are perpendicular - can't satisfy both with one move
-    result = move_away_from(10, 10, 10, 15, goal_x=15, goal_y=10)
+    result = move_away_from((10, 10), (10, 15), goal=(15, 10))
 
     # Should prioritize safety (flee north)
     assert result == (10, 9), "Should flee from threat even if not toward goal"
@@ -523,7 +525,7 @@ def test_move_away_from_when_already_fleeing_correct_direction() -> None:
     # Threat at (5, 5) - far to the northwest
     # Goal at (18, 18) - far to the southeast
 
-    result = move_away_from(10, 10, 5, 5, goal_x=18, goal_y=18)
+    result = move_away_from((10, 10), (5, 5), goal=(18, 18))
 
     # Both fleeing E and fleeing S move away from threat AND toward goal
     # Either is fine, but should pick one
@@ -535,7 +537,7 @@ def test_move_away_from_when_already_fleeing_correct_direction() -> None:
 def test_move_away_from_backward_compatibility() -> None:
     """Without goal parameters, should match old move_away_from behavior"""
     # This ensures we don't break existing code
-    result = move_away_from(10, 10, 11, 11)
+    result = move_away_from((10, 10), (11, 11))
 
     # Should match the test we already have
     assert result in [(9, 10), (10, 9)], "Should behave like original when no goal"
