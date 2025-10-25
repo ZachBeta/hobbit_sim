@@ -5,6 +5,7 @@ import sys
 import time
 
 Position = tuple[int, int]
+GridDimensions = tuple[int, int]
 Grid = list[list[str]]
 EntityPositions = list[Position]
 
@@ -60,21 +61,21 @@ def render_world(world: dict) -> str:
     grid = create_grid(WIDTH, HEIGHT)
 
     # Place terrain (if any)
-    for x, y in world.get("terrain", []):
-        place_entity(grid, x, y, "#")
+    for terrain_pos in world.get("terrain", []):
+        place_entity(grid, terrain_pos, "#")
 
     # Place landmarks
-    place_entity(grid, 0, 0, "S")  # Shire
+    place_entity(grid, (0, 0), "S")  # Shire
     rivendell = world["rivendell"]
-    place_entity(grid, rivendell[0], rivendell[1], "R")
+    place_entity(grid, rivendell, "R")
 
     # Place hobbits
-    for hx, hy in world["hobbits"]:
-        place_entity(grid, hx, hy, "H")
+    for hobbit_pos in world["hobbits"]:
+        place_entity(grid, hobbit_pos, "H")
 
     # Place nazgul
-    for nx, ny in world["nazgul"]:
-        place_entity(grid, nx, ny, "N")
+    for nazgul_pos in world["nazgul"]:
+        place_entity(grid, nazgul_pos, "N")
 
     return render_grid(grid)
 
@@ -90,8 +91,9 @@ def render_grid(grid: Grid) -> str:
     return "\n".join(lines)
 
 
-def place_entity(grid: Grid, x: int, y: int, symbol: str) -> None:
-    """Place an entity on the grid at position (x, y)"""
+def place_entity(grid: Grid, position: Position, symbol: str) -> None:
+    """Place an entity on the grid at position"""
+    x, y = position
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         grid[y][x] = symbol
 
@@ -151,13 +153,13 @@ def move_with_speed(
     current: Position,
     target: Position,
     speed: int,
-    width: int,
-    height: int,
+    dimensions: GridDimensions,
     tick: int,
     terrain: set[Position] | None = None,
 ) -> Position:
     """Move toward target for 'speed' steps, stopping at boundaries or terrain."""
     current_x, current_y = current
+    width, height = dimensions
     if terrain is None:
         terrain = set()
 
@@ -165,7 +167,11 @@ def move_with_speed(
         new_x, new_y = move_toward((current_x, current_y), target)
 
         # Check boundaries and terrain
-        if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
+        if (
+            0 <= new_x < width
+            and 0 <= new_y < height
+            and (new_x, new_y) not in terrain
+        ):
             current_x, current_y = new_x, new_y
             log_event(
                 tick,
@@ -258,8 +264,7 @@ def update_hobbits(
     hobbits: EntityPositions,
     rivendell: Position,
     nazgul: EntityPositions,
-    width: int,
-    height: int,
+    dimensions: GridDimensions,
     tick: int,
     terrain: set[Position] | None = None,
     debug_output: list[str] | None = None,
@@ -267,6 +272,7 @@ def update_hobbits(
     """Move all hobbits toward Rivendell at speed 2. Returns new hobbit positions."""
     new_hobbits = []
     DANGER_DISTANCE = 6
+    width, height = dimensions
     if terrain is None:
         terrain = set()
 
@@ -370,8 +376,7 @@ def update_hobbits(
                 hobbit_pos,
                 rivendell,
                 speed=2,
-                width=width,
-                height=height,
+                dimensions=dimensions,
                 tick=tick,
                 terrain=terrain,
             )
@@ -383,14 +388,14 @@ def update_hobbits(
 def update_nazgul(
     nazgul: EntityPositions,
     hobbits: EntityPositions,
-    width: int,
-    height: int,
+    dimensions: GridDimensions,
     tick: int,
     terrain: set[Position] | None = None,
     debug_output: list[str] | None = None,
 ) -> EntityPositions:
     """Move all Nazgûl toward nearest hobbit at speed 1. Returns new Nazgûl positions."""
     new_nazgul = []
+    width, height = dimensions
     if terrain is None:
         terrain = set()
 
@@ -410,8 +415,7 @@ def update_nazgul(
                 nazgul_pos,
                 target,
                 speed=1,
-                width=width,
-                height=height,
+                dimensions=dimensions,
                 tick=tick,
                 terrain=terrain,
             )
@@ -481,6 +485,7 @@ def run_simulation() -> None:
     hobbits = world["hobbits"]
     nazgul = world["nazgul"]
 
+    dimensions = (WIDTH, HEIGHT)
     tick = 0
     while True:
         debug_buffer: list[str] = []
@@ -504,8 +509,7 @@ def run_simulation() -> None:
             hobbits,
             rivendell,
             nazgul,
-            WIDTH,
-            HEIGHT,
+            dimensions,
             tick=tick,
             terrain=terrain,
             debug_output=debug_buffer,
@@ -513,8 +517,7 @@ def run_simulation() -> None:
         nazgul = update_nazgul(
             nazgul,
             hobbits,
-            WIDTH,
-            HEIGHT,
+            dimensions,
             tick=tick,
             terrain=terrain,
             debug_output=debug_buffer,
@@ -538,20 +541,20 @@ def run_simulation() -> None:
         grid = create_grid(WIDTH, HEIGHT)
 
         # Place terrain
-        for tx, ty in terrain:
-            place_entity(grid, tx, ty, "#")
+        for terrain_pos in terrain:
+            place_entity(grid, terrain_pos, "#")
 
         # Place landmarks
-        place_entity(grid, 1, 1, "S")  # Shire
-        place_entity(grid, rivendell[0], rivendell[1], "R")  # Rivendell
+        place_entity(grid, (1, 1), "S")  # Shire
+        place_entity(grid, rivendell, "R")  # Rivendell
 
         # Place hobbits
-        for hx, hy in hobbits:
-            place_entity(grid, hx, hy, "H")
+        for hobbit_pos in hobbits:
+            place_entity(grid, hobbit_pos, "H")
 
         # Place Nazgûl
-        for nx, ny in nazgul:
-            place_entity(grid, nx, ny, "N")
+        for nazgul_pos in nazgul:
+            place_entity(grid, nazgul_pos, "N")
 
         # Print state
         print(f"=== Tick {tick} ===")
