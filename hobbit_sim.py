@@ -360,28 +360,23 @@ def create_world() -> dict:
     - nazgul: list of nazgul positions
     """
     WIDTH, HEIGHT = 20, 20
-    rivendell = (19, 19)
+    rivendell = (18, 18)
 
     # Terrain - create border walls (but leave openings at Shire and Rivendell)
     terrain = set()
 
-    # # Add borders (all edges)
-    # for x in range(WIDTH):
-    #     terrain.add((x, 0))  # Top border
-    #     terrain.add((x, HEIGHT - 1))  # Bottom border
-    # for y in range(HEIGHT):
-    #     terrain.add((0, y))  # Left border
-    #     terrain.add((WIDTH - 1, y))  # Right border
+    # Add borders (all edges)
+    for x in range(WIDTH):
+        terrain.add((x, 0))  # Top border
+        terrain.add((x, HEIGHT - 1))  # Bottom border
+    for y in range(HEIGHT):
+        terrain.add((0, y))  # Left border
+        terrain.add((WIDTH - 1, y))  # Right border
 
-    # # Remove borders at Shire (0,0) and Rivendell (19,19) to allow entry
-    # terrain.discard((0, 0))
-    # terrain.discard((19, 19))
-
-    # Initialize hobbits
     hobbits = [
         (1, 0),  # Pippin
         (0, 1),  # Sam
-        (1, 1),  # Frodo
+        (2, 2),  # Frodo
     ]
 
     # Initialize Nazgûl
@@ -427,7 +422,7 @@ def run_simulation() -> None:
             place_entity(grid, tx, ty, "#")
 
         # Place landmarks
-        place_entity(grid, 0, 0, "S")  # Shire
+        place_entity(grid, 1, 1, "S")  # Shire
         place_entity(grid, rivendell[0], rivendell[1], "R")  # Rivendell
 
         # Place hobbits
