@@ -31,7 +31,7 @@ def log_event(tick: int, event_type: str, event_data: dict) -> None:
         f.write("\n")
 
 
-def create_grid(dimensions: GridDimensions = (20, 20)) -> Grid:
+def create_grid(*, dimensions: GridDimensions = (20, 20)) -> Grid:
     """Create a 2D grid filled with empty spaces"""
     width, height = dimensions
     grid = []
@@ -45,11 +45,11 @@ def create_grid(dimensions: GridDimensions = (20, 20)) -> Grid:
 
 def print_grid(grid: Grid) -> None:
     """Print the grid with all entities"""
-    print(render_grid(grid))
+    print(render_grid(grid=grid))
     print()
 
 
-def render_world(world: dict) -> str:
+def render_world(*, world: dict) -> str:
     """Render world state as string (high-level test helper)
 
     Takes world dict from create_world() and returns visual representation.
@@ -78,10 +78,10 @@ def render_world(world: dict) -> str:
     for nazgul_pos in world["nazgul"]:
         place_entity(grid=grid, position=nazgul_pos, symbol="N")
 
-    return render_grid(grid)
+    return render_grid(grid=grid)
 
 
-def render_grid(grid: Grid) -> str:
+def render_grid(*, grid: Grid) -> str:
     """Return grid as string (for testing and printing)
 
     Format: "H . .\nN . .\n. . ."
@@ -92,14 +92,14 @@ def render_grid(grid: Grid) -> str:
     return "\n".join(lines)
 
 
-def place_entity(grid: Grid, position: Position, symbol: str) -> None:
+def place_entity(*, grid: Grid, position: Position, symbol: str) -> None:
     """Place an entity on the grid at position"""
     x, y = position
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         grid[y][x] = symbol
 
 
-def move_toward(current: Position, target: Position) -> Position:
+def move_toward(*, current: Position, target: Position) -> Position:
     """Move one step toward target using Manhattan distance (no diagonals).
 
     Prioritizes moving on the axis with greater distance first.
@@ -128,7 +128,7 @@ def move_toward(current: Position, target: Position) -> Position:
 
 
 def find_nearest_hobbit(
-    nazgul: Position, hobbits: EntityPositions
+    *, nazgul: Position, hobbits: EntityPositions
 ) -> tuple[Position | None, float]:
     """Find nearest Hobbit and distance.
 
@@ -151,6 +151,7 @@ def find_nearest_hobbit(
 
 
 def move_with_speed(
+    *,
     current: Position,
     target: Position,
     speed: int,
@@ -187,7 +188,9 @@ def move_with_speed(
     return current_x, current_y
 
 
-def find_nearest_nazgul(hobbit: Position, nazgul: EntityPositions) -> tuple[Position | None, float]:
+def find_nearest_nazgul(
+    *, hobbit: Position, nazgul: EntityPositions
+) -> tuple[Position | None, float]:
     """Find nearest Nazgûl and distance.
 
     Returns (nazgul_pos, distance) or (None, infinity)
@@ -209,6 +212,7 @@ def find_nearest_nazgul(hobbit: Position, nazgul: EntityPositions) -> tuple[Posi
 
 
 def move_away_from(
+    *,
     current: Position,
     threat: Position,
     goal: Position | None = None,
@@ -258,6 +262,7 @@ def move_away_from(
 
 
 def update_hobbits(
+    *,
     hobbits: EntityPositions,
     rivendell: Position,
     nazgul: EntityPositions,
@@ -383,6 +388,7 @@ def update_hobbits(
 
 
 def update_nazgul(
+    *,
     nazgul: EntityPositions,
     hobbits: EntityPositions,
     dimensions: GridDimensions,

@@ -24,7 +24,13 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
     rivendell = (18, 18)  # Goal is east along same edge
 
     # Move hobbits (should evade)
-    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0)
+    new_hobbits = update_hobbits(
+        hobbits=hobbits,
+        rivendell=rivendell,
+        nazgul=nazgul,
+        dimensions=(20, 20),
+        tick=0,
+    )
 
     # Assert: Hobbit should have moved (not stuck at same position)
     assert new_hobbits[0] != (10, 19), "Hobbit should move when evading at edge"
@@ -47,30 +53,38 @@ def test_move_away_from_uses_manhattan_movement() -> None:
 
 
 def test_find_nearest_nazgul_returns_closest() -> None:
-    assert find_nearest_nazgul((10, 10), [(11, 11), (9, 10)]) == ((9, 10), 1)
+    assert find_nearest_nazgul(hobbit=(10, 10), nazgul=[(11, 11), (9, 10)]) == ((9, 10), 1)
 
 
 def test_move_with_speed_uses_manhattan_movement() -> None:
     """move_with_speed should use Manhattan movement (one axis at a time)"""
     # Equal distances: should move on Y axis (tiebreaker)
-    assert move_with_speed((10, 10), (11, 11), speed=1, dimensions=(20, 20), tick=0) == (10, 11)
+    assert move_with_speed(
+        current=(10, 10), target=(11, 11), speed=1, dimensions=(20, 20), tick=0
+    ) == (10, 11)
 
     # With speed=2, should move Y then X (alternating)
-    result = move_with_speed((10, 10), (12, 12), speed=2, dimensions=(20, 20), tick=0)
+    result = move_with_speed(
+        current=(10, 10), target=(12, 12), speed=2, dimensions=(20, 20), tick=0
+    )
     assert result in [(11, 11), (10, 12)], f"Should move 2 steps Manhattan-style, got {result}"
 
 
 def test_move_with_speed_uses_manhattan_movement_with_speed() -> None:
-    assert move_with_speed((10, 10), (11, 11), speed=1, dimensions=(20, 20), tick=0) == (10, 11)
-    assert move_with_speed((10, 10), (11, 11), speed=2, dimensions=(20, 20), tick=0) == (11, 11)
+    assert move_with_speed(
+        current=(10, 10), target=(11, 11), speed=1, dimensions=(20, 20), tick=0
+    ) == (10, 11)
+    assert move_with_speed(
+        current=(10, 10), target=(11, 11), speed=2, dimensions=(20, 20), tick=0
+    ) == (11, 11)
 
 
 def test_find_nearest_hobbit_returns_closest() -> None:
-    assert find_nearest_hobbit((10, 10), [(11, 11), (9, 10)]) == ((9, 10), 1)
+    assert find_nearest_hobbit(nazgul=(10, 10), hobbits=[(11, 11), (9, 10)]) == ((9, 10), 1)
 
 
 def test_find_nearest_hobbit_with_no_hobbits() -> None:
-    assert find_nearest_hobbit((10, 10), []) == (None, float("inf"))
+    assert find_nearest_hobbit(nazgul=(10, 10), hobbits=[]) == (None, float("inf"))
 
 
 @pytest.mark.skip(reason="Not implemented")
@@ -82,7 +96,13 @@ def test_hobbits_cannot_stack_on_same_square() -> None:
 
     # Both want to move to (2, 0)
     # First hobbit gets there, second should be blocked
-    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0)
+    new_hobbits = update_hobbits(
+        hobbits=hobbits,
+        rivendell=rivendell,
+        nazgul=nazgul,
+        dimensions=(20, 20),
+        tick=0,
+    )
 
     # Should have 2 distinct positions (no stacking)
     assert len(set(new_hobbits)) == 2, "Hobbits should not stack"
@@ -95,7 +115,7 @@ def test_nazgul_cannot_stack_on_same_square() -> None:
     nazgul = [(8, 10), (12, 10)]  # Both sides of hobbit
 
     # Both want to move toward (10, 10)
-    new_nazgul = update_nazgul(nazgul, hobbits, dimensions=(20, 20), tick=0)
+    new_nazgul = update_nazgul(nazgul=nazgul, hobbits=hobbits, dimensions=(20, 20), tick=0)
 
     # Should have 2 distinct positions
     assert len(set(new_nazgul)) == 2, "Nazgûl should not stack"
@@ -110,7 +130,13 @@ def test_hobbit_can_move_onto_nazgul_square_for_capture() -> None:
 
     # Hobbit moving toward Rivendell will pass through Nazgûl
     # This should be ALLOWED (capture detection happens after movement)
-    new_hobbits = update_hobbits(hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0)
+    new_hobbits = update_hobbits(
+        hobbits=hobbits,
+        rivendell=rivendell,
+        nazgul=nazgul,
+        dimensions=(20, 20),
+        tick=0,
+    )
 
     # Movement should happen (even though it leads to capture)
     assert new_hobbits[0] != (9, 10), "Hobbit should be able to move"
@@ -125,7 +151,13 @@ def test_hobbit_reaches_goal_when_no_threat() -> None:
     for tick in range(20):
         if hobbits[0] == rivendell:
             return  # Success!
-        hobbits = update_hobbits(hobbits, rivendell, nazgul, (60, 60), tick)
+        hobbits = update_hobbits(
+            hobbits=hobbits,
+            rivendell=rivendell,
+            nazgul=nazgul,
+            dimensions=(60, 60),
+            tick=tick,
+        )
 
     pytest.fail("Should reach goal when no threat")
 
@@ -137,7 +169,13 @@ def test_hobbit_flees_forward_when_chased_from_behind() -> None:
     nazgul = [(5, 5)]  # Behind (northwest)
 
     # Move once
-    hobbits = update_hobbits(hobbits, rivendell, nazgul, (20, 20), tick=0)
+    hobbits = update_hobbits(
+        hobbits=hobbits,
+        rivendell=rivendell,
+        nazgul=nazgul,
+        dimensions=(20, 20),
+        tick=0,
+    )
 
     # Hobbit should flee SOUTHEAST (away from threat + toward goal)
     assert hobbits[0][0] > 10, "Should move east"
@@ -151,7 +189,13 @@ def test_hobbit_evades_perpendicular_threat() -> None:
     nazgul = [(10, 5)]  # Due north (perpendicular)
 
     # Move once
-    hobbits = update_hobbits(hobbits, rivendell, nazgul, (20, 20), tick=0)
+    hobbits = update_hobbits(
+        hobbits=hobbits,
+        rivendell=rivendell,
+        nazgul=nazgul,
+        dimensions=(20, 20),
+        tick=0,
+    )
 
     # Should flee south (away from north threat)
     # X-position might stay same or move toward goal
@@ -185,8 +229,19 @@ def test_single_hobbit_escapes_single_nazgul() -> None:
             pytest.fail(f"Hobbit was caught at tick {tick}")
 
         # Move entities
-        hobbits = update_hobbits(hobbits, rivendell, nazgul, (WIDTH, HEIGHT), tick=tick)
-        nazgul = update_nazgul(nazgul, hobbits, (WIDTH, HEIGHT), tick=tick)
+        hobbits = update_hobbits(
+            hobbits=hobbits,
+            rivendell=rivendell,
+            nazgul=nazgul,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
+        nazgul = update_nazgul(
+            nazgul=nazgul,
+            hobbits=hobbits,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
 
         # Check captures
         if hobbits and hobbits[0] in nazgul:
@@ -221,8 +276,19 @@ def test_system_three_hobbits_escape_single_rider() -> None:
             pytest.fail("All hobbits were caught - simulation failed")
 
         # Move entities
-        hobbits = update_hobbits(hobbits, rivendell, nazgul, (WIDTH, HEIGHT), tick=tick)
-        nazgul = update_nazgul(nazgul, hobbits, (WIDTH, HEIGHT), tick=tick)
+        hobbits = update_hobbits(
+            hobbits=hobbits,
+            rivendell=rivendell,
+            nazgul=nazgul,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
+        nazgul = update_nazgul(
+            nazgul=nazgul,
+            hobbits=hobbits,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
 
         # Check captures
         hobbits_to_remove = [h for h in hobbits if h in nazgul]
@@ -250,10 +316,10 @@ def test_render_grid_with_hobbits_and_nazgul() -> None:
     from hobbit_sim import create_grid, place_entity, render_grid
 
     grid = create_grid(dimensions=(4, 4))
-    place_entity(grid, (0, 0), "H")  # Hobbit top-left
-    place_entity(grid, (3, 3), "N")  # Nazgul bottom-right
-    place_entity(grid, (1, 2), "H")  # Another hobbit
-    result = render_grid(grid)
+    place_entity(grid=grid, position=(0, 0), symbol="H")  # Hobbit top-left
+    place_entity(grid=grid, position=(3, 3), symbol="N")  # Nazgul bottom-right
+    place_entity(grid=grid, position=(1, 2), symbol="H")  # Another hobbit
+    result = render_grid(grid=grid)
 
     expected = "H . . .\n. . . .\n. H . .\n. . . N"
     assert result == expected
@@ -264,11 +330,11 @@ def test_render_grid_with_landmarks() -> None:
     from hobbit_sim import create_grid, place_entity, render_grid
 
     grid = create_grid(dimensions=(5, 5))
-    place_entity(grid, (0, 0), "S")  # Shire
-    place_entity(grid, (4, 4), "R")  # Rivendell
-    place_entity(grid, (1, 1), "H")  # Hobbit
-    place_entity(grid, (3, 2), "N")  # Nazgul
-    result = render_grid(grid)
+    place_entity(grid=grid, position=(0, 0), symbol="S")  # Shire
+    place_entity(grid=grid, position=(4, 4), symbol="R")  # Rivendell
+    place_entity(grid=grid, position=(1, 1), symbol="H")  # Hobbit
+    place_entity(grid=grid, position=(3, 2), symbol="N")  # Nazgul
+    result = render_grid(grid=grid)
 
     expected = "S . . . .\n. H . . .\n. . . N .\n. . . . .\n. . . . R"
     assert result == expected
@@ -281,10 +347,10 @@ def test_render_grid_with_named_hobbits() -> None:
     from hobbit_sim import create_grid, place_entity, render_grid
 
     grid = create_grid(dimensions=(4, 4))
-    place_entity(grid, (0, 0), "F")  # Frodo
-    place_entity(grid, (1, 0), "S")  # Sam
-    place_entity(grid, (0, 1), "P")  # Pippin
-    result = render_grid(grid)
+    place_entity(grid=grid, position=(0, 0), symbol="F")  # Frodo
+    place_entity(grid=grid, position=(1, 0), symbol="S")  # Sam
+    place_entity(grid=grid, position=(0, 1), symbol="P")  # Pippin
+    result = render_grid(grid=grid)
 
     expected = "F S . .\nP . . .\n. . . .\n. . . ."
     assert result == expected  # Will pass once Phase 3 done!
@@ -313,7 +379,7 @@ def test_render_world_shows_terrain() -> None:
     from hobbit_sim import create_world, render_world
 
     world = create_world()
-    result = render_world(world)
+    result = render_world(world=world)
 
     # Check that first row has terrain (borders) and Shire
     # Row 0: S (Shire), # (borders), ..., # (border)
@@ -338,7 +404,12 @@ def test_hobbit_cannot_move_through_terrain() -> None:
 
     # Hobbit wants to move toward (10, 10) but terrain blocks (6, 6)
     new_hobbits = update_hobbits(
-        hobbits, rivendell, nazgul, dimensions=(20, 20), tick=0, terrain=terrain
+        hobbits=hobbits,
+        rivendell=rivendell,
+        nazgul=nazgul,
+        dimensions=(20, 20),
+        tick=0,
+        terrain=terrain,
     )
 
     # Hobbit should NOT be at (6, 6) because terrain blocks it
@@ -361,7 +432,13 @@ def test_nazgul_cannot_move_through_terrain() -> None:
     terrain = {(6, 5), (6, 6), (5, 6)}  # Wall to the right and diagonal
 
     # Nazgul wants to move toward (10, 10) but terrain blocks
-    new_nazgul = update_nazgul(nazgul, hobbits, dimensions=(20, 20), tick=0, terrain=terrain)
+    new_nazgul = update_nazgul(
+        nazgul=nazgul,
+        hobbits=hobbits,
+        dimensions=(20, 20),
+        tick=0,
+        terrain=terrain,
+    )
 
     # Nazgul should NOT be at terrain positions
     assert new_nazgul[0] not in terrain, "Nazgul should not move into terrain"
@@ -375,7 +452,12 @@ def test_move_with_speed_stops_at_terrain() -> None:
 
     # Try to move from (10, 10) to (15, 10) - should stop at (11, 10)
     result = move_with_speed(
-        (10, 10), (15, 10), speed=5, dimensions=(20, 20), tick=0, terrain=terrain
+        current=(10, 10),
+        target=(15, 10),
+        speed=5,
+        dimensions=(20, 20),
+        tick=0,
+        terrain=terrain,
     )
 
     assert result == (11, 10), f"Should stop before terrain at (12, 10), got {result}"
@@ -406,7 +488,7 @@ def test_manhattan_movement_creates_staircase_pattern() -> None:
         if current == target:
             break
 
-        current = move_toward(current, target)
+        current = move_toward(current=current, target=target)
 
     # Verify we reached the target
     assert path[-1] == (5, 5), f"Should reach target, final position: {path[-1]}"
@@ -448,11 +530,11 @@ def test_manhattan_movement_creates_staircase_pattern() -> None:
 def test_move_away_from_without_goal_uses_distance_priority() -> None:
     """When no goal provided, should behave like original move_away_from"""
     # Threat to the east and south (dx=5, dy=2) - larger X distance
-    result = move_away_from((10, 10), (15, 12))
+    result = move_away_from(current=(10, 10), threat=(15, 12))
     assert result == (9, 10), "Should flee on X axis when dx > dy"
 
     # Threat to the east and south (dx=2, dy=5) - larger Y distance
-    result = move_away_from((10, 10), (12, 15))
+    result = move_away_from(current=(10, 10), threat=(12, 15))
     assert result == (10, 9), "Should flee on Y axis when dy > dx"
 
 
@@ -463,7 +545,7 @@ def test_move_away_from_with_goal_prefers_goal_aligned_direction() -> None:
     # Threat at (8, 8) - northwest
     # Goal at (15, 15) - southeast
     # Both fleeing E and fleeing S work, but both also move toward goal!
-    result = move_away_from((10, 10), (8, 8), goal=(15, 15))
+    result = move_away_from(current=(10, 10), threat=(8, 8), goal=(15, 15))
 
     # Should flee on one of the axes (both are good)
     assert result in [(11, 10), (10, 11)], f"Should flee toward goal, got {result}"
@@ -472,7 +554,7 @@ def test_move_away_from_with_goal_prefers_goal_aligned_direction() -> None:
     # Let's test a clearer case:
     # Threat at (10, 8) - directly north (dy=2, dx=0)
     # Goal at (15, 15) - southeast
-    result = move_away_from((10, 10), (10, 8), goal=(15, 15))
+    result = move_away_from(current=(10, 10), threat=(10, 8), goal=(15, 15))
     assert result == (10, 11), "Should flee south (away + toward goal)"
 
 
@@ -482,7 +564,7 @@ def test_move_away_from_flees_even_if_away_from_goal() -> None:
     # Hobbit at (10, 10)
     # Threat at (11, 11) - SE, close!
     # Goal at (18, 18) - SE, far
-    result = move_away_from((10, 10), (11, 11), goal=(18, 18))
+    result = move_away_from(current=(10, 10), threat=(11, 11), goal=(18, 18))
 
     # Should flee NW (away from threat), even though goal is SE
     assert result in [(9, 10), (10, 9)], f"Should flee away from threat, got {result}"
@@ -498,7 +580,7 @@ def test_move_away_from_chooses_goal_aligned_axis_when_both_axes_flee() -> None:
 
     # Can flee: East (away from threat + toward goal) ✅
     # Can flee: North (away from threat, perpendicular to goal) ⚠️
-    result = move_away_from((10, 10), (8, 12), goal=(18, 10))
+    result = move_away_from(current=(10, 10), threat=(8, 12), goal=(18, 10))
 
     # Should prefer fleeing east because it helps with goal
     assert result == (11, 10), f"Should prefer east (toward goal), got {result}"
@@ -513,7 +595,7 @@ def test_move_away_from_perpendicular_threat_and_goal() -> None:
     # Must flee: North (away from threat)
     # Goal says: East
     # These are perpendicular - can't satisfy both with one move
-    result = move_away_from((10, 10), (10, 15), goal=(15, 10))
+    result = move_away_from(current=(10, 10), threat=(10, 15), goal=(15, 10))
 
     # Should prioritize safety (flee north)
     assert result == (10, 9), "Should flee from threat even if not toward goal"
@@ -525,7 +607,7 @@ def test_move_away_from_when_already_fleeing_correct_direction() -> None:
     # Threat at (5, 5) - far to the northwest
     # Goal at (18, 18) - far to the southeast
 
-    result = move_away_from((10, 10), (5, 5), goal=(18, 18))
+    result = move_away_from(current=(10, 10), threat=(5, 5), goal=(18, 18))
 
     # Both fleeing E and fleeing S move away from threat AND toward goal
     # Either is fine, but should pick one
@@ -537,7 +619,7 @@ def test_move_away_from_when_already_fleeing_correct_direction() -> None:
 def test_move_away_from_backward_compatibility() -> None:
     """Without goal parameters, should match old move_away_from behavior"""
     # This ensures we don't break existing code
-    result = move_away_from((10, 10), (11, 11))
+    result = move_away_from(current=(10, 10), threat=(11, 11))
 
     # Should match the test we already have
     assert result in [(9, 10), (10, 9)], "Should behave like original when no goal"
