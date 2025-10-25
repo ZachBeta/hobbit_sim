@@ -51,6 +51,14 @@ mypy hobbit_sim.py test_hobbit_sim.py
 
 **Important**: Line length limit is 100 characters (configured in pyproject.toml). mypy is configured with strict type checking - all functions require type annotations.
 
+### Code Quality Workflow
+After any code changes, the following checks must be run in order to ensure code quality:
+1. **Style guide compliance** - Uses `style-guide-fixer` agent to verify and fix all functions to use keyword-only parameters
+2. **Ruff linting and formatting** - Uses `ruff-fixer` agent to check and auto-fix linting issues
+3. **Type checking** - Uses `mypy-error-fixer` agent to find and fix type errors
+
+These are automated through specialized agents in `.claude/agents/` and should be invoked proactively after implementing features or fixing bugs. Run style guide fixer first to ensure all function signatures comply before running other checks.
+
 ## Code Architecture
 
 ### Core Simulation Loop
