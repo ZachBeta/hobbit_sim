@@ -95,6 +95,7 @@ def place_entity(grid: Grid, x: int, y: int, symbol: str) -> None:
     if 0 <= x < len(grid[0]) and 0 <= y < len(grid):
         grid[y][x] = symbol
 
+
 def move_toward(current_x: int, current_y: int, target_x: int, target_y: int) -> Position:
     """Move one step toward target using Manhattan distance (no diagonals).
 
@@ -121,10 +122,15 @@ def move_toward(current_x: int, current_y: int, target_x: int, target_y: int) ->
     return current_x, current_y
 
 
-def find_nearest_hobbit(nazgul_x: int, nazgul_y: int, hobbits: EntityPositions) -> Position | None:
-    """Find the nearest hobbit to this Nazgûl"""
+def find_nearest_hobbit(
+    nazgul_x: int, nazgul_y: int, hobbits: EntityPositions
+) -> tuple[Position | None, float]:
+    """Find nearest Hobbit and distance.
+
+    Returns (hobbit_pos, distance) or (None, infinity)
+    """
     if not hobbits:
-        return None
+        return None, float("inf")
 
     nearest = hobbits[0]
     min_dist = abs(nazgul_x - nearest[0]) + abs(nazgul_y - nearest[1])
@@ -135,7 +141,7 @@ def find_nearest_hobbit(nazgul_x: int, nazgul_y: int, hobbits: EntityPositions) 
             min_dist = dist
             nearest = hobbit
 
-    return nearest
+    return nearest, min_dist
 
 
 def move_with_speed(
@@ -160,9 +166,17 @@ def move_with_speed(
         # Check boundaries and terrain
         if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
             current_x, current_y = new_x, new_y
-            log_event(tick, "movement", {"entity": (x, y), "new_position": (current_x, current_y)})
+            log_event(
+                tick,
+                "movement",
+                {"entity": (x, y), "new_position": (current_x, current_y)},
+            )
         else:
-            log_event(tick, "movement_blocked", {"entity": (x, y), "new_position": (current_x, current_y)})
+            log_event(
+                tick,
+                "movement_blocked",
+                {"entity": (x, y), "new_position": (current_x, current_y)},
+            )
             # Hit boundary or terrain, stop moving
             break
 
@@ -187,13 +201,14 @@ def find_nearest_nazgul(
 
     return nearest, min_dist
 
+
 def move_away_from(
     current_x: int,
     current_y: int,
     threat_x: int,
     threat_y: int,
     goal_x: int | None = None,
-    goal_y: int | None = None
+    goal_y: int | None = None,
 ) -> Position:
     """Move away from threat, with bias toward goal if provided.
 
@@ -265,20 +280,32 @@ def update_hobbits(
             # PANIC! Run away from Nazgûl
             current_x, current_y = hx, hy
             for step in range(2):  # speed 2
-                debug(f"  Hobbit[{hobbit_index}] step {step+1}/2: at ({current_x},{current_y})")
-                log_event(tick, "evasion_attempt", {"hobbit": (hx, hy), "nazgul": nearest_naz, "goal": rivendell})
+                debug(f"  Hobbit[{hobbit_index}] step {step + 1}/2: at ({current_x},{current_y})")
+                log_event(
+                    tick,
+                    "evasion_attempt",
+                    {"hobbit": (hx, hy), "nazgul": nearest_naz, "goal": rivendell},
+                )
                 new_x, new_y = move_away_from(
-                    current_x, current_y,
+                    current_x,
+                    current_y,
                     threat_x=nearest_naz[0],
                     threat_y=nearest_naz[1],
                     goal_x=rivendell[0],
-                    goal_y=rivendell[1]
-                    )
-                debug(f"  Hobbit[{hobbit_index}] step {step+1}/2: evading from Nazgûl at {nearest_naz}, trying ({new_x},{new_y})")
+                    goal_y=rivendell[1],
+                )
+                debug(
+                    f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
+                    f"evading from Nazgûl at {nearest_naz}, trying ({new_x},{new_y})"
+                )
 
                 # Check if evasion move is valid (boundaries and terrain)
                 if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
-                    debug(f"  Hobbit[{hobbit_index}] step {step+1}/2: evasion move successful from ({current_x},{current_y}) to ({new_x},{new_y})")
+                    debug(
+                        f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
+                        f"evasion move successful from "
+                        f"({current_x},{current_y}) to ({new_x},{new_y})"
+                    )
                     current_x, current_y = new_x, new_y
                     log_event(
                         tick,
@@ -290,7 +317,11 @@ def update_hobbits(
                         },
                     )
                 else:
-                    debug(f"  Hobbit[{hobbit_index}] step {step+1}/2: evasion move failed from ({current_x},{current_y}) to ({new_x},{new_y})")
+                    debug(
+                        f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
+                        f"evasion move failed from "
+                        f"({current_x},{current_y}) to ({new_x},{new_y})"
+                    )
                     log_event(
                         tick,
                         "evasion_failure",
@@ -300,21 +331,41 @@ def update_hobbits(
                             "new_position": (current_x, current_y),
                         },
                     )
-                    # Can't evade in that direction - try moving toward goal instead
+                    # Can't evade in that direction - try moving toward goal
                     new_x, new_y = move_toward(current_x, current_y, rivendell[0], rivendell[1])
-                    debug(f"  Hobbit[{hobbit_index}] step {step+1}/2: moving toward goal from ({current_x},{current_y}) to ({new_x},{new_y})")
+                    debug(
+                        f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
+                        f"moving toward goal from ({current_x},{current_y}) "
+                        f"to ({new_x},{new_y})"
+                    )
                     if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
                         current_x, current_y = new_x, new_y
-                        debug(f"  Hobbit[{hobbit_index}] step {step+1}/2: moving toward goal successful from ({current_x},{current_y}) to ({new_x},{new_y})")
+                        debug(
+                            f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
+                            f"moving toward goal successful from "
+                            f"({current_x},{current_y}) to ({new_x},{new_y})"
+                        )
                     else:
-                        debug(f"  Hobbit[{hobbit_index}] step {step+1}/2: moving toward goal failed from ({current_x},{current_y}) to ({new_x},{new_y})")
+                        debug(
+                            f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
+                            f"moving toward goal failed from "
+                            f"({current_x},{current_y}) to ({new_x},{new_y})"
+                        )
 
             new_hobbits.append((current_x, current_y))
         else:
-            debug(f"  Hobbit[{hobbit_index}] safe - move toward Rivendell from ({hx},{hy}) to ({rivendell[0]},{rivendell[1]})")
+            debug(
+                f"  Hobbit[{hobbit_index}] safe - move toward Rivendell "
+                f"from ({hx},{hy}) to ({rivendell[0]},{rivendell[1]})"
+            )
             # Safe - move toward Rivendell
-            log_event(tick, "hobbit_movement_attempt", {"hobbit": (hx, hy), "rivendell": rivendell})
-            # TODO: pull steps above out a layer so they don't accidentally move into the danger zone
+            log_event(
+                tick,
+                "hobbit_movement_attempt",
+                {"hobbit": (hx, hy), "rivendell": rivendell},
+            )
+            # TODO: pull steps above out a layer so they don't accidentally
+            # move into the danger zone
             new_x, new_y = move_with_speed(
                 hx,
                 hy,
@@ -338,19 +389,35 @@ def update_nazgul(
     height: int,
     tick: int,
     terrain: set[Position] | None = None,
+    debug_output: list[str] | None = None,
 ) -> EntityPositions:
     """Move all Nazgûl toward nearest hobbit at speed 1. Returns new Nazgûl positions."""
     new_nazgul = []
     if terrain is None:
         terrain = set()
 
-    for nx, ny in nazgul:
+    def debug(msg: str) -> None:
+        if debug_output is not None:
+            debug_output.append(msg)
+        else:
+            print(msg)
+
+    for nazgul_index, (nx, ny) in enumerate(nazgul):
         log_event(tick, "nazgul_movement_attempt", {"nazgul": (nx, ny), "hobbits": hobbits})
-        target = find_nearest_hobbit(nx, ny, hobbits)
+        target, distance = find_nearest_hobbit(nx, ny, hobbits)
         if target:
+            debug(f"  Nazgûl[{nazgul_index}] chasing Hobbit at {target}")
             log_event(tick, "nazgul_movement", {"nazgul": (nx, ny), "hobbit": target})
             new_x, new_y = move_with_speed(
-                nx, ny, target[0], target[1], speed=1, width=width, height=height, tick=tick, terrain=terrain
+                nx,
+                ny,
+                target[0],
+                target[1],
+                speed=1,
+                width=width,
+                height=height,
+                tick=tick,
+                terrain=terrain,
             )
             new_nazgul.append((new_x, new_y))
     return new_nazgul
@@ -406,7 +473,6 @@ def create_world() -> dict:
     }
 
 
-
 def run_simulation() -> None:
     """Run the main simulation"""
 
@@ -421,9 +487,58 @@ def run_simulation() -> None:
 
     tick = 0
     while True:
-        debug_buffer = []
+        debug_buffer: list[str] = []
 
-        # Create fresh grid
+        # Check win condition if all hobbits are at Rivendell
+        if all(h == rivendell for h in hobbits):
+            log_event(
+                tick, "victory", {"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell}
+            )
+            print("🎉 Victory! All hobbits reached Rivendell!")
+            break
+        if len(hobbits) != world["starting_hobbit_count"]:
+            log_event(
+                tick, "defeat", {"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell}
+            )
+            print("💀 Defeat! Some hobbits were caught!")
+            break
+
+        # Move entities
+        hobbits = update_hobbits(
+            hobbits,
+            rivendell,
+            nazgul,
+            WIDTH,
+            HEIGHT,
+            tick=tick,
+            terrain=terrain,
+            debug_output=debug_buffer,
+        )
+        nazgul = update_nazgul(
+            nazgul,
+            hobbits,
+            WIDTH,
+            HEIGHT,
+            tick=tick,
+            terrain=terrain,
+            debug_output=debug_buffer,
+        )
+
+        # Check for captures (Nazgûl on same square as hobbit)
+        hobbits_to_remove = []
+        for hobbit in hobbits:
+            for naz in nazgul:
+                if hobbit == naz:
+                    hobbits_to_remove.append(hobbit)
+                    log_event(tick, "hobbit_captured", {"hobbit": hobbit, "nazgul": naz})
+                    print(f"💀 Hobbit caught at {hobbit}!")
+                    break
+
+        for h in hobbits_to_remove:
+            hobbits.remove(h)
+        log_event(tick, "hobbits_removed", {"hobbits": hobbits_to_remove})
+
+        # Create fresh grid with NEW positions
         grid = create_grid(WIDTH, HEIGHT)
 
         # Place terrain
@@ -446,41 +561,7 @@ def run_simulation() -> None:
         print(f"=== Tick {tick} ===")
         print(f"Hobbits remaining: {len(hobbits)}")
 
-        # Check win condition if all hobbits are at Rivendell
-        if all(h == rivendell for h in hobbits):
-            log_event(
-                tick, "victory", {"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell}
-            )
-            print("🎉 Victory! All hobbits reached Rivendell!")
-            break
-        if len(hobbits) != world["starting_hobbit_count"]:
-            log_event(
-                tick, "defeat", {"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell}
-            )
-            print("💀 Defeat! Some hobbits were caught!")
-            break
-
-        # Move entities
-        hobbits = update_hobbits(
-            hobbits, rivendell, nazgul, WIDTH, HEIGHT, tick=tick, terrain=terrain, debug_output=debug_buffer
-        )
-        nazgul = update_nazgul(nazgul, hobbits, WIDTH, HEIGHT, tick=tick, terrain=terrain)
-
-        # Check for captures (Nazgûl on same square as hobbit)
-        hobbits_to_remove = []
-        for hobbit in hobbits:
-            for naz in nazgul:
-                if hobbit == naz:
-                    hobbits_to_remove.append(hobbit)
-                    log_event(tick, "hobbit_captured", {"hobbit": hobbit, "nazgul": naz})
-                    print(f"💀 Hobbit caught at {hobbit}!")
-                    break
-
-        for h in hobbits_to_remove:
-            hobbits.remove(h)
-        log_event(tick, "hobbits_removed", {"hobbits": hobbits_to_remove})
-
-        # Print debug output after movement
+        # Print debug output
         if debug_buffer:
             for line in debug_buffer:
                 print(line)
