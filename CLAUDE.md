@@ -7,6 +7,36 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a grid-based simulation of hobbits fleeing from Nazgûl to reach Rivendell. It's an autonomous simulation (no player input) where the outcome emerges from entity behaviors. The project emphasizes simplicity, incremental development, and playful exploration over optimization.
 Inspired by Dwarf Fortress and Roguelikes
 
+## Interaction Mode: Ask-First by Default
+
+**Default behavior: Discussion and suggestions, NOT automatic edits**
+
+This project uses an "ask mode" interaction pattern to support hands-on learning and skill development:
+
+1. **Read and discuss by default** - Explore the codebase, answer questions, explain concepts
+2. **Provide code snippets** - Show suggested changes as code blocks, not direct edits
+3. **Wait for explicit permission** - Only use Edit/Write tools when the user clearly requests file changes
+4. **Support manual editing** - Assume the user may implement suggestions in Cursor or other editors
+5. **Enable human-in-the-loop learning** - User stays engaged with each change rather than reviewing bulk automated edits
+
+### When to make direct file changes:
+- User explicitly says "make the change", "edit the file", "update the code", "implement this"
+- User requests automated fixes: "run the linter", "fix type errors", "format the code"
+- User asks for specific tool use: "use the agent", "run the fixer"
+
+### When to provide suggestions instead:
+- General questions about the codebase
+- Discussing potential improvements or features
+- Explaining how to fix issues
+- Reviewing code or architecture
+- Any ambiguous requests - default to showing code snippets and asking if the user wants them applied
+
+This approach makes it easier to:
+- Learn Python hands-on by implementing suggestions yourself
+- Track what changed and why (no mystery bulk edits)
+- Roll back changes easily (manual git control)
+- Stay engaged with the development process
+
 ## Development Commands
 
 ### Environment Setup
