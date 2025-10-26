@@ -19,9 +19,9 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
     Expected: Hobbit should move laterally (east or west) along edge to evade
     """
     # Setup: Hobbit at south edge, Nazgûl to the north
-    hobbits = [(10, 18)]  # At south edge
+    hobbits = [(10, 19)]  # At south edge
     nazgul = [(10, 15)]  # 4 squares north (within danger distance 6)
-    rivendell = (18, 18)  # Goal is east along same edge
+    rivendell = (19, 19)  # Goal is east along same edge
 
     # Move hobbits (should evade)
     new_hobbits = update_hobbits(
@@ -38,6 +38,33 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
     # Assert: Hobbit moved laterally toward goal (east), not stuck going south
     assert new_hobbits[0][0] > 10, "Hobbit should move east toward goal"
     assert new_hobbits[0][1] == 19, "Hobbit should stay on south edge"
+
+def test_hobbit_evading_at_south_edge_with_terrain_doesnt_get_stuck() -> None:
+    """
+    Scenario: Hobbit at bottom edge (y=18), Nazgûl approaching from north
+    Bug: Hobbit tries to move south (away), hits boundary, doesn't move at all
+    Expected: Hobbit should move laterally (east or west) along edge to evade
+    """
+    # Setup: Hobbit at south edge, Nazgûl to the north
+    hobbits = [(10, 18)]  # At south edge
+    nazgul = [(10, 15)]  # 4 squares north (within danger distance 6)
+    rivendell = (19, 19)  # Goal is east along same edge
+
+    terrain = set()
+    for x in range(20):
+        terrain.add((x, 19))  # Bottom border
+
+    # Move hobbits (should evade)
+    new_hobbits = update_hobbits(
+        hobbits=hobbits,
+        rivendell=rivendell,
+        nazgul=nazgul,
+        dimensions=(20, 20),
+        tick=0,
+        terrain=terrain,
+    )
+
+    assert new_hobbits[0] == (12, 18), "Hobbit should move east toward goal"
 
 
 def test_move_away_from_uses_manhattan_movement() -> None:
@@ -87,8 +114,7 @@ def test_find_nearest_hobbit_with_no_hobbits() -> None:
     assert find_nearest_hobbit(nazgul=(10, 10), hobbits=[]) == (None, float("inf"))
 
 
-@pytest.mark.skip(reason="Not implemented")
-def test_hobbits_cannot_stack_on_same_square() -> None:
+def test_hobbits_can_stack_on_same_square_if_exiting_to_goal() -> None:
     """Two hobbits trying to move to same square - second one should be blocked"""
     hobbits = [(0, 0), (1, 0)]  # Side by side
     nazgul = [(10, 10)]  # Far away
@@ -104,26 +130,72 @@ def test_hobbits_cannot_stack_on_same_square() -> None:
         tick=0,
     )
 
-    # Should have 2 distinct positions (no stacking)
-    assert len(set(new_hobbits)) == 2, "Hobbits should not stack"
+    # Should have 1 position (stacking)
+    assert len(set(new_hobbits)) == 1, "Hobbits should stack"
+    assert new_hobbits[0] == (2, 0)
 
 
-@pytest.mark.skip(reason="Not implemented")
 def test_nazgul_cannot_stack_on_same_square() -> None:
     """Two Nazgûl chasing same hobbit shouldn't stack"""
     hobbits = [(10, 10)]
-    nazgul = [(8, 10), (12, 10)]  # Both sides of hobbit
+    nazgul = [(9, 10), (11, 10)]  # Both sides of hobbit
 
     # Both want to move toward (10, 10)
-    new_nazgul = update_nazgul(nazgul=nazgul, hobbits=hobbits, dimensions=(20, 20), tick=0)
+    new_nazgul = update_nazgul(
+        nazgul=nazgul,
+        hobbits=hobbits,
+        dimensions=(20, 20),
+        tick=0,
+        terrain=set(),
+    )
+
 
     # Should have 2 distinct positions
     assert len(set(new_nazgul)) == 2, "Nazgûl should not stack"
+    assert new_nazgul[0] == (10, 10)
+    assert new_nazgul[1] == (11, 10)
 
+@pytest.mark.skip(reason="Evasion logic is still too strange.")
+def test_hobbits_fleeing_to_corner_cannot_stack() -> None:
+      """Two hobbits evading toward same corner square should not stack"""
+      # Setup: Two hobbits in a line, Nazgûl chasing from behind
+      hobbits = [(1, 1), (1, 2)]  # Vertical line
+      nazgul = [(2, 1), (2, 2), (2, 3), (1, 3)]  # South of both, within danger distance
+      rivendell = (4, 4)  # Northwest corner - both will flee there
 
-@pytest.mark.skip(reason="Not implemented")
-def test_hobbit_can_move_onto_nazgul_square_for_capture() -> None:
-    """Hobbits and Nazgûl CAN overlap (that's how captures work)"""
+      # Both hobbits will try to flee northwest (away from nazgul)
+      # Both want to reach (4, 4) area
+      new_hobbits = update_hobbits(
+          hobbits=hobbits,
+          rivendell=rivendell,
+          nazgul=nazgul,
+          dimensions=(20, 20),
+          tick=0,
+      )
+
+      # Should NOT stack on same square
+      assert len(set(new_hobbits)) == 2, f"Hobbits stacked! {new_hobbits}"
+      assert new_hobbits[0] == (0, 1)
+      assert new_hobbits[1] == (0, 2)
+
+def test_nazgul_can_move_onto_hobbit_square_for_capture() -> None:
+    """Nazgûl can move onto a hobbit square for capture"""
+    hobbits = [(10, 10)]
+    nazgul = [(9, 10)]
+
+    new_nazgul = update_nazgul(
+        nazgul=nazgul,
+        hobbits=hobbits,
+        dimensions=(20, 20),
+        tick=0,
+        terrain=set(),
+    )
+
+    assert new_nazgul[0] == (10, 10)
+
+@pytest.mark.skip(reason="Not implemented. In fact this test should prove that a hobbit will not move to a nazgul square for capture.")
+def test_hobbit_will_not_move_onto_nazgul_square_for_capture() -> None:
+    """Hobbit will not move onto a nazgul square for capture"""
     hobbits = [(9, 10)]
     nazgul = [(10, 10)]
     rivendell = (19, 19)
@@ -139,7 +211,7 @@ def test_hobbit_can_move_onto_nazgul_square_for_capture() -> None:
     )
 
     # Movement should happen (even though it leads to capture)
-    assert new_hobbits[0] != (9, 10), "Hobbit should be able to move"
+    assert new_hobbits[0] != (9, 10), "Hobbit should be able to evade capture"
 
 
 def test_hobbit_reaches_goal_when_no_threat() -> None:
@@ -201,8 +273,7 @@ def test_hobbit_evades_perpendicular_threat() -> None:
     # X-position might stay same or move toward goal
     assert hobbits[0][1] > 10, "Should flee south from north threat"
 
-
-@pytest.mark.skip(reason="Complex scenario - focus on simpler 1v1 case first")
+@pytest.mark.skip(reason="Evasion is not strong enough yet. Hobbit runs into a wall and gets stuck.")
 def test_single_hobbit_escapes_single_nazgul() -> None:
     """Simplest case: 1 hobbit vs 1 Nazgûl, clear path to goal"""
     # Hobbit starts northwest, goal is southeast, Nazgûl starts in between
@@ -250,7 +321,7 @@ def test_single_hobbit_escapes_single_nazgul() -> None:
     pytest.fail(f"Simulation timeout after 50 ticks. Hobbit at {hobbits[0]}, Nazgûl at {nazgul[0]}")
 
 
-@pytest.mark.skip(reason="Complex scenario - focus on simpler 1v1 case first")
+@pytest.mark.skip(reason="Evasion is not strong enough yet. We need to implement a more robust evasion system.")
 def test_system_three_hobbits_escape_single_rider() -> None:
     """
     System test: Full simulation scenario
