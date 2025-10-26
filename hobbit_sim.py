@@ -32,7 +32,7 @@ def _debug_output(msg: str, *, debug_output: list[str] | None = None) -> None:
         print(msg)
 
 
-def log_event(tick: int, event_type: str, event_data: dict) -> None:
+def log_event(*, tick: int, event_type: str, event_data: dict) -> None:
     """Log an event to the log file"""
     with open(LOG_FILENAME, "a") as f:
         json.dump({"tick": tick, "event_type": event_type, "event_data": event_data}, f)
@@ -180,15 +180,15 @@ def move_with_speed(
         if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
             current_x, current_y = new_x, new_y
             log_event(
-                tick,
-                "movement",
-                {"entity": current, "new_position": (current_x, current_y)},
+                tick=tick,
+                event_type="movement",
+                event_data={"entity": current, "new_position": (current_x, current_y)},
             )
         else:
             log_event(
-                tick,
-                "movement_blocked",
-                {"entity": current, "new_position": (current_x, current_y)},
+                tick=tick,
+                event_type="movement_blocked",
+                event_data={"entity": current, "new_position": (current_x, current_y)},
             )
             # Hit boundary or terrain, stop moving
             break
@@ -298,9 +298,9 @@ def update_hobbits(
                     debug_output=debug_output,
                 )
                 log_event(
-                    tick,
-                    "evasion_attempt",
-                    {"hobbit": hobbit_pos, "nazgul": nearest_naz, "goal": rivendell},
+                    tick=tick,
+                    event_type="evasion_attempt",
+                    event_data={"hobbit": hobbit_pos, "nazgul": nearest_naz, "goal": rivendell},
                 )
                 new_x, new_y = move_away_from(
                     current=(current_x, current_y),
@@ -323,9 +323,9 @@ def update_hobbits(
                     )
                     current_x, current_y = new_x, new_y
                     log_event(
-                        tick,
-                        "evasion_success",
-                        {
+                        tick=tick,
+                        event_type="evasion_success",
+                        event_data={
                             "hobbit": hobbit_pos,
                             "nazgul": nearest_naz,
                             "new_position": (current_x, current_y),
@@ -339,9 +339,9 @@ def update_hobbits(
                         debug_output=debug_output,
                     )
                     log_event(
-                        tick,
-                        "evasion_failure",
-                        {
+                        tick=tick,
+                        event_type="evasion_failure",
+                        event_data={
                             "hobbit": hobbit_pos,
                             "nazgul": nearest_naz,
                             "new_position": (current_x, current_y),
@@ -380,9 +380,9 @@ def update_hobbits(
             )
             # Safe - move toward Rivendell
             log_event(
-                tick,
-                "hobbit_movement_attempt",
-                {"hobbit": hobbit_pos, "rivendell": rivendell},
+                tick=tick,
+                event_type="hobbit_movement_attempt",
+                event_data={"hobbit": hobbit_pos, "rivendell": rivendell},
             )
             # TODO: pull steps above out a layer so they don't accidentally
             # move into the danger zone
@@ -443,10 +443,11 @@ def update_nazgul(
                 new_nazgul.add((new_x, new_y))
             else:
                 new_nazgul.add(nazgul_pos)
-                _debug_output(
-                    f"  Nazgûl[{nazgul_index}] cannot move to {new_x},{new_y} because it is already occupied",
-                    debug_output=debug_output,
+                msg = (
+                    f"  Nazgûl[{nazgul_index}] cannot move to {new_x},{new_y} "
+                    "because it is already occupied"
                 )
+                _debug_output(msg, debug_output=debug_output)
     return list(new_nazgul)
 
 
@@ -520,13 +521,17 @@ def run_simulation() -> None:
         # Check win condition if all hobbits are at Rivendell
         if all(h == rivendell for h in hobbits):
             log_event(
-                tick, "victory", {"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell}
+                tick=tick,
+                event_type="victory",
+                event_data={"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell},
             )
             print("🎉 Victory! All hobbits reached Rivendell!")
             break
         if len(hobbits) != world["starting_hobbit_count"]:
             log_event(
-                tick, "defeat", {"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell}
+                tick=tick,
+                event_type="defeat",
+                event_data={"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell},
             )
             print("💀 Defeat! Some hobbits were caught!")
             break
@@ -556,13 +561,19 @@ def run_simulation() -> None:
             for naz in nazgul:
                 if hobbit == naz:
                     hobbits_to_remove.append(hobbit)
-                    log_event(tick, "hobbit_captured", {"hobbit": hobbit, "nazgul": naz})
+                    log_event(
+                        tick=tick,
+                        event_type="hobbit_captured",
+                        event_data={"hobbit": hobbit, "nazgul": naz},
+                    )
                     print(f"💀 Hobbit caught at {hobbit}!")
                     break
 
         for h in hobbits_to_remove:
             hobbits.remove(h)
-        log_event(tick, "hobbits_removed", {"hobbits": hobbits_to_remove})
+        log_event(
+            tick=tick, event_type="hobbits_removed", event_data={"hobbits": hobbits_to_remove}
+        )
 
         # Create fresh grid with NEW positions
         grid = create_grid(dimensions=(WIDTH, HEIGHT))
