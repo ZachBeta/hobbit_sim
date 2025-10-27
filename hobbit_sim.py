@@ -3,6 +3,9 @@ import json
 import os
 import sys
 import time
+from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
 
 Position = tuple[int, int]
 GridDimensions = tuple[int, int]
@@ -24,12 +27,102 @@ def _get_log_filename() -> str:
 LOG_FILENAME = _get_log_filename()
 
 
-def _debug_output(msg: str, *, debug_output: list[str] | None = None) -> None:
-    """Helper for debug output - prints or appends to list"""
-    if debug_output is not None:
-        debug_output.append(msg)
-    else:
-        print(msg)
+@dataclass
+class GameEvent:
+    """Represents a game event with structured data and narrative formatting"""
+
+    tick: int
+    event_type: str
+    data: dict[str, Any]
+
+    def to_log_entry(self) -> dict:
+        """Format for JSON logging (includes all data, including indices)"""
+        return {"tick": self.tick, "event_type": self.event_type, "event_data": self.data}
+
+    def to_narrative(self) -> str:
+        """Format as narrative text for watching the simulation unfold"""
+        formatter = EVENT_FORMATTERS.get(self.event_type)
+        if formatter:
+            return formatter(self.data)
+        return f"[{self.event_type}] {self.data}"
+
+
+class NarrativeBuffer:
+    """Collects narrative output during a simulation tick"""
+
+    _buffer: list[str] = []
+
+    @classmethod
+    def append(cls, message: str) -> None:
+        """Add a message to the narrative buffer"""
+        if message:  # Only add non-empty messages
+            cls._buffer.append(message)
+
+    @classmethod
+    def flush(cls) -> None:
+        """Print all buffered messages and clear the buffer"""
+        for msg in cls._buffer:
+            print(msg)
+        cls._buffer.clear()
+
+
+# Narrative formatters - tell the story of what's happening
+EVENT_FORMATTERS: dict[str, Callable[[dict[str, Any]], str]] = {
+    "nazgul_movement": lambda d: (
+        f"  Nazgûl[{d['nazgul_index']}] chasing Hobbit at {d['hobbit']} from {d['nazgul']}"
+    ),
+    # Evasion story
+    "evasion_attempt": lambda d: (
+        f"  Hobbit[{d['hobbit_index']}] step {d['step']}/2: "
+        f"evading from Nazgûl at {d['nazgul']}, trying {d['attempted_position']}"
+    ),
+    "evasion_success": lambda d: (
+        f"  Hobbit[{d['hobbit_index']}] step {d['step']}/2: "
+        f"evasion successful → {d['new_position']}"
+    ),
+    "evasion_failure": lambda d: (
+        f"  Hobbit[{d['hobbit_index']}] step {d['step']}/2: "
+        f"evasion blocked at {d['attempted_position']}, falling back to goal-seeking"
+    ),
+    # Safe travel (when not evading)
+    "hobbit_safe_travel": lambda d: (
+        f"  Hobbit[{d['hobbit_index']}] safe - moving toward Rivendell "
+        f"from {d['hobbit']} to {d['rivendell']}"
+    ),
+    # Game outcomes
+    "victory": lambda d: "🎉 Victory! All hobbits reached Rivendell!",
+    "defeat": lambda d: "💀 Defeat! Some hobbits were caught!",
+    "hobbit_captured": lambda d: f"💀 Hobbit caught at {d['hobbit']}!",
+    # Movement detail (sub-steps)
+    "movement": lambda d: f"    → moved to {d['new_position']}",
+    "movement_blocked": lambda d: f"    ✗ blocked at {d['entity']} (terrain/boundary)",
+    # Nazgûl decision-making
+    "nazgul_movement_attempt": lambda d: f"  Nazgûl at {d['nazgul']} seeking target",
+    # Cleanup bookkeeping
+    "hobbits_removed": lambda d: (
+        f"  Removed {len(d['hobbits'])} hobbit(s)" if d['hobbits'] else ""
+    ),
+}
+
+
+def emit_event(*, tick: int, event_type: str, **event_data: Any) -> None:
+    """Emit a game event - handles both logging and narrative output"""
+    event = GameEvent(tick=tick, event_type=event_type, data=event_data)
+
+    # Write structured log
+    log_entry = event.to_log_entry()
+    with open(LOG_FILENAME, "a") as f:
+        json.dump(log_entry, f)
+        f.write("\n")
+
+    # Add narrative to buffer
+    narrative = event.to_narrative()
+    NarrativeBuffer.append(narrative)
+
+
+def _debug_output(msg: str) -> None:
+    """Helper for narrative output - adds to buffer"""
+    NarrativeBuffer.append(msg)
 
 
 def log_event(*, tick: int, event_type: str, event_data: dict) -> None:
@@ -277,7 +370,6 @@ def update_hobbits(
     dimensions: GridDimensions,
     tick: int,
     terrain: set[Position] | None = None,
-    debug_output: list[str] | None = None,
 ) -> EntityPositions:
     """Move all hobbits toward Rivendell at speed 2. Returns new hobbit positions."""
     new_hobbits = []
@@ -293,96 +385,74 @@ def update_hobbits(
             # PANIC! Run away from Nazgûl
             current_x, current_y = hobbit_pos
             for step in range(2):  # speed 2
-                _debug_output(
-                    f"  Hobbit[{hobbit_index}] step {step + 1}/2: at ({current_x},{current_y})",
-                    debug_output=debug_output,
-                )
-                log_event(
-                    tick=tick,
-                    event_type="evasion_attempt",
-                    event_data={"hobbit": hobbit_pos, "nazgul": nearest_naz, "goal": rivendell},
-                )
                 new_x, new_y = move_away_from(
                     current=(current_x, current_y),
                     threat=nearest_naz,
                     goal=rivendell,
                 )
-                _debug_output(
-                    f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
-                    f"evading from Nazgûl at {nearest_naz}, trying ({new_x},{new_y})",
-                    debug_output=debug_output,
+                emit_event(
+                    tick=tick,
+                    event_type="evasion_attempt",
+                    hobbit_index=hobbit_index,
+                    step=step + 1,
+                    hobbit=hobbit_pos,
+                    nazgul=nearest_naz,
+                    goal=rivendell,
+                    attempted_position=(new_x, new_y),
                 )
 
                 # Check if evasion move is valid (boundaries and terrain)
                 if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
-                    _debug_output(
-                        f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
-                        f"evasion move successful from "
-                        f"({current_x},{current_y}) to ({new_x},{new_y})",
-                        debug_output=debug_output,
-                    )
                     current_x, current_y = new_x, new_y
-                    log_event(
+                    emit_event(
                         tick=tick,
                         event_type="evasion_success",
-                        event_data={
-                            "hobbit": hobbit_pos,
-                            "nazgul": nearest_naz,
-                            "new_position": (current_x, current_y),
-                        },
+                        hobbit_index=hobbit_index,
+                        step=step + 1,
+                        hobbit=hobbit_pos,
+                        nazgul=nearest_naz,
+                        new_position=(current_x, current_y),
                     )
                 else:
-                    _debug_output(
-                        f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
-                        f"evasion move failed from "
-                        f"({current_x},{current_y}) to ({new_x},{new_y})",
-                        debug_output=debug_output,
-                    )
-                    log_event(
+                    emit_event(
                         tick=tick,
                         event_type="evasion_failure",
-                        event_data={
-                            "hobbit": hobbit_pos,
-                            "nazgul": nearest_naz,
-                            "new_position": (current_x, current_y),
-                        },
+                        hobbit_index=hobbit_index,
+                        step=step + 1,
+                        hobbit=hobbit_pos,
+                        nazgul=nearest_naz,
+                        attempted_position=(new_x, new_y),
                     )
                     # Can't evade in that direction - try moving toward goal
                     new_x, new_y = move_toward(current=(current_x, current_y), target=rivendell)
                     _debug_output(
                         f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
                         f"moving toward goal from ({current_x},{current_y}) "
-                        f"to ({new_x},{new_y})",
-                        debug_output=debug_output,
+                        f"to ({new_x},{new_y})"
                     )
                     if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
                         current_x, current_y = new_x, new_y
                         _debug_output(
                             f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
                             f"moving toward goal successful from "
-                            f"({current_x},{current_y}) to ({new_x},{new_y})",
-                            debug_output=debug_output,
+                            f"({current_x},{current_y}) to ({new_x},{new_y})"
                         )
                     else:
                         _debug_output(
                             f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
                             f"moving toward goal failed from "
-                            f"({current_x},{current_y}) to ({new_x},{new_y})",
-                            debug_output=debug_output,
+                            f"({current_x},{current_y}) to ({new_x},{new_y})"
                         )
 
             new_hobbits.append((current_x, current_y))
         else:
-            _debug_output(
-                f"  Hobbit[{hobbit_index}] safe - move toward Rivendell "
-                f"from {hobbit_pos} to {rivendell}",
-                debug_output=debug_output,
-            )
             # Safe - move toward Rivendell
-            log_event(
+            emit_event(
                 tick=tick,
-                event_type="hobbit_movement_attempt",
-                event_data={"hobbit": hobbit_pos, "rivendell": rivendell},
+                event_type="hobbit_safe_travel",
+                hobbit_index=hobbit_index,
+                hobbit=hobbit_pos,
+                rivendell=rivendell,
             )
             # TODO: pull steps above out a layer so they don't accidentally
             # move into the danger zone
@@ -406,7 +476,6 @@ def update_nazgul(
     dimensions: GridDimensions,
     tick: int,
     terrain: set[Position] | None = None,
-    debug_output: list[str] | None = None,
 ) -> EntityPositions:
     """Move all Nazgûl toward nearest hobbit at speed 1. Returns new Nazgûl positions."""
     new_nazgul = set()
@@ -422,14 +491,12 @@ def update_nazgul(
         )
         target, distance = find_nearest_hobbit(nazgul=nazgul_pos, hobbits=hobbits)
         if target:
-            _debug_output(
-                f"  Nazgûl[{nazgul_index}] chasing Hobbit at {target} from {nazgul_pos}",
-                debug_output=debug_output,
-            )
-            log_event(
+            emit_event(
                 tick=tick,
                 event_type="nazgul_movement",
-                event_data={"nazgul": nazgul_pos, "hobbit": target},
+                nazgul=nazgul_pos,
+                nazgul_index=nazgul_index,
+                hobbit=target,
             )
             new_x, new_y = move_with_speed(
                 current=nazgul_pos,
@@ -447,7 +514,7 @@ def update_nazgul(
                     f"  Nazgûl[{nazgul_index}] cannot move to {new_x},{new_y} "
                     "because it is already occupied"
                 )
-                _debug_output(msg, debug_output=debug_output)
+                _debug_output(msg)
     return list(new_nazgul)
 
 
@@ -516,24 +583,24 @@ def run_simulation() -> None:
     dimensions = (WIDTH, HEIGHT)
     tick = 0
     while True:
-        debug_buffer: list[str] = []
-
         # Check win condition if all hobbits are at Rivendell
         if all(h == rivendell for h in hobbits):
-            log_event(
+            emit_event(
                 tick=tick,
                 event_type="victory",
-                event_data={"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell},
+                hobbits=hobbits,
+                nazgul=nazgul,
+                rivendell=rivendell,
             )
-            print("🎉 Victory! All hobbits reached Rivendell!")
             break
         if len(hobbits) != world["starting_hobbit_count"]:
-            log_event(
+            emit_event(
                 tick=tick,
                 event_type="defeat",
-                event_data={"hobbits": hobbits, "nazgul": nazgul, "rivendell": rivendell},
+                hobbits=hobbits,
+                nazgul=nazgul,
+                rivendell=rivendell,
             )
-            print("💀 Defeat! Some hobbits were caught!")
             break
 
         # Move entities
@@ -544,7 +611,6 @@ def run_simulation() -> None:
             dimensions=dimensions,
             tick=tick,
             terrain=terrain,
-            debug_output=debug_buffer,
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
@@ -552,7 +618,6 @@ def run_simulation() -> None:
             dimensions=dimensions,
             tick=tick,
             terrain=terrain,
-            debug_output=debug_buffer,
         )
 
         # Check for captures (Nazgûl on same square as hobbit)
@@ -561,19 +626,16 @@ def run_simulation() -> None:
             for naz in nazgul:
                 if hobbit == naz:
                     hobbits_to_remove.append(hobbit)
-                    log_event(
+                    emit_event(
                         tick=tick,
                         event_type="hobbit_captured",
-                        event_data={"hobbit": hobbit, "nazgul": naz},
+                        hobbit=hobbit,
+                        nazgul=naz,
                     )
-                    print(f"💀 Hobbit caught at {hobbit}!")
                     break
 
         for h in hobbits_to_remove:
             hobbits.remove(h)
-        log_event(
-            tick=tick, event_type="hobbits_removed", event_data={"hobbits": hobbits_to_remove}
-        )
 
         # Create fresh grid with NEW positions
         grid = create_grid(dimensions=(WIDTH, HEIGHT))
@@ -598,10 +660,8 @@ def run_simulation() -> None:
         print(f"=== Tick {tick} ===")
         print(f"Hobbits remaining: {len(hobbits)}")
 
-        # Print debug output
-        if debug_buffer:
-            for line in debug_buffer:
-                print(line)
+        # Print narrative output
+        NarrativeBuffer.flush()
 
         print_grid(grid)
         tick += 1
