@@ -39,6 +39,7 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
     assert new_hobbits[0][0] > 10, "Hobbit should move east toward goal"
     assert new_hobbits[0][1] == 19, "Hobbit should stay on south edge"
 
+
 def test_hobbit_evading_at_south_edge_with_terrain_doesnt_get_stuck() -> None:
     """
     Scenario: Hobbit at bottom edge (y=18), Nazgûl approaching from north
@@ -149,34 +150,35 @@ def test_nazgul_cannot_stack_on_same_square() -> None:
         terrain=set(),
     )
 
-
     # Should have 2 distinct positions
     assert len(set(new_nazgul)) == 2, "Nazgûl should not stack"
     assert new_nazgul[0] == (10, 10)
     assert new_nazgul[1] == (11, 10)
 
+
 @pytest.mark.skip(reason="Evasion logic is still too strange.")
 def test_hobbits_fleeing_to_corner_cannot_stack() -> None:
-      """Two hobbits evading toward same corner square should not stack"""
-      # Setup: Two hobbits in a line, Nazgûl chasing from behind
-      hobbits = [(1, 1), (1, 2)]  # Vertical line
-      nazgul = [(2, 1), (2, 2), (2, 3), (1, 3)]  # South of both, within danger distance
-      rivendell = (4, 4)  # Northwest corner - both will flee there
+    """Two hobbits evading toward same corner square should not stack"""
+    # Setup: Two hobbits in a line, Nazgûl chasing from behind
+    hobbits = [(1, 1), (1, 2)]  # Vertical line
+    nazgul = [(2, 1), (2, 2), (2, 3), (1, 3)]  # South of both, within danger distance
+    rivendell = (4, 4)  # Northwest corner - both will flee there
 
-      # Both hobbits will try to flee northwest (away from nazgul)
-      # Both want to reach (4, 4) area
-      new_hobbits = update_hobbits(
-          hobbits=hobbits,
-          rivendell=rivendell,
-          nazgul=nazgul,
-          dimensions=(20, 20),
-          tick=0,
-      )
+    # Both hobbits will try to flee northwest (away from nazgul)
+    # Both want to reach (4, 4) area
+    new_hobbits = update_hobbits(
+        hobbits=hobbits,
+        rivendell=rivendell,
+        nazgul=nazgul,
+        dimensions=(20, 20),
+        tick=0,
+    )
 
-      # Should NOT stack on same square
-      assert len(set(new_hobbits)) == 2, f"Hobbits stacked! {new_hobbits}"
-      assert new_hobbits[0] == (0, 1)
-      assert new_hobbits[1] == (0, 2)
+    # Should NOT stack on same square
+    assert len(set(new_hobbits)) == 2, f"Hobbits stacked! {new_hobbits}"
+    assert new_hobbits[0] == (0, 1)
+    assert new_hobbits[1] == (0, 2)
+
 
 def test_nazgul_can_move_onto_hobbit_square_for_capture() -> None:
     """Nazgûl can move onto a hobbit square for capture"""
@@ -193,7 +195,11 @@ def test_nazgul_can_move_onto_hobbit_square_for_capture() -> None:
 
     assert new_nazgul[0] == (10, 10)
 
-@pytest.mark.skip(reason="Not implemented. In fact this test should prove that a hobbit will not move to a nazgul square for capture.")
+
+@pytest.mark.skip(
+    reason="Not implemented. In fact this test should prove that a hobbit will not "
+    "move to a nazgul square for capture."
+)
 def test_hobbit_will_not_move_onto_nazgul_square_for_capture() -> None:
     """Hobbit will not move onto a nazgul square for capture"""
     hobbits = [(9, 10)]
@@ -273,7 +279,10 @@ def test_hobbit_evades_perpendicular_threat() -> None:
     # X-position might stay same or move toward goal
     assert hobbits[0][1] > 10, "Should flee south from north threat"
 
-@pytest.mark.skip(reason="Evasion is not strong enough yet. Hobbit runs into a wall and gets stuck.")
+
+@pytest.mark.skip(
+    reason="Evasion is not strong enough yet. Hobbit runs into a wall and gets stuck."
+)
 def test_single_hobbit_escapes_single_nazgul() -> None:
     """Simplest case: 1 hobbit vs 1 Nazgûl, clear path to goal"""
     # Hobbit starts northwest, goal is southeast, Nazgûl starts in between
@@ -321,7 +330,9 @@ def test_single_hobbit_escapes_single_nazgul() -> None:
     pytest.fail(f"Simulation timeout after 50 ticks. Hobbit at {hobbits[0]}, Nazgûl at {nazgul[0]}")
 
 
-@pytest.mark.skip(reason="Evasion is not strong enough yet. We need to implement a more robust evasion system.")
+@pytest.mark.skip(
+    reason="Evasion is not strong enough yet. We need to implement a more robust evasion system."
+)
 def test_system_three_hobbits_escape_single_rider() -> None:
     """
     System test: Full simulation scenario

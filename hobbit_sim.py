@@ -148,7 +148,7 @@ def create_grid(*, dimensions: GridDimensions = (20, 20)) -> Grid:
     return grid
 
 
-def print_grid(grid: Grid) -> None:
+def print_grid(*, grid: Grid) -> None:
     """Print the grid with all entities"""
     print(render_grid(grid=grid))
     print()
@@ -368,6 +368,34 @@ def move_away_from(
     return current_x, current_y
 
 
+def is_valid_position(
+    *,
+    position: Position,
+    dimensions: GridDimensions,
+    terrain: set[Position],
+) -> bool:
+    """Check if position is within bounds and not blocked by terrain."""
+    x, y = position
+    width, height = dimensions
+    return 0 <= x < width and 0 <= y < height and position not in terrain
+
+
+def try_move_step(
+    *,
+    current: Position,
+    attempted: Position,
+    dimensions: GridDimensions,
+    terrain: set[Position],
+) -> tuple[bool, Position]:
+    """
+    Try to move from current to attempted position.
+    Returns (success, new_position) where new_position is attempted if valid, else current.
+    """
+    if is_valid_position(position=attempted, dimensions=dimensions, terrain=terrain):
+        return True, attempted
+    return False, current
+
+
 def update_hobbits(
     *,
     hobbits: EntityPositions,
@@ -407,9 +435,16 @@ def update_hobbits(
                     attempted_position=(new_x, new_y),
                 )
 
-                # Check if evasion move is valid (boundaries and terrain)
-                if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
-                    current_x, current_y = new_x, new_y
+                # Try evasion move
+                success, new_pos = try_move_step(
+                    current=(current_x, current_y),
+                    attempted=(new_x, new_y),
+                    dimensions=dimensions,
+                    terrain=terrain,
+                )
+                current_x, current_y = new_pos
+
+                if success:
                     emit_event(
                         tick=tick,
                         event_type="evasion_success",
@@ -439,8 +474,16 @@ def update_hobbits(
                         hobbit=hobbit_pos,
                         attempted_position=(new_x, new_y),
                     )
-                    if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
-                        current_x, current_y = new_x, new_y
+
+                    fallback_success, new_pos = try_move_step(
+                        current=(current_x, current_y),
+                        attempted=(new_x, new_y),
+                        dimensions=dimensions,
+                        terrain=terrain,
+                    )
+                    current_x, current_y = new_pos
+
+                    if fallback_success:
                         emit_event(
                             tick=tick,
                             event_type="evasion_fallback_success",
@@ -681,7 +724,7 @@ def run_simulation() -> None:
         # Print narrative output
         NarrativeBuffer.flush()
 
-        print_grid(grid)
+        print_grid(grid=grid)
         tick += 1
         time.sleep(0.3)  # Slow down for readability
 
