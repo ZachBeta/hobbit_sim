@@ -100,7 +100,23 @@ EVENT_FORMATTERS: dict[str, Callable[[dict[str, Any]], str]] = {
     "nazgul_movement_attempt": lambda d: f"  Nazgûl at {d['nazgul']} seeking target",
     # Cleanup bookkeeping
     "hobbits_removed": lambda d: (
-        f"  Removed {len(d['hobbits'])} hobbit(s)" if d['hobbits'] else ""
+        f"  Removed {len(d['hobbits'])} hobbit(s)" if d["hobbits"] else ""
+    ),
+    # Evasion fallback (when evasion fails, try moving toward goal)
+    "evasion_fallback_attempt": lambda d: (
+        f"  Hobbit[{d['hobbit_index']}] step {d['step']}/2: "
+        f"fallback to goal {d['attempted_position']}"
+    ),
+    "evasion_fallback_success": lambda d: (
+        f"  Hobbit[{d['hobbit_index']}] step {d['step']}/2: "
+        f"fallback successful → {d['new_position']}"
+    ),
+    "evasion_fallback_blocked": lambda d: (
+        f"  Hobbit[{d['hobbit_index']}] step {d['step']}/2: fallback blocked at {d['current']}"
+    ),
+    # Nazgûl collision
+    "nazgul_blocked": lambda d: (
+        f"  Nazgûl[{d['nazgul_index']}] cannot move to {d['attempted_position']} (occupied)"
     ),
 }
 
@@ -118,18 +134,6 @@ def emit_event(*, tick: int, event_type: str, **event_data: Any) -> None:
     # Add narrative to buffer
     narrative = event.to_narrative()
     NarrativeBuffer.append(narrative)
-
-
-def _debug_output(msg: str) -> None:
-    """Helper for narrative output - adds to buffer"""
-    NarrativeBuffer.append(msg)
-
-
-def log_event(*, tick: int, event_type: str, event_data: dict) -> None:
-    """Log an event to the log file"""
-    with open(LOG_FILENAME, "a") as f:
-        json.dump({"tick": tick, "event_type": event_type, "event_data": event_data}, f)
-        f.write("\n")
 
 
 def create_grid(*, dimensions: GridDimensions = (20, 20)) -> Grid:
@@ -272,16 +276,18 @@ def move_with_speed(
         # Check boundaries and terrain
         if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
             current_x, current_y = new_x, new_y
-            log_event(
+            emit_event(
                 tick=tick,
                 event_type="movement",
-                event_data={"entity": current, "new_position": (current_x, current_y)},
+                entity=current,
+                new_position=(current_x, current_y),
             )
         else:
-            log_event(
+            emit_event(
                 tick=tick,
                 event_type="movement_blocked",
-                event_data={"entity": current, "new_position": (current_x, current_y)},
+                entity=current,
+                new_position=(current_x, current_y),
             )
             # Hit boundary or terrain, stop moving
             break
@@ -425,23 +431,32 @@ def update_hobbits(
                     )
                     # Can't evade in that direction - try moving toward goal
                     new_x, new_y = move_toward(current=(current_x, current_y), target=rivendell)
-                    _debug_output(
-                        f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
-                        f"moving toward goal from ({current_x},{current_y}) "
-                        f"to ({new_x},{new_y})"
+                    emit_event(
+                        tick=tick,
+                        event_type="evasion_fallback_attempt",
+                        hobbit_index=hobbit_index,
+                        step=step + 1,
+                        hobbit=hobbit_pos,
+                        attempted_position=(new_x, new_y),
                     )
                     if 0 <= new_x < width and 0 <= new_y < height and (new_x, new_y) not in terrain:
                         current_x, current_y = new_x, new_y
-                        _debug_output(
-                            f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
-                            f"moving toward goal successful from "
-                            f"({current_x},{current_y}) to ({new_x},{new_y})"
+                        emit_event(
+                            tick=tick,
+                            event_type="evasion_fallback_success",
+                            hobbit_index=hobbit_index,
+                            step=step + 1,
+                            hobbit=hobbit_pos,
+                            new_position=(current_x, current_y),
                         )
                     else:
-                        _debug_output(
-                            f"  Hobbit[{hobbit_index}] step {step + 1}/2: "
-                            f"moving toward goal failed from "
-                            f"({current_x},{current_y}) to ({new_x},{new_y})"
+                        emit_event(
+                            tick=tick,
+                            event_type="evasion_fallback_blocked",
+                            hobbit_index=hobbit_index,
+                            step=step + 1,
+                            hobbit=hobbit_pos,
+                            current=(current_x, current_y),
                         )
 
             new_hobbits.append((current_x, current_y))
@@ -484,10 +499,11 @@ def update_nazgul(
         terrain = set()
 
     for nazgul_index, nazgul_pos in enumerate(nazgul):
-        log_event(
+        emit_event(
             tick=tick,
             event_type="nazgul_movement_attempt",
-            event_data={"nazgul": nazgul_pos, "hobbits": hobbits},
+            nazgul=nazgul_pos,
+            hobbits=hobbits,
         )
         target, distance = find_nearest_hobbit(nazgul=nazgul_pos, hobbits=hobbits)
         if target:
@@ -510,11 +526,13 @@ def update_nazgul(
                 new_nazgul.add((new_x, new_y))
             else:
                 new_nazgul.add(nazgul_pos)
-                msg = (
-                    f"  Nazgûl[{nazgul_index}] cannot move to {new_x},{new_y} "
-                    "because it is already occupied"
+                emit_event(
+                    tick=tick,
+                    event_type="nazgul_blocked",
+                    nazgul_index=nazgul_index,
+                    nazgul=nazgul_pos,
+                    attempted_position=(new_x, new_y),
                 )
-                _debug_output(msg)
     return list(new_nazgul)
 
 
