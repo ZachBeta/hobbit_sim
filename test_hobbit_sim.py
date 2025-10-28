@@ -135,14 +135,23 @@ def test_distance_calculations_use_manhattan_distance() -> None:
     pass
 
 
-def test_hobbits_can_stack_on_same_square_if_exiting_to_goal() -> None:
-    """Two hobbits trying to move to same square - second one should be blocked"""
+def test_hobbits_at_rivendell_represent_exited_state() -> None:
+    """
+    Hobbits reaching Rivendell are considered 'exited' (current simplification).
+
+    In the current implementation, hobbits "stack" at the Rivendell position
+    to represent having successfully exited the map. This is a simplification
+    of the ideal behavior where escaped hobbits would be tracked in a separate
+    buffer off the board.
+
+    See: test_escaped_hobbits_tracked_separately_from_active (skipped) for
+    the desired future behavior.
+    """
     hobbits = [(0, 0), (1, 0)]  # Side by side
     nazgul = [(10, 10)]  # Far away
-    rivendell = (2, 0)  # East
+    rivendell = (2, 0)  # East - the exit
 
-    # Both want to move to (2, 0)
-    # First hobbit gets there, second should be blocked
+    # Both hobbits move toward Rivendell (the exit)
     new_hobbits = update_hobbits(
         hobbits=hobbits,
         rivendell=rivendell,
@@ -151,9 +160,36 @@ def test_hobbits_can_stack_on_same_square_if_exiting_to_goal() -> None:
         tick=0,
     )
 
-    # Should have 1 position (stacking)
-    assert len(set(new_hobbits)) == 1, "Hobbits should stack"
-    assert new_hobbits[0] == (2, 0)
+    # Both hobbits at Rivendell (currently represented as "stacking")
+    assert len(set(new_hobbits)) == 1, "Both hobbits should reach the exit"
+    assert new_hobbits[0] == (2, 0), "Exit position should be Rivendell"
+
+
+@pytest.mark.skip(
+    reason="Exit buffer not implemented - hobbits currently 'stack' at Rivendell "
+    "to represent exited state"
+)
+def test_escaped_hobbits_tracked_separately_from_active() -> None:
+    """
+    Escaped hobbits should be tracked in separate buffer, not as board positions.
+
+    When a hobbit reaches Rivendell, they should be:
+    - Removed from active board positions
+    - Added to escaped/exited buffer
+    - Not vulnerable to capture
+    - Counted toward victory condition
+
+    This separates the concept of 'exiting' (state transition) from
+    'stacking' (collision problem). Similar to roguelike level transitions
+    or Diablo's town portal - you're off the combat map.
+
+    Future implementation might return:
+    - (active_hobbits, escaped_hobbits) tuple
+    - Or WorldState dataclass with separate tracking
+    - Or Game object with exit buffer
+    """
+    # Test will be written when exit buffer is implemented
+    pass
 
 
 def test_nazgul_cannot_stack_on_same_square() -> None:
@@ -178,7 +214,17 @@ def test_nazgul_cannot_stack_on_same_square() -> None:
 
 @pytest.mark.skip(reason="Evasion logic is still too strange.")
 def test_hobbits_fleeing_to_corner_cannot_stack() -> None:
-    """Two hobbits evading toward same corner square should not stack"""
+    """
+    Hobbits avoid colliding when fleeing from danger (collision avoidance).
+
+    When multiple hobbits panic and flee in the same direction, they should
+    spread out to avoid stacking on the same square. This is about collision
+    avoidance during movement, not exiting behavior.
+
+    This is different from reaching Rivendell (exiting), where multiple hobbits
+    CAN occupy the same square because they're transitioning off the map.
+    See: test_hobbits_at_rivendell_represent_exited_state
+    """
     # Setup: Two hobbits in a line, Nazgûl chasing from behind
     hobbits = [(1, 1), (1, 2)]  # Vertical line
     nazgul = [(2, 1), (2, 2), (2, 3), (1, 3)]  # South of both, within danger distance
