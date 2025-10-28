@@ -217,17 +217,24 @@ def test_nazgul_can_move_onto_hobbit_square_for_capture() -> None:
 
 
 @pytest.mark.skip(
-    reason="Not implemented. In fact this test should prove that a hobbit will not "
-    "move to a nazgul square for capture."
+    reason="Hobbits don't yet detect Nazgûl positions when choosing movement. "
+    "Need to add collision awareness to prevent walking into capture."
 )
-def test_hobbit_will_not_move_onto_nazgul_square_for_capture() -> None:
-    """Hobbit will not move onto a nazgul square for capture"""
-    hobbits = [(9, 10)]
-    nazgul = [(10, 10)]
-    rivendell = (19, 19)
+def test_hobbit_routes_around_nazgul_to_avoid_capture() -> None:
+    """
+    Hobbit detects Nazgûl in path and routes around to avoid capture.
 
-    # Hobbit moving toward Rivendell will pass through Nazgûl
-    # This should be ALLOWED (capture detection happens after movement)
+    When a hobbit's direct path to Rivendell passes through a Nazgûl position,
+    the hobbit should detect this and choose an alternative route that avoids
+    the threat while still making progress toward the goal.
+    Open question - if a hobbit decides to pass thru a nazgul space does that
+    count as a capture, or is it effectively running just past them
+    attack of opportunity? or can a nazgul only capture on their own turn
+    """
+    hobbits = [(9, 10)]
+    nazgul = [(10, 10)]  # Directly east of hobbit
+    rivendell = (19, 19)  # Southeast - direct path goes through Nazgûl
+
     new_hobbits = update_hobbits(
         hobbits=hobbits,
         rivendell=rivendell,
@@ -236,8 +243,17 @@ def test_hobbit_will_not_move_onto_nazgul_square_for_capture() -> None:
         tick=0,
     )
 
-    # Movement should happen (even though it leads to capture)
-    assert new_hobbits[0] != (9, 10), "Hobbit should be able to evade capture"
+    # Hobbit should move (not stay stuck)
+    assert new_hobbits[0] != (9, 10), "Hobbit should move, not stay stuck"
+
+    # Hobbit should NOT walk into the Nazgûl
+    assert new_hobbits[0] != (10, 10), "Hobbit should not walk onto Nazgûl square"
+
+    # Hobbit should make progress by routing around
+    # Could be (9, 11) going north, or (10, 11) going diagonal northeast
+    assert new_hobbits[0] in [(9, 11), (10, 11)], (
+        f"Hobbit should route around Nazgûl, got {new_hobbits[0]}"
+    )
 
 
 def test_hobbit_reaches_goal_when_no_threat() -> None:
