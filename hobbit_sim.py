@@ -396,6 +396,146 @@ def try_move_step(
     return False, current
 
 
+def _move_hobbit_evading(
+    *,
+    hobbit_pos: Position,
+    hobbit_index: int,
+    nearest_nazgul: Position,
+    rivendell: Position,
+    dimensions: GridDimensions,
+    tick: int,
+    terrain: set[Position],
+) -> Position:
+    """
+    Move a hobbit that is evading a nearby Nazgûl.
+
+    Uses manual step-by-step movement with evasion + fallback logic.
+    For each of 2 steps:
+    - Try to move away from threat (preferring directions toward goal)
+    - If blocked, fall back to moving toward goal
+    - If still blocked, stay put
+
+    Returns the hobbit's new position after 2 movement steps.
+    """
+    current_x, current_y = hobbit_pos
+
+    for step in range(2):  # speed 2
+        # Common event context for this hobbit's step
+        event_context = {
+            "hobbit_index": hobbit_index,
+            "hobbit": hobbit_pos,
+            "step": step + 1,
+        }
+        new_x, new_y = move_away_from(
+            current=(current_x, current_y),
+            threat=nearest_nazgul,
+            goal=rivendell,
+        )
+        emit_event(
+            tick=tick,
+            event_type="evasion_attempt",
+            nazgul=nearest_nazgul,
+            goal=rivendell,
+            attempted_position=(new_x, new_y),
+            **event_context,
+        )
+
+        # Try evasion move
+        success, new_pos = try_move_step(
+            current=(current_x, current_y),
+            attempted=(new_x, new_y),
+            dimensions=dimensions,
+            terrain=terrain,
+        )
+        current_x, current_y = new_pos
+
+        if success:
+            emit_event(
+                tick=tick,
+                event_type="evasion_success",
+                nazgul=nearest_nazgul,
+                new_position=(current_x, current_y),
+                **event_context,
+            )
+        else:
+            emit_event(
+                tick=tick,
+                event_type="evasion_failure",
+                nazgul=nearest_nazgul,
+                attempted_position=(new_x, new_y),
+                **event_context,
+            )
+            # Can't evade in that direction - try moving toward goal
+            new_x, new_y = move_toward(current=(current_x, current_y), target=rivendell)
+            emit_event(
+                tick=tick,
+                event_type="evasion_fallback_attempt",
+                attempted_position=(new_x, new_y),
+                **event_context,
+            )
+
+            fallback_success, new_pos = try_move_step(
+                current=(current_x, current_y),
+                attempted=(new_x, new_y),
+                dimensions=dimensions,
+                terrain=terrain,
+            )
+            current_x, current_y = new_pos
+
+            if fallback_success:
+                emit_event(
+                    tick=tick,
+                    event_type="evasion_fallback_success",
+                    new_position=(current_x, current_y),
+                    **event_context,
+                )
+            else:
+                emit_event(
+                    tick=tick,
+                    event_type="evasion_fallback_blocked",
+                    current=(current_x, current_y),
+                    **event_context,
+                )
+
+    return (current_x, current_y)
+
+
+def _move_hobbit_traveling(
+    *,
+    hobbit_pos: Position,
+    hobbit_index: int,
+    rivendell: Position,
+    dimensions: GridDimensions,
+    tick: int,
+    terrain: set[Position],
+) -> Position:
+    """
+    Move a hobbit that is safely traveling toward Rivendell.
+
+    Uses move_with_speed() helper for consistent multi-step movement.
+
+    Returns the hobbit's new position after movement.
+    """
+    emit_event(
+        tick=tick,
+        event_type="hobbit_safe_travel",
+        hobbit_index=hobbit_index,
+        hobbit=hobbit_pos,
+        rivendell=rivendell,
+    )
+
+    new_x, new_y = move_with_speed(
+        current=hobbit_pos,
+        target=rivendell,
+        speed=2,
+        dimensions=dimensions,
+        tick=tick,
+        terrain=terrain,
+    )
+
+    return (new_x, new_y)
+
+
 def update_hobbits(
     *,
     hobbits: EntityPositions,
@@ -413,7 +553,6 @@ def update_hobbits(
     """
     new_hobbits = []
     DANGER_DISTANCE = 6
-    width, height = dimensions
     if terrain is None:
         terrain = set()
 
@@ -422,109 +561,26 @@ def update_hobbits(
 
         # Choose movement strategy based on threat proximity
         if distance <= DANGER_DISTANCE and nearest_naz is not None:
-            # PANIC! Run away from Nazgûl
-            # Manual step-by-step movement with evasion + fallback logic
-            current_x, current_y = hobbit_pos
-            for step in range(2):  # speed 2
-                # Common event context for this hobbit's step
-                event_context = {
-                    "hobbit_index": hobbit_index,
-                    "hobbit": hobbit_pos,
-                    "step": step + 1,
-                }
-                new_x, new_y = move_away_from(
-                    current=(current_x, current_y),
-                    threat=nearest_naz,
-                    goal=rivendell,
-                )
-                emit_event(
-                    tick=tick,
-                    event_type="evasion_attempt",
-                    nazgul=nearest_naz,
-                    goal=rivendell,
-                    attempted_position=(new_x, new_y),
-                    **event_context,
-                )
-
-                # Try evasion move
-                success, new_pos = try_move_step(
-                    current=(current_x, current_y),
-                    attempted=(new_x, new_y),
-                    dimensions=dimensions,
-                    terrain=terrain,
-                )
-                current_x, current_y = new_pos
-
-                if success:
-                    emit_event(
-                        tick=tick,
-                        event_type="evasion_success",
-                        nazgul=nearest_naz,
-                        new_position=(current_x, current_y),
-                        **event_context,
-                    )
-                else:
-                    emit_event(
-                        tick=tick,
-                        event_type="evasion_failure",
-                        nazgul=nearest_naz,
-                        attempted_position=(new_x, new_y),
-                        **event_context,
-                    )
-                    # Can't evade in that direction - try moving toward goal
-                    new_x, new_y = move_toward(current=(current_x, current_y), target=rivendell)
-                    emit_event(
-                        tick=tick,
-                        event_type="evasion_fallback_attempt",
-                        attempted_position=(new_x, new_y),
-                        **event_context,
-                    )
-
-                    fallback_success, new_pos = try_move_step(
-                        current=(current_x, current_y),
-                        attempted=(new_x, new_y),
-                        dimensions=dimensions,
-                        terrain=terrain,
-                    )
-                    current_x, current_y = new_pos
-
-                    if fallback_success:
-                        emit_event(
-                            tick=tick,
-                            event_type="evasion_fallback_success",
-                            new_position=(current_x, current_y),
-                            **event_context,
-                        )
-                    else:
-                        emit_event(
-                            tick=tick,
-                            event_type="evasion_fallback_blocked",
-                            current=(current_x, current_y),
-                            **event_context,
-                        )
-
-            new_hobbits.append((current_x, current_y))
-        else:
-            # Safe - move toward Rivendell
-            # Uses move_with_speed() helper for consistent multi-step movement
-            emit_event(
-                tick=tick,
-                event_type="hobbit_safe_travel",
+            new_pos = _move_hobbit_evading(
+                hobbit_pos=hobbit_pos,
                 hobbit_index=hobbit_index,
-                hobbit=hobbit_pos,
+                nearest_nazgul=nearest_naz,
                 rivendell=rivendell,
-            )
-            # TODO: pull steps above out a layer so they don't accidentally
-            # move into the danger zone
-            new_x, new_y = move_with_speed(
-                current=hobbit_pos,
-                target=rivendell,
-                speed=2,
                 dimensions=dimensions,
                 tick=tick,
                 terrain=terrain,
             )
-            new_hobbits.append((new_x, new_y))
+        else:
+            new_pos = _move_hobbit_traveling(
+                hobbit_pos=hobbit_pos,
+                hobbit_index=hobbit_index,
+                rivendell=rivendell,
+                dimensions=dimensions,
+                tick=tick,
+                terrain=terrain,
+            )
+
+        new_hobbits.append(new_pos)
 
     return new_hobbits
 
