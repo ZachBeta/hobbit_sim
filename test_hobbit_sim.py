@@ -115,6 +115,26 @@ def test_find_nearest_hobbit_with_no_hobbits() -> None:
     assert find_nearest_hobbit(nazgul=(10, 10), hobbits=[]) == (None, float("inf"))
 
 
+@pytest.mark.skip(
+    reason="Distance calculations return float (Euclidean-style) but movement uses "
+    "Manhattan distance. Consider making distance calculations consistent with movement system."
+)
+def test_distance_calculations_use_manhattan_distance() -> None:
+    """
+    Distance calculations should match movement system (Manhattan distance).
+    Currently find_nearest_* returns float suggesting Euclidean distance.
+
+    Example: point (0,0) to (3,4)
+    - Manhattan: |3| + |4| = 7
+    - Euclidean: sqrt(3² + 4²) = 5.0
+
+    Movement uses Manhattan, but distance return type (float) suggests Euclidean.
+    """
+    # Test that distances are calculated as Manhattan (|dx| + |dy|)
+    # not Euclidean (sqrt(dx² + dy²))
+    pass
+
+
 def test_hobbits_can_stack_on_same_square_if_exiting_to_goal() -> None:
     """Two hobbits trying to move to same square - second one should be blocked"""
     hobbits = [(0, 0), (1, 0)]  # Side by side
