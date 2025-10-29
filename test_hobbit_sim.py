@@ -2,6 +2,8 @@
 import pytest
 
 from hobbit_sim import (
+    _run_simulation_loop,
+    create_world,
     find_nearest_hobbit,
     find_nearest_nazgul,
     move_away_from,
@@ -410,6 +412,174 @@ def test_single_hobbit_escapes_single_nazgul() -> None:
             hobbits = []
 
     pytest.fail(f"Simulation timeout after 50 ticks. Hobbit at {hobbits[0]}, Nazgûl at {nazgul[0]}")
+
+
+def test_baseline_three_hobbits_can_reach_rivendell() -> None:
+    """
+    Baseline system test: 3 hobbits escape 1 Nazgûl and reach Rivendell.
+
+    This test locks in the current working behavior - the basic FOTR scenario
+    of hobbits fleeing from a Black Rider and reaching safety.
+
+    Setup (matching current create_world()):
+    - 3 hobbits start in southwest corner
+    - 1 Nazgûl starts far east
+    - Rivendell in northeast corner
+    - 20x20 grid with border walls
+
+    Success: ALL 3 hobbits reach Rivendell (current sim achieves this in ~16 ticks)
+    """
+    # Hardcoded setup matching current create_world()
+    hobbits = [(1, 2), (2, 1), (2, 2)]  # Southwest corner
+    nazgul = [(18, 5)]  # Far east
+    rivendell = (18, 18)  # Northeast corner
+    WIDTH, HEIGHT = 20, 20
+
+    # Create terrain - border walls
+    terrain = set()
+    for x in range(WIDTH):
+        terrain.add((x, 0))  # Top border
+        terrain.add((x, HEIGHT - 1))  # Bottom border
+    for y in range(HEIGHT):
+        terrain.add((0, y))  # Left border
+        terrain.add((WIDTH - 1, y))  # Right border
+
+    starting_hobbit_count = len(hobbits)
+
+    # Run simulation
+    for tick in range(50):  # Current sim finishes in ~16 ticks
+        # Check victory: all hobbits at Rivendell
+        if all(h == rivendell for h in hobbits):
+            assert len(hobbits) == starting_hobbit_count, (
+                f"Only {len(hobbits)}/{starting_hobbit_count} hobbits escaped"
+            )
+            return  # Success!
+
+        # Check loss: all captured
+        if not hobbits:
+            pytest.fail(f"All hobbits were caught at tick {tick}")
+
+        # Update entities
+        hobbits = update_hobbits(
+            hobbits=hobbits,
+            rivendell=rivendell,
+            nazgul=nazgul,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+            terrain=terrain,
+        )
+        nazgul = update_nazgul(
+            nazgul=nazgul,
+            hobbits=hobbits,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+            terrain=terrain,
+        )
+
+        # Remove captured hobbits
+        hobbits = [h for h in hobbits if h not in nazgul]
+
+    pytest.fail(
+        f"Simulation timeout after 50 ticks. "
+        f"{len(hobbits)}/{starting_hobbit_count} hobbits reached Rivendell"
+    )
+
+
+def test_current_simulation_configuration_completes() -> None:
+    """
+    Surface-level test: Whatever create_world() returns completes successfully.
+
+    This test wraps the current simulation configuration. As we evolve the
+    simulation setup in create_world(), this test evolves with it, ensuring
+    the configured scenario always works.
+
+    This is different from test_baseline_three_hobbits_can_reach_rivendell
+    which has hardcoded values and stays stable.
+    """
+    world = create_world()
+    hobbits = world["hobbits"]
+    nazgul = world["nazgul"]
+    rivendell = world["rivendell"]
+    terrain = world["terrain"]
+    dimensions = (world["width"], world["height"])
+    starting_hobbit_count = world["starting_hobbit_count"]
+
+    # Run simulation
+    for tick in range(100):  # Generous limit for future configs
+        # Check victory: all hobbits at Rivendell
+        if all(h == rivendell for h in hobbits):
+            assert len(hobbits) == starting_hobbit_count, (
+                f"Only {len(hobbits)}/{starting_hobbit_count} hobbits escaped"
+            )
+            return  # Success!
+
+        # Check loss: all captured
+        if not hobbits:
+            pytest.fail(f"All hobbits were caught at tick {tick}")
+
+        # Update entities
+        hobbits = update_hobbits(
+            hobbits=hobbits,
+            rivendell=rivendell,
+            nazgul=nazgul,
+            dimensions=dimensions,
+            tick=tick,
+            terrain=terrain,
+        )
+        nazgul = update_nazgul(
+            nazgul=nazgul,
+            hobbits=hobbits,
+            dimensions=dimensions,
+            tick=tick,
+            terrain=terrain,
+        )
+
+        # Remove captured hobbits
+        hobbits = [h for h in hobbits if h not in nazgul]
+
+    pytest.fail(
+        f"Simulation timeout after 100 ticks. "
+        f"{len(hobbits)}/{starting_hobbit_count} hobbits reached Rivendell"
+    )
+
+
+def test_acceptance_full_simulation_succeeds() -> None:
+    """
+    Acceptance test: Full simulation path from create_world() to victory.
+
+    This tests the complete simulation stack including _run_simulation_loop(),
+    which is what run_simulation() calls internally. Tests the full path:
+    - World creation
+    - Victory/defeat detection
+    - Entity updates
+    - Capture detection
+    - Grid rendering (headless, no display callback)
+
+    This is the most realistic test - it exercises the exact same code path
+    as the interactive simulation, just without display/pacing.
+    """
+    result = _run_simulation_loop(max_ticks=100)
+
+    # Assert successful completion
+    assert result["outcome"] == "victory", (
+        f"Expected victory but got {result['outcome']} after {result['ticks']} ticks. "
+        f"Escaped: {result['hobbits_escaped']}, Captured: {result['hobbits_captured']}"
+    )
+
+    # Assert all hobbits escaped
+    assert result["hobbits_escaped"] == 3, (
+        f"Expected all 3 hobbits to escape, but only {result['hobbits_escaped']} made it"
+    )
+
+    # Assert no captures
+    assert result["hobbits_captured"] == 0, (
+        f"Expected no captures, but {result['hobbits_captured']} hobbits were caught"
+    )
+
+    # Assert reasonable completion time (current sim finishes in ~16 ticks)
+    assert result["ticks"] < 50, (
+        f"Simulation took {result['ticks']} ticks, expected < 50 (current baseline is ~16)"
+    )
 
 
 @pytest.mark.skip(

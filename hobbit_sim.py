@@ -5,12 +5,36 @@ import sys
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Protocol, TypedDict
 
 Position = tuple[int, int]
 GridDimensions = tuple[int, int]
 Grid = list[list[str]]
 EntityPositions = list[Position]
+
+
+class SimulationResult(TypedDict):
+    """Result of running a simulation."""
+
+    outcome: str
+    ticks: int
+    hobbits_escaped: int
+    hobbits_captured: int
+
+
+class TickCallback(Protocol):
+    """Protocol for simulation tick callbacks with keyword-only parameters."""
+
+    def __call__(
+        self,
+        *,
+        tick: int,
+        hobbits: EntityPositions,
+        nazgul: EntityPositions,
+        grid: Grid,
+    ) -> None:
+        """Called each simulation tick with current state."""
+        ...
 
 
 # Auto-detect environment (Rails-style)
@@ -687,10 +711,21 @@ def create_world() -> dict:
     }
 
 
-def run_simulation() -> None:
-    """Run the main simulation"""
+def _run_simulation_loop(
+    *,
+    max_ticks: int | None = None,
+    on_tick: TickCallback | None = None,
+) -> SimulationResult:
+    """
+    Core simulation loop: create world, run until victory/defeat/timeout.
 
-    # Goal location
+    Args:
+        max_ticks: Optional limit on simulation length (for testing)
+        on_tick: Optional callback called each tick with (tick, hobbits, nazgul, grid)
+
+    Returns:
+        Dict with keys: outcome, ticks, hobbits_escaped, hobbits_captured
+    """
     world = create_world()
     WIDTH = world["width"]
     HEIGHT = world["height"]
@@ -698,10 +733,23 @@ def run_simulation() -> None:
     terrain = world["terrain"]
     hobbits = world["hobbits"]
     nazgul = world["nazgul"]
+    starting_hobbit_count = world["starting_hobbit_count"]
 
     dimensions = (WIDTH, HEIGHT)
     tick = 0
+
     while True:
+        # Check timeout
+        if max_ticks is not None and tick >= max_ticks:
+            hobbits_escaped = sum(1 for h in hobbits if h == rivendell)
+            hobbits_captured = starting_hobbit_count - len(hobbits)
+            return {
+                "outcome": "timeout",
+                "ticks": tick,
+                "hobbits_escaped": hobbits_escaped,
+                "hobbits_captured": hobbits_captured,
+            }
+
         # Check win condition if all hobbits are at Rivendell
         if all(h == rivendell for h in hobbits):
             emit_event(
@@ -711,8 +759,17 @@ def run_simulation() -> None:
                 nazgul=nazgul,
                 rivendell=rivendell,
             )
-            break
-        if len(hobbits) != world["starting_hobbit_count"]:
+            hobbits_escaped = len(hobbits)
+            hobbits_captured = starting_hobbit_count - len(hobbits)
+            return {
+                "outcome": "victory",
+                "ticks": tick,
+                "hobbits_escaped": hobbits_escaped,
+                "hobbits_captured": hobbits_captured,
+            }
+
+        # Check loss condition
+        if len(hobbits) != starting_hobbit_count:
             emit_event(
                 tick=tick,
                 event_type="defeat",
@@ -720,7 +777,14 @@ def run_simulation() -> None:
                 nazgul=nazgul,
                 rivendell=rivendell,
             )
-            break
+            hobbits_escaped = sum(1 for h in hobbits if h == rivendell)
+            hobbits_captured = starting_hobbit_count - len(hobbits)
+            return {
+                "outcome": "defeat",
+                "ticks": tick,
+                "hobbits_escaped": hobbits_escaped,
+                "hobbits_captured": hobbits_captured,
+            }
 
         # Move entities
         hobbits = update_hobbits(
@@ -775,16 +839,31 @@ def run_simulation() -> None:
         for nazgul_pos in nazgul:
             place_entity(grid=grid, position=nazgul_pos, symbol="N")
 
-        # Print state
+        # Call display callback if provided
+        if on_tick:
+            on_tick(tick=tick, hobbits=hobbits, nazgul=nazgul, grid=grid)
+
+        tick += 1
+
+
+def run_simulation() -> None:
+    """Run the interactive simulation with display and pacing."""
+
+    def display_tick(
+        *,
+        tick: int,
+        hobbits: EntityPositions,
+        nazgul: EntityPositions,
+        grid: Grid,
+    ) -> None:
+        """Display callback for interactive simulation."""
         print(f"=== Tick {tick} ===")
         print(f"Hobbits remaining: {len(hobbits)}")
-
-        # Print narrative output
         NarrativeBuffer.flush()
-
         print_grid(grid=grid)
-        tick += 1
-        time.sleep(0.3)  # Slow down for readability
+        time.sleep(0.3)
+
+    _run_simulation_loop(on_tick=display_tick)
 
 
 if __name__ == "__main__":
