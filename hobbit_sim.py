@@ -274,13 +274,14 @@ def move_toward(*, current: Position, target: Position) -> Position:
 
 def find_nearest_hobbit(
     *, nazgul: Position, hobbits: EntityPositions
-) -> tuple[Position | None, float]:
-    """Find nearest Hobbit and distance.
+) -> tuple[Position | None, int]:
+    """Find nearest Hobbit and Manhattan distance.
 
-    Returns (hobbit_pos, distance) or (None, infinity)
+    Returns (hobbit_pos, distance) or (None, 999_999_999) when no hobbits exist.
+    Distance is calculated as Manhattan distance: |dx| + |dy|.
     """
     if not hobbits:
-        return None, float("inf")
+        return None, 999_999_999 # Nine 9's for the Nine Rings of Men
 
     nazgul_x, nazgul_y = nazgul
     nearest = hobbits[0]
@@ -337,13 +338,14 @@ def move_with_speed(
 
 def find_nearest_nazgul(
     *, hobbit: Position, nazgul: EntityPositions
-) -> tuple[Position | None, float]:
-    """Find nearest Nazgûl and distance.
+) -> tuple[Position | None, int]:
+    """Find nearest Nazgûl and Manhattan distance.
 
-    Returns (nazgul_pos, distance) or (None, infinity)
+    Returns (nazgul_pos, distance) or (None, 999_999_999) when no Nazgûl exist.
+    Distance is calculated as Manhattan distance: |dx| + |dy|.
     """
     if not nazgul:
-        return None, float("inf")
+        return None, 999_999_999 # Nine 9's for the Nine Rings of Men
 
     hobbit_x, hobbit_y = hobbit
     nearest = nazgul[0]

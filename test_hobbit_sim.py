@@ -2,6 +2,8 @@
 import pytest
 
 from hobbit_sim import (
+    EntityPositions,
+    Position,
     _run_simulation_loop,
     create_world,
     find_nearest_hobbit,
@@ -114,27 +116,40 @@ def test_find_nearest_hobbit_returns_closest() -> None:
 
 
 def test_find_nearest_hobbit_with_no_hobbits() -> None:
-    assert find_nearest_hobbit(nazgul=(10, 10), hobbits=[]) == (None, float("inf"))
+    assert find_nearest_hobbit(nazgul=(10, 10), hobbits=[]) == (None, 999_999_999)
 
-
-@pytest.mark.skip(
-    reason="Distance calculations return float (Euclidean-style) but movement uses "
-    "Manhattan distance. Consider making distance calculations consistent with movement system."
-)
 def test_distance_calculations_use_manhattan_distance() -> None:
     """
-    Distance calculations should match movement system (Manhattan distance).
-    Currently find_nearest_* returns float suggesting Euclidean distance.
+    Distance calculations match movement system (Manhattan distance).
+
+    Both find_nearest_* functions return integer Manhattan distances,
+    not float Euclidean distances.
 
     Example: point (0,0) to (3,4)
-    - Manhattan: |3| + |4| = 7
-    - Euclidean: sqrt(3² + 4²) = 5.0
+    - Manhattan: |3| + |4| = 7 (int)
+    - Euclidean: sqrt(3² + 4²) = 5.0 (float)
 
-    Movement uses Manhattan, but distance return type (float) suggests Euclidean.
+    This test verifies the return type is int and distances are calculated correctly.
     """
-    # Test that distances are calculated as Manhattan (|dx| + |dy|)
-    # not Euclidean (sqrt(dx² + dy²))
-    pass
+    # Test find_nearest_hobbit returns integer Manhattan distance
+    hobbits: EntityPositions = [(3, 4), (5, 5)]
+    nazgul_pos: Position = (0, 0)
+
+    nearest_hobbit, distance = find_nearest_hobbit(nazgul=nazgul_pos, hobbits=hobbits)
+
+    assert nearest_hobbit == (3, 4), "Should find closest hobbit"
+    assert distance == 7, "Manhattan distance from (0,0) to (3,4) is |3| + |4| = 7"
+    assert isinstance(distance, int), "Distance should be int, not float (Manhattan not Euclidean)"
+
+    # Test find_nearest_nazgul returns integer Manhattan distance
+    nazguls: EntityPositions = [(2, 1), (6, 8)]
+    hobbit_pos: Position = (0, 0)
+
+    nearest_naz, distance = find_nearest_nazgul(hobbit=hobbit_pos, nazgul=nazguls)
+
+    assert nearest_naz == (2, 1), "Should find closest Nazgûl"
+    assert distance == 3, "Manhattan distance from (0,0) to (2,1) is |2| + |1| = 3"
+    assert isinstance(distance, int), "Distance should be int, not float (Manhattan not Euclidean)"
 
 
 def test_hobbits_at_rivendell_represent_exited_state() -> None:
