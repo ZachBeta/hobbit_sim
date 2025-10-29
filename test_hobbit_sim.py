@@ -497,12 +497,12 @@ def test_current_simulation_configuration_completes() -> None:
     which has hardcoded values and stays stable.
     """
     world = create_world()
-    hobbits = world["hobbits"]
-    nazgul = world["nazgul"]
-    rivendell = world["rivendell"]
-    terrain = world["terrain"]
-    dimensions = (world["width"], world["height"])
-    starting_hobbit_count = world["starting_hobbit_count"]
+    hobbits = world.hobbits
+    nazgul = world.nazgul
+    rivendell = world.rivendell
+    terrain = world.terrain
+    dimensions = world.dimensions
+    starting_hobbit_count = world.starting_hobbit_count
 
     # Run simulation
     for tick in range(100):  # Generous limit for future configs
@@ -637,12 +637,12 @@ def test_create_world_returns_valid_state() -> None:
 
     world = create_world()
 
-    assert world["width"] == 20
-    assert world["height"] == 20
-    assert world["rivendell"] == (18, 18)
-    assert len(world["hobbits"]) == 3
-    assert len(world["nazgul"]) == 1
-    assert isinstance(world["terrain"], set)
+    assert world.width == 20
+    assert world.height == 20
+    assert world.rivendell == (18, 18)
+    assert len(world.hobbits) == 3
+    assert len(world.nazgul) == 1
+    assert isinstance(world.terrain, set)
 
 
 def test_render_grid_with_hobbits_and_nazgul() -> None:
@@ -695,7 +695,7 @@ def test_terrain_creates_borders_with_openings() -> None:
     from hobbit_sim import create_world
 
     world = create_world()
-    terrain = world["terrain"]
+    terrain = world.terrain
 
     # Check that borders exist
     assert (5, 0) in terrain, "Top border should exist"

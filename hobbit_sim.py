@@ -13,6 +13,29 @@ Grid = list[list[str]]
 EntityPositions = list[Position]
 
 
+@dataclass
+class WorldState:
+    """Complete simulation state including map and entities."""
+
+    # Map configuration (immutable during simulation)
+    width: int
+    height: int
+    rivendell: Position
+    terrain: set[Position]
+    starting_hobbit_count: int
+    starting_nazgul_count: int
+
+    # Entity state (mutable during simulation)
+    hobbits: EntityPositions
+    nazgul: EntityPositions
+    tick: int = 0
+
+    @property
+    def dimensions(self) -> GridDimensions:
+        """Grid dimensions as tuple."""
+        return (self.width, self.height)
+
+
 class SimulationResult(TypedDict):
     """Result of running a simulation."""
 
@@ -28,12 +51,9 @@ class TickCallback(Protocol):
     def __call__(
         self,
         *,
-        tick: int,
-        hobbits: EntityPositions,
-        nazgul: EntityPositions,
-        grid: Grid,
+        state: WorldState,
     ) -> None:
-        """Called each simulation tick with current state."""
+        """Called each simulation tick with current world state."""
         ...
 
 
@@ -178,33 +198,29 @@ def print_grid(*, grid: Grid) -> None:
     print()
 
 
-def render_world(*, world: dict) -> str:
+def render_world(*, world: WorldState) -> str:
     """Render world state as string (high-level test helper)
 
-    Takes world dict from create_world() and returns visual representation.
+    Takes WorldState from create_world() and returns visual representation.
     Useful for testing complete scenes without manual entity placement.
     """
-    WIDTH = world["width"]
-    HEIGHT = world["height"]
-
     # Create fresh grid
-    grid = create_grid(dimensions=(WIDTH, HEIGHT))
+    grid = create_grid(dimensions=world.dimensions)
 
     # Place terrain (if any)
-    for terrain_pos in world.get("terrain", []):
+    for terrain_pos in world.terrain:
         place_entity(grid=grid, position=terrain_pos, symbol="#")
 
     # Place landmarks
     place_entity(grid=grid, position=(0, 0), symbol="S")  # Shire
-    rivendell = world["rivendell"]
-    place_entity(grid=grid, position=rivendell, symbol="R")
+    place_entity(grid=grid, position=world.rivendell, symbol="R")
 
     # Place hobbits
-    for hobbit_pos in world["hobbits"]:
+    for hobbit_pos in world.hobbits:
         place_entity(grid=grid, position=hobbit_pos, symbol="H")
 
     # Place nazgul
-    for nazgul_pos in world["nazgul"]:
+    for nazgul_pos in world.nazgul:
         place_entity(grid=grid, position=nazgul_pos, symbol="N")
 
     return render_grid(grid=grid)
@@ -661,15 +677,10 @@ def update_nazgul(
     return list(new_nazgul)
 
 
-def create_world() -> dict:
+def create_world() -> WorldState:
     """Initialize world state (terrain, entities, landmarks)
 
-    Returns dict with:
-    - width, height: grid dimensions
-    - rivendell: goal position
-    - terrain: set of impassable coordinates
-    - hobbits: list of hobbit positions
-    - nazgul: list of nazgul positions
+    Returns WorldState with complete simulation configuration and initial entity positions.
     """
     WIDTH, HEIGHT = 20, 20
     rivendell = (18, 18)
@@ -699,16 +710,52 @@ def create_world() -> dict:
     starting_hobbit_count = len(hobbits)
     starting_nazgul_count = len(nazgul)
 
-    return {
-        "width": WIDTH,
-        "height": HEIGHT,
-        "rivendell": rivendell,
-        "terrain": terrain,
-        "hobbits": hobbits,
-        "nazgul": nazgul,
-        "starting_hobbit_count": starting_hobbit_count,
-        "starting_nazgul_count": starting_nazgul_count,
-    }
+    return WorldState(
+        width=WIDTH,
+        height=HEIGHT,
+        rivendell=rivendell,
+        terrain=terrain,
+        hobbits=hobbits,
+        nazgul=nazgul,
+        starting_hobbit_count=starting_hobbit_count,
+        starting_nazgul_count=starting_nazgul_count,
+        tick=0,
+    )
+
+
+def _render_simulation_state(
+    *,
+    state: WorldState,
+) -> Grid:
+    """
+    Render current simulation state to a grid.
+
+    Args:
+        state: Complete world state
+
+    Returns:
+        Grid with all entities placed
+    """
+    # Create fresh grid
+    grid = create_grid(dimensions=state.dimensions)
+
+    # Place terrain
+    for terrain_pos in state.terrain:
+        place_entity(grid=grid, position=terrain_pos, symbol="#")
+
+    # Place landmarks
+    place_entity(grid=grid, position=(1, 1), symbol="S")  # Shire
+    place_entity(grid=grid, position=state.rivendell, symbol="R")  # Rivendell
+
+    # Place hobbits
+    for hobbit_pos in state.hobbits:
+        place_entity(grid=grid, position=hobbit_pos, symbol="H")
+
+    # Place Nazgûl
+    for nazgul_pos in state.nazgul:
+        place_entity(grid=grid, position=nazgul_pos, symbol="N")
+
+    return grid
 
 
 def _run_simulation_loop(
@@ -721,96 +768,86 @@ def _run_simulation_loop(
 
     Args:
         max_ticks: Optional limit on simulation length (for testing)
-        on_tick: Optional callback called each tick with (tick, hobbits, nazgul, grid)
+        on_tick: Optional callback called each tick with current world state
 
     Returns:
         Dict with keys: outcome, ticks, hobbits_escaped, hobbits_captured
     """
-    world = create_world()
-    WIDTH = world["width"]
-    HEIGHT = world["height"]
-    rivendell = world["rivendell"]
-    terrain = world["terrain"]
-    hobbits = world["hobbits"]
-    nazgul = world["nazgul"]
-    starting_hobbit_count = world["starting_hobbit_count"]
-
-    dimensions = (WIDTH, HEIGHT)
-    tick = 0
+    state = create_world()
 
     while True:
         # Check timeout
-        if max_ticks is not None and tick >= max_ticks:
-            hobbits_escaped = sum(1 for h in hobbits if h == rivendell)
-            hobbits_captured = starting_hobbit_count - len(hobbits)
+        if max_ticks is not None and state.tick >= max_ticks:
+            hobbits_escaped = sum(1 for h in state.hobbits if h == state.rivendell)
+            hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
             return {
                 "outcome": "timeout",
-                "ticks": tick,
+                "ticks": state.tick,
                 "hobbits_escaped": hobbits_escaped,
                 "hobbits_captured": hobbits_captured,
             }
 
         # Check win condition if all hobbits are at Rivendell
-        if all(h == rivendell for h in hobbits):
+        if all(h == state.rivendell for h in state.hobbits):
             emit_event(
-                tick=tick,
+                tick=state.tick,
                 event_type="victory",
-                hobbits=hobbits,
-                nazgul=nazgul,
-                rivendell=rivendell,
+                hobbits=state.hobbits,
+                nazgul=state.nazgul,
+                rivendell=state.rivendell,
             )
-            hobbits_escaped = len(hobbits)
-            hobbits_captured = starting_hobbit_count - len(hobbits)
+            hobbits_escaped = len(state.hobbits)
+            hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
             return {
                 "outcome": "victory",
-                "ticks": tick,
+                "ticks": state.tick,
                 "hobbits_escaped": hobbits_escaped,
                 "hobbits_captured": hobbits_captured,
             }
 
         # Check loss condition
-        if len(hobbits) != starting_hobbit_count:
+        if len(state.hobbits) != state.starting_hobbit_count:
             emit_event(
-                tick=tick,
+                tick=state.tick,
                 event_type="defeat",
-                hobbits=hobbits,
-                nazgul=nazgul,
-                rivendell=rivendell,
+                hobbits=state.hobbits,
+                nazgul=state.nazgul,
+                rivendell=state.rivendell,
             )
-            hobbits_escaped = sum(1 for h in hobbits if h == rivendell)
-            hobbits_captured = starting_hobbit_count - len(hobbits)
+            hobbits_escaped = sum(1 for h in state.hobbits if h == state.rivendell)
+            hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
             return {
                 "outcome": "defeat",
-                "ticks": tick,
+                "ticks": state.tick,
                 "hobbits_escaped": hobbits_escaped,
                 "hobbits_captured": hobbits_captured,
             }
 
         # Move entities
-        hobbits = update_hobbits(
-            hobbits=hobbits,
-            rivendell=rivendell,
-            nazgul=nazgul,
-            dimensions=dimensions,
-            tick=tick,
-            terrain=terrain,
+        state.hobbits = update_hobbits(
+            hobbits=state.hobbits,
+            rivendell=state.rivendell,
+            nazgul=state.nazgul,
+            dimensions=state.dimensions,
+            tick=state.tick,
+            terrain=state.terrain,
         )
-        nazgul = update_nazgul(
-            nazgul=nazgul,
-            hobbits=hobbits,
-            dimensions=dimensions,
-            tick=tick,
-            terrain=terrain,
+        state.nazgul = update_nazgul(
+            nazgul=state.nazgul,
+            hobbits=state.hobbits,
+            dimensions=state.dimensions,
+            tick=state.tick,
+            terrain=state.terrain,
         )
 
         # Check for captures (Nazgûl on same square as hobbit)
         hobbits_to_remove = []
-        for hobbit in hobbits:
-            for naz in nazgul:
+        for hobbit in state.hobbits:
+            for naz in state.nazgul:
                 if hobbit == naz:
                     hobbits_to_remove.append(hobbit)
                     emit_event(
-                        tick=tick,
+                        tick=state.tick,
                         event_type="hobbit_captured",
                         hobbit=hobbit,
                         nazgul=naz,
@@ -818,32 +855,13 @@ def _run_simulation_loop(
                     break
 
         for h in hobbits_to_remove:
-            hobbits.remove(h)
-
-        # Create fresh grid with NEW positions
-        grid = create_grid(dimensions=(WIDTH, HEIGHT))
-
-        # Place terrain
-        for terrain_pos in terrain:
-            place_entity(grid=grid, position=terrain_pos, symbol="#")
-
-        # Place landmarks
-        place_entity(grid=grid, position=(1, 1), symbol="S")  # Shire
-        place_entity(grid=grid, position=rivendell, symbol="R")  # Rivendell
-
-        # Place hobbits
-        for hobbit_pos in hobbits:
-            place_entity(grid=grid, position=hobbit_pos, symbol="H")
-
-        # Place Nazgûl
-        for nazgul_pos in nazgul:
-            place_entity(grid=grid, position=nazgul_pos, symbol="N")
+            state.hobbits.remove(h)
 
         # Call display callback if provided
         if on_tick:
-            on_tick(tick=tick, hobbits=hobbits, nazgul=nazgul, grid=grid)
+            on_tick(state=state)
 
-        tick += 1
+        state.tick += 1
 
 
 def run_simulation() -> None:
@@ -851,14 +869,14 @@ def run_simulation() -> None:
 
     def display_tick(
         *,
-        tick: int,
-        hobbits: EntityPositions,
-        nazgul: EntityPositions,
-        grid: Grid,
+        state: WorldState,
     ) -> None:
         """Display callback for interactive simulation."""
-        print(f"=== Tick {tick} ===")
-        print(f"Hobbits remaining: {len(hobbits)}")
+        # Render the grid from current state
+        grid = _render_simulation_state(state=state)
+
+        print(f"=== Tick {state.tick} ===")
+        print(f"Hobbits remaining: {len(state.hobbits)}")
         NarrativeBuffer.flush()
         print_grid(grid=grid)
         time.sleep(0.3)
