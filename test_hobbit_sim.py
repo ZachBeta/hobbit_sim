@@ -423,6 +423,208 @@ def test_hobbit_evades_perpendicular_threat() -> None:
     assert hobbits[0][1] > 10, "Should flee south from north threat"
 
 
+def test_hobbit_with_threats_on_two_axes_doesnt_flee_into_trap() -> None:
+    """
+    Scenario: Hobbit cornered with Nazgûl on two perpendicular axes.
+
+    Setup:
+        H . . . . N    Hobbit at (5, 5)
+        . . . . . .    Nazgûl A at (10, 5) - east, distance 5
+        . . . . . .    Nazgûl B at (5, 10) - south, distance 5
+        . . . . . .
+        . . . . . .    Goal at (0, 0) - northwest (safe direction)
+        N . . . . .
+
+    Current behavior might try:
+    - flee from Nazgûl A (east) → go WEST (good!) or perpendicular N/S (bad if south!)
+
+    Expected: Hobbit should flee NORTHWEST (away from both threats, toward goal)
+    Bug: Hobbit might flee SOUTH (perpendicular from A, but toward B)
+    """
+    hobbits = [(5, 5)]
+    nazgul = [
+        (10, 5),  # East - distance 5
+        (5, 10),  # South - distance 5
+    ]
+    rivendell = (0, 0)  # Northwest - safe direction
+    WIDTH, HEIGHT = 20, 20
+
+    # Run simulation
+    for tick in range(50):
+        print(f"\n--- Tick {tick} ---")
+        print(f"Hobbit: {hobbits[0] if hobbits else 'CAUGHT'}")
+        print(f"Nazgûl: {nazgul}")
+        print(f"Goal: {rivendell}")
+
+        # Win condition
+        if hobbits and hobbits[0] == rivendell:
+            print(f"✓ Victory in {tick} ticks!")
+            return
+
+        # Lose condition
+        if not hobbits:
+            pytest.fail(f"Hobbit caught at tick {tick}")
+
+        # Move entities
+        hobbits = update_hobbits(
+            hobbits=hobbits,
+            rivendell=rivendell,
+            nazgul=nazgul,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
+        nazgul = update_nazgul(
+            nazgul=nazgul,
+            hobbits=hobbits,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
+
+        # Check captures
+        if hobbits and hobbits[0] in nazgul:
+            hobbits = []
+
+    pytest.fail(f"Timeout after 50 ticks. Hobbit at {hobbits[0] if hobbits else 'caught'}")
+
+
+def test_hobbit_threads_between_two_nazgul_to_reach_goal() -> None:
+    """
+    Scenario: Hobbit must navigate BETWEEN two Nazgûl to reach goal.
+
+    Setup:
+              N₁ (10,3)
+              |
+    H (5,5) -----> Goal (15,5)
+              |
+              N₂ (10,7)
+
+    Hobbit at (5, 5)
+    Nazgûl A at (10, 3) - northeast, distance 7
+    Nazgûl B at (10, 7) - southeast, distance 7
+    Goal at (15, 5) - due east (through the gap!)
+
+    Challenge: Hobbit must move EAST toward goal, threading the needle
+    between two threats. Simple "flee away" won't work here.
+
+    Expected: Hobbit stays on y=5 (middle line), speeds through the gap
+    Bug: Hobbit might flee north/south away from goal
+    """
+    hobbits = [(5, 5)]
+    nazgul = [
+        (10, 3),  # Northeast - distance 7
+        (10, 7),  # Southeast - distance 7
+    ]
+    rivendell = (15, 5)  # Due east - through the gap!
+    WIDTH, HEIGHT = 20, 20
+
+    # Run simulation
+    for tick in range(50):
+        print(f"\n--- Tick {tick} ---")
+        print(f"Hobbit: {hobbits[0] if hobbits else 'CAUGHT'}")
+        print(f"Nazgûl: {nazgul}")
+        print(f"Goal: {rivendell}")
+
+        # Win condition
+        if hobbits and hobbits[0] == rivendell:
+            print(f"✓ Victory in {tick} ticks!")
+            return
+
+        # Lose condition
+        if not hobbits:
+            pytest.fail(f"Hobbit caught at tick {tick}")
+
+        # Move entities
+        hobbits = update_hobbits(
+            hobbits=hobbits,
+            rivendell=rivendell,
+            nazgul=nazgul,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
+        nazgul = update_nazgul(
+            nazgul=nazgul,
+            hobbits=hobbits,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
+
+        # Check captures
+        if hobbits and hobbits[0] in nazgul:
+            hobbits = []
+
+    pytest.fail(f"Timeout after 50 ticks. Hobbit at {hobbits[0] if hobbits else 'caught'}")
+
+
+def test_hobbit_navigates_through_three_nazgul_blockade() -> None:
+    """
+    Scenario: Three Nazgûl form a blockade between hobbit and goal.
+
+    Setup:
+           N₁ (9,3)
+           |
+    H ---- N₂ (10,5) -----> Goal (18,5)
+           |
+           N₃ (9,7)
+
+    Hobbit at (5, 5)
+    Nazgûl A at (9, 3) - northeast, distance 6
+    Nazgûl B at (10, 5) - due east, distance 5
+    Nazgûl C at (9, 7) - southeast, distance 6
+    Goal at (18, 5) - due east beyond blockade
+
+    Challenge: Three Nazgûl block the direct path. Hobbit must find a gap
+    or go around. This tests if hobbit can path around a blockade.
+
+    Expected: Hobbit routes around (north or south of blockade)
+    Bug: Hobbit might get stuck or flee backward away from goal
+    """
+    hobbits = [(5, 5)]
+    nazgul = [
+        (9, 3),   # North guard - distance 6
+        (10, 5),  # Center guard - distance 5
+        (9, 7),   # South guard - distance 6
+    ]
+    rivendell = (18, 5)  # Due east beyond blockade
+    WIDTH, HEIGHT = 20, 20
+
+    # Run simulation
+    for tick in range(50):
+        print(f"\n--- Tick {tick} ---")
+        print(f"Hobbit: {hobbits[0] if hobbits else 'CAUGHT'}")
+        print(f"Nazgûl: {nazgul}")
+        print(f"Goal: {rivendell}")
+
+        # Win condition
+        if hobbits and hobbits[0] == rivendell:
+            print(f"✓ Victory in {tick} ticks!")
+            return
+
+        # Lose condition
+        if not hobbits:
+            pytest.fail(f"Hobbit caught at tick {tick}")
+
+        # Move entities
+        hobbits = update_hobbits(
+            hobbits=hobbits,
+            rivendell=rivendell,
+            nazgul=nazgul,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
+        nazgul = update_nazgul(
+            nazgul=nazgul,
+            hobbits=hobbits,
+            dimensions=(WIDTH, HEIGHT),
+            tick=tick,
+        )
+
+        # Check captures
+        if hobbits and hobbits[0] in nazgul:
+            hobbits = []
+
+    pytest.fail(f"Timeout after 50 ticks. Hobbit at {hobbits[0] if hobbits else 'caught'}")
+
+
 def test_single_hobbit_escapes_single_nazgul() -> None:
     """Simplest case: 1 hobbit vs 1 Nazgûl, clear path to goal, no terrain complexity"""
     # Hobbit starts northwest, goal is southeast, Nazgûl starts in between
