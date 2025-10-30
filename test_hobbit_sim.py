@@ -84,6 +84,49 @@ def test_move_away_from_uses_manhattan_movement() -> None:
     assert move_away_from(current=(10, 10), threat=(11, 15)) == (10, 9)
 
 
+def test_calculate_perpendicular_moves_when_threat_is_east() -> None:
+    """When threat is east (on X axis), perpendicular moves are north/south"""
+    from hobbit_sim import calculate_perpendicular_moves
+
+    options = calculate_perpendicular_moves(
+        current=(10, 10),
+        threat=(15, 10),  # 5 squares east
+    )
+
+    assert (10, 11) in options, "Should include south"
+    assert (10, 9) in options, "Should include north"
+    assert len(options) == 2, "Should return exactly 2 options"
+
+
+def test_calculate_perpendicular_moves_when_threat_is_north() -> None:
+    """When threat is north (on Y axis), perpendicular moves are east/west"""
+    from hobbit_sim import calculate_perpendicular_moves
+
+    options = calculate_perpendicular_moves(
+        current=(10, 10),
+        threat=(10, 5),  # 5 squares north
+    )
+
+    assert (11, 10) in options, "Should include east"
+    assert (9, 10) in options, "Should include west"
+    assert len(options) == 2, "Should return exactly 2 options"
+
+
+def test_calculate_perpendicular_moves_when_threat_is_diagonal() -> None:
+    """When threat is diagonal, use larger axis distance as tiebreaker"""
+    from hobbit_sim import calculate_perpendicular_moves
+
+    # Threat northeast: dx=3, dy=2 → larger X distance
+    options = calculate_perpendicular_moves(
+        current=(10, 10),
+        threat=(13, 8),
+    )
+
+    # Should treat as X-axis threat → perpendicular is Y-axis
+    assert (10, 11) in options, "Should include south"
+    assert (10, 9) in options, "Should include north"
+
+
 def test_find_nearest_nazgul_returns_closest() -> None:
     assert find_nearest_nazgul(hobbit=(10, 10), nazgul=[(11, 11), (9, 10)]) == ((9, 10), 1)
 
@@ -117,6 +160,7 @@ def test_find_nearest_hobbit_returns_closest() -> None:
 
 def test_find_nearest_hobbit_with_no_hobbits() -> None:
     assert find_nearest_hobbit(nazgul=(10, 10), hobbits=[]) == (None, 999_999_999)
+
 
 def test_distance_calculations_use_manhattan_distance() -> None:
     """
@@ -379,11 +423,8 @@ def test_hobbit_evades_perpendicular_threat() -> None:
     assert hobbits[0][1] > 10, "Should flee south from north threat"
 
 
-@pytest.mark.skip(
-    reason="Evasion is not strong enough yet. Hobbit runs into a wall and gets stuck."
-)
 def test_single_hobbit_escapes_single_nazgul() -> None:
-    """Simplest case: 1 hobbit vs 1 Nazgûl, clear path to goal"""
+    """Simplest case: 1 hobbit vs 1 Nazgûl, clear path to goal, no terrain complexity"""
     # Hobbit starts northwest, goal is southeast, Nazgûl starts in between
     hobbits = [(5, 5)]
     rivendell = (15, 15)
