@@ -840,9 +840,6 @@ def test_acceptance_full_simulation_succeeds() -> None:
     )
 
 
-@pytest.mark.skip(
-    reason="Evasion is not strong enough yet. We need to implement a more robust evasion system."
-)
 def test_system_three_hobbits_escape_single_rider() -> None:
     """
     System test: Full simulation scenario
@@ -864,8 +861,8 @@ def test_system_three_hobbits_escape_single_rider() -> None:
             return  # Success!
 
         # Check lose condition
-        if not hobbits:
-            pytest.fail("All hobbits were caught - simulation failed")
+        if len(hobbits) != 3:
+            pytest.fail(f"Hobbits were captured - simulation failed")
 
         # Move entities
         hobbits = update_hobbits(
