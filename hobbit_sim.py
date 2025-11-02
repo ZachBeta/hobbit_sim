@@ -12,6 +12,15 @@ GridDimensions = tuple[int, int]
 Grid = list[list[str]]
 EntityPositions = list[Position]
 
+# Hobbit identification by list index
+# Maps hobbit index to display name/symbol
+HOBBIT_NAMES = {
+    0: "Frodo",
+    1: "Sam",
+    2: "Pippin",
+    3: "Merry",
+}
+
 
 @dataclass
 class WorldState:
@@ -198,11 +207,27 @@ def print_grid(*, grid: Grid) -> None:
     print()
 
 
-def render_world(*, world: WorldState) -> str:
+def get_hobbit_symbol(*, index: int) -> str:
+    """Get display symbol for hobbit by index.
+
+    Returns first letter of hobbit's name: F, S, P, M
+    Falls back to 'H' for unknown indices.
+    """
+    name = HOBBIT_NAMES.get(index)
+    if name:
+        return name[0]  # First letter: F, S, P, M
+    return "H"  # Fallback for unknown hobbits
+
+
+def render_world(*, world: WorldState, show_hobbit_ids: bool = False) -> str:
     """Render world state as string (high-level test helper)
 
     Takes WorldState from create_world() and returns visual representation.
     Useful for testing complete scenes without manual entity placement.
+
+    Args:
+        world: Current world state to render
+        show_hobbit_ids: If True, show hobbit index (0,1,2,3). If False, show 'H'
     """
     # Create fresh grid
     grid = create_grid(dimensions=world.dimensions)
@@ -215,9 +240,10 @@ def render_world(*, world: WorldState) -> str:
     place_entity(grid=grid, position=(0, 0), symbol="S")  # Shire
     place_entity(grid=grid, position=world.rivendell, symbol="R")
 
-    # Place hobbits
-    for hobbit_pos in world.hobbits:
-        place_entity(grid=grid, position=hobbit_pos, symbol="H")
+    # Place hobbits with optional IDs
+    for index, hobbit_pos in enumerate(world.hobbits):
+        symbol = get_hobbit_symbol(index=index) if show_hobbit_ids else "H"
+        place_entity(grid=grid, position=hobbit_pos, symbol=symbol)
 
     # Place nazgul
     for nazgul_pos in world.nazgul:

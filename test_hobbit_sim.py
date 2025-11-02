@@ -979,6 +979,34 @@ def test_render_world_shows_terrain() -> None:
     assert "#" in first_row, "Should show terrain borders"
 
 
+def test_render_world_shows_hobbit_names() -> None:
+    """render_world() can show hobbit names as F, S, P, M"""
+    from hobbit_sim import WorldState, render_world
+
+    # Create simple world with 4 hobbits at known positions
+    world = WorldState(
+        width=6,
+        height=6,
+        rivendell=(5, 5),
+        terrain=set(),
+        starting_hobbit_count=4,
+        starting_nazgul_count=0,
+        hobbits=[(1, 1), (2, 2), (3, 3), (4, 4)],  # Frodo, Sam, Pippin, Merry
+        nazgul=[],
+    )
+
+    # Render without IDs (default) - should show generic 'H'
+    result_default = render_world(world=world)
+    assert result_default.count("H") == 4, "Should show 4 generic 'H' symbols by default"
+
+    # Render with IDs enabled - should show F, S, P, M
+    result_with_ids = render_world(world=world, show_hobbit_ids=True)
+    assert "F" in result_with_ids, "Should show Frodo as 'F'"
+    assert "S" in result_with_ids, "Should show Sam as 'S'"
+    assert "P" in result_with_ids, "Should show Pippin as 'P'"
+    assert "M" in result_with_ids, "Should show Merry as 'M'"
+
+
 def test_hobbit_cannot_move_through_terrain() -> None:
     """Hobbits should be blocked by terrain walls"""
     from hobbit_sim import update_hobbits
