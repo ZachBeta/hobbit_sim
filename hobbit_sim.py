@@ -12,6 +12,10 @@ GridDimensions = tuple[int, int]
 Grid = list[list[str]]
 EntityPositions = list[Position]
 
+# Dict-based hobbit identity (migration target)
+HobbitId = int
+Hobbits = dict[HobbitId, Position]
+
 # Hobbit identification by list index
 # Maps hobbit index to display name/symbol
 HOBBIT_NAMES = {
@@ -569,6 +573,8 @@ def update_hobbits(
 ) -> EntityPositions:
     """Move all hobbits toward Rivendell at speed 2.
 
+    Adapter: Converts list-based API to internal dict-based implementation.
+
     Each hobbit:
     1. Takes 2 steps (speed 2)
     2. Reassesses world after each step (greedy evaluation)
@@ -576,25 +582,77 @@ def update_hobbits(
 
     Returns new hobbit positions.
     """
+    # Adapter: convert list → dict → list
+    hobbit_dict = {i: pos for i, pos in enumerate(hobbits)}
+    result_dict = _update_hobbits_dict(
+        hobbits=hobbit_dict,
+        rivendell=rivendell,
+        nazgul=nazgul,
+        dimensions=dimensions,
+        tick=tick,
+        terrain=terrain,
+    )
+    return list(result_dict.values())
+
+
+def _update_hobbits_dict(
+    *,
+    hobbits: Hobbits,
+    rivendell: Position,
+    nazgul: EntityPositions,
+    dimensions: GridDimensions,
+    tick: int,
+    terrain: set[Position] | None = None,
+) -> Hobbits:
+    """Internal dict-based version of update_hobbits.
+
+    Move all hobbits toward Rivendell at speed 2.
+    Works with dict[HobbitId, Position] for explicit identity tracking.
+
+    Each hobbit:
+    1. Takes 2 steps (speed 2)
+    2. Reassesses world after each step (greedy evaluation)
+    3. Autonomously decides behavior based on perceived threats
+
+    Returns new hobbit positions as dict.
+    """
     if terrain is None:
         terrain = set()
 
-    new_hobbits = []
+    new_hobbits = {}
 
-    for hobbit_pos in hobbits:
+    for hobbit_id, hobbit_pos in hobbits.items():
         current = hobbit_pos
+        hobbit_name = HOBBIT_NAMES.get(hobbit_id, f"Hobbit {hobbit_id}")
+
+        emit_event(
+            tick=tick,
+            event_type="hobbit_turn_start",
+            hobbit=current,
+            name=hobbit_name,
+        )
 
         # Speed 2: Take 2 steps, reassessing after each
-        for _step in range(2):
-            current = move_hobbit_one_step(
+        for step in range(2):
+            next_pos = move_hobbit_one_step(
                 current=current,
                 goal=rivendell,
                 threats=nazgul,
                 terrain=terrain,
                 dimensions=dimensions,
             )
+            if next_pos != current:
+                emit_event(
+                    tick=tick,
+                    event_type="hobbit_moved",
+                    name=hobbit_name,
+                    from_pos=current,
+                    to_pos=next_pos,
+                    step=step + 1,
+                )
+            current = next_pos
 
-        new_hobbits.append(current)
+        new_hobbits[hobbit_id] = current
 
     return new_hobbits
 
@@ -671,9 +729,9 @@ def create_world() -> WorldState:
         terrain.add((WIDTH - 1, y))  # Right border
 
     hobbits = [
-        (1, 2),  # Pippin
-        (2, 1),  # Sam
-        (2, 2),  # Frodo
+        (1, 2),  # Frodo (index 0)
+        (2, 1),  # Sam (index 1)
+        (2, 2),  # Pippin (index 2)
     ]
 
     # Initialize Nazgûl
@@ -721,9 +779,10 @@ def _render_simulation_state(
     place_entity(grid=grid, position=(1, 1), symbol="S")  # Shire
     place_entity(grid=grid, position=state.rivendell, symbol="R")  # Rivendell
 
-    # Place hobbits
-    for hobbit_pos in state.hobbits:
-        place_entity(grid=grid, position=hobbit_pos, symbol="H")
+    # Place hobbits with identity
+    for index, hobbit_pos in enumerate(state.hobbits):
+        symbol = get_hobbit_symbol(index=index)
+        place_entity(grid=grid, position=hobbit_pos, symbol=symbol)
 
     # Place Nazgûl
     for nazgul_pos in state.nazgul:

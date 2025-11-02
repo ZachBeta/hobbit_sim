@@ -929,10 +929,8 @@ def test_render_grid_with_landmarks() -> None:
     assert result == expected
 
 
-@pytest.mark.skip(reason="Not implemented")
-# FUTURE: When we add individual hobbit symbols
 def test_render_grid_with_named_hobbits() -> None:
-    """RED: This will fail until we implement Phase 3"""
+    """place_entity() can render individual hobbit symbols F, S, P, M"""
     from hobbit_sim import create_grid, place_entity, render_grid
 
     grid = create_grid(dimensions=(4, 4))
