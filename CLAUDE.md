@@ -41,42 +41,38 @@ This approach makes it easier to:
 
 ### Environment Setup
 ```bash
-# Create and activate virtual environment
-uv venv
-source .venv/bin/activate  # macOS/Linux
-
-# Install dependencies
-uv pip install -e ".[dev]"
+# One-time setup: create venv and install dependencies
+uv sync
 ```
 
 ### Running
 ```bash
 # Run the simulation
-python hobbit_sim.py
+uv run python hobbit_sim.py
 
 # Run all tests
-pytest .
+uv run pytest .
 
 # Run single test by name
-pytest test_hobbit_sim.py::test_move_toward_moves_diagonally
+uv run pytest test_hobbit_sim.py::test_move_toward_moves_diagonally
 
 # Run tests with coverage
-pytest --cov=hobbit_sim --cov-report=term-missing
+uv run pytest --cov=hobbit_sim --cov-report=term-missing
 ```
 
 ### Linting and Type Checking
 ```bash
 # Check linting issues
-ruff check .
+uv run ruff check .
 
 # Auto-fix linting issues
-ruff check --fix .
+uv run ruff check --fix .
 
 # Format code
-ruff format .
+uv run ruff format .
 
 # Type checking
-mypy hobbit_sim.py test_hobbit_sim.py
+uv run mypy hobbit_sim.py test_hobbit_sim.py
 ```
 
 **Important**: Line length limit is 100 characters (configured in pyproject.toml). mypy is configured with strict type checking - all functions require type annotations.
