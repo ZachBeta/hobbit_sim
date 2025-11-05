@@ -493,6 +493,7 @@ def move_hobbit_one_step(
     threats: EntityPositions,
     terrain: set[Position],
     dimensions: GridDimensions,
+    occupied_positions: set[Position] | None = None,
 ) -> Position:
     """Move hobbit one step based on perception of world.
 
@@ -513,6 +514,7 @@ def move_hobbit_one_step(
         threats: List of Nazgûl positions
         terrain: Set of impassable positions
         dimensions: Grid bounds (width, height)
+        occupied_positions: Set of positions occupied by other hobbits (for collision avoidance)
 
     Returns:
         New position after one step (or current if all options blocked)
@@ -543,7 +545,12 @@ def move_hobbit_one_step(
 
     # Act: Try each option until one is valid
     for option in options:
-        if is_valid_position(position=option, dimensions=dimensions, terrain=terrain):
+        if is_valid_position(
+            position=option,
+            dimensions=dimensions,
+            terrain=terrain,
+            occupied_positions=occupied_positions,
+        ):
             return option
 
     # All options blocked - stay put
@@ -555,11 +562,21 @@ def is_valid_position(
     position: Position,
     dimensions: GridDimensions,
     terrain: set[Position],
+    occupied_positions: set[Position] | None = None,
 ) -> bool:
-    """Check if position is within bounds and not blocked by terrain."""
+    """Check if position is within bounds and not blocked by terrain or other hobbits."""
     x, y = position
     width, height = dimensions
-    return 0 <= x < width and 0 <= y < height and position not in terrain
+
+    # Check bounds and terrain
+    if not (0 <= x < width and 0 <= y < height and position not in terrain):
+        return False
+
+    # Check collision with other hobbits (if tracking occupied positions)
+    if occupied_positions is not None and position in occupied_positions:
+        return False
+
+    return True
 
 
 def _hobbit_positions(*, hobbits: Hobbits) -> list[Position]:
@@ -620,6 +637,7 @@ def _update_hobbits_dict(
         terrain = set()
 
     new_hobbits = {}
+    occupied_positions: set[Position] = set()
 
     for hobbit_id, hobbit_pos in hobbits.items():
         current = hobbit_pos
@@ -640,6 +658,7 @@ def _update_hobbits_dict(
                 threats=nazgul,
                 terrain=terrain,
                 dimensions=dimensions,
+                occupied_positions=occupied_positions,
             )
             if next_pos != current:
                 emit_event(
@@ -653,6 +672,9 @@ def _update_hobbits_dict(
             current = next_pos
 
         new_hobbits[hobbit_id] = current
+        # Track this hobbit's position as occupied (unless at goal/Rivendell)
+        if current != rivendell:
+            occupied_positions.add(current)
 
     return new_hobbits
 
