@@ -580,9 +580,9 @@ def test_hobbit_navigates_through_three_nazgul_blockade() -> None:
     """
     hobbits = {0: (5, 5)}
     nazgul = [
-        (9, 3),   # North guard - distance 6
+        (9, 3),  # North guard - distance 6
         (10, 5),  # Center guard - distance 5
-        (9, 7),   # South guard - distance 6
+        (9, 7),  # South guard - distance 6
     ]
     rivendell = (18, 5)  # Due east beyond blockade
     WIDTH, HEIGHT = 20, 20
@@ -669,7 +669,10 @@ def test_single_hobbit_escapes_single_nazgul() -> None:
         if hobbits and hobbits.get(0) in nazgul:
             hobbits = {}
 
-    pytest.fail(f"Simulation timeout after 50 ticks. Hobbit at {hobbits.get(0, 'caught')}, Nazgûl at {nazgul[0]}")
+    pytest.fail(
+        f"Simulation timeout after 50 ticks. "
+        f"Hobbit at {hobbits.get(0, 'caught')}, Nazgûl at {nazgul[0]}"
+    )
 
 
 def test_baseline_three_hobbits_can_reach_rivendell() -> None:
@@ -862,7 +865,7 @@ def test_system_three_hobbits_escape_single_rider() -> None:
 
         # Check lose condition
         if len(hobbits) != 3:
-            pytest.fail(f"Hobbits were captured - simulation failed")
+            pytest.fail("Hobbits were captured - simulation failed")
 
         # Move entities
         hobbits = update_hobbits(
