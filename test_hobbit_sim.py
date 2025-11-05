@@ -23,7 +23,7 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
     Expected: Hobbit should move laterally (east or west) along edge to evade
     """
     # Setup: Hobbit at south edge, Nazgûl to the north
-    hobbits = [(10, 19)]  # At south edge
+    hobbits = {0: (10, 19)}  # At south edge
     nazgul = [(10, 15)]  # 4 squares north (within danger distance 6)
     rivendell = (19, 19)  # Goal is east along same edge
 
@@ -51,7 +51,7 @@ def test_hobbit_evading_at_south_edge_with_terrain_doesnt_get_stuck() -> None:
     Expected: Hobbit should move laterally (east or west) along edge to evade
     """
     # Setup: Hobbit at south edge, Nazgûl to the north
-    hobbits = [(10, 18)]  # At south edge
+    hobbits = {0: (10, 18)}  # At south edge
     nazgul = [(10, 15)]  # 4 squares north (within danger distance 6)
     rivendell = (19, 19)  # Goal is east along same edge
 
@@ -208,7 +208,7 @@ def test_hobbits_at_rivendell_represent_exited_state() -> None:
     See: test_escaped_hobbits_tracked_separately_from_active (skipped) for
     the desired future behavior.
     """
-    hobbits = [(0, 0), (1, 0)]  # Side by side
+    hobbits = {0: (0, 0), 1: (1, 0)}  # Side by side
     nazgul = [(10, 10)]  # Far away
     rivendell = (2, 0)  # East - the exit
 
@@ -222,7 +222,7 @@ def test_hobbits_at_rivendell_represent_exited_state() -> None:
     )
 
     # Both hobbits at Rivendell (currently represented as "stacking")
-    assert len(set(new_hobbits)) == 1, "Both hobbits should reach the exit"
+    assert len(set(new_hobbits.values())) == 1, "Both hobbits should reach the exit"
     assert new_hobbits[0] == (2, 0), "Exit position should be Rivendell"
 
 
@@ -255,13 +255,13 @@ def test_escaped_hobbits_tracked_separately_from_active() -> None:
 
 def test_nazgul_cannot_stack_on_same_square() -> None:
     """Two Nazgûl chasing same hobbit shouldn't stack"""
-    hobbits = [(10, 10)]
+    hobbits = {0: (10, 10)}
     nazgul = [(9, 10), (11, 10)]  # Both sides of hobbit
 
     # Both want to move toward (10, 10)
     new_nazgul = update_nazgul(
         nazgul=nazgul,
-        hobbits=hobbits,
+        hobbits=list(hobbits.values()),  # Convert dict to positions list
         dimensions=(20, 20),
         tick=0,
         terrain=set(),
@@ -287,7 +287,7 @@ def test_hobbits_fleeing_to_corner_cannot_stack() -> None:
     See: test_hobbits_at_rivendell_represent_exited_state
     """
     # Setup: Two hobbits in a line, Nazgûl chasing from behind
-    hobbits = [(1, 1), (1, 2)]  # Vertical line
+    hobbits = {0: (1, 1), 1: (1, 2)}  # Vertical line
     nazgul = [(2, 1), (2, 2), (2, 3), (1, 3)]  # South of both, within danger distance
     rivendell = (4, 4)  # Northwest corner - both will flee there
 
@@ -302,19 +302,19 @@ def test_hobbits_fleeing_to_corner_cannot_stack() -> None:
     )
 
     # Should NOT stack on same square
-    assert len(set(new_hobbits)) == 2, f"Hobbits stacked! {new_hobbits}"
+    assert len(set(new_hobbits.values())) == 2, f"Hobbits stacked! {new_hobbits}"
     assert new_hobbits[0] == (0, 1)
     assert new_hobbits[1] == (0, 2)
 
 
 def test_nazgul_can_move_onto_hobbit_square_for_capture() -> None:
     """Nazgûl can move onto a hobbit square for capture"""
-    hobbits = [(10, 10)]
+    hobbits = {0: (10, 10)}
     nazgul = [(9, 10)]
 
     new_nazgul = update_nazgul(
         nazgul=nazgul,
-        hobbits=hobbits,
+        hobbits=list(hobbits.values()),  # Convert dict to positions
         dimensions=(20, 20),
         tick=0,
         terrain=set(),
@@ -338,7 +338,7 @@ def test_hobbit_routes_around_nazgul_to_avoid_capture() -> None:
     count as a capture, or is it effectively running just past them
     attack of opportunity? or can a nazgul only capture on their own turn
     """
-    hobbits = [(9, 10)]
+    hobbits = {0: (9, 10)}
     nazgul = [(10, 10)]  # Directly east of hobbit
     rivendell = (19, 19)  # Southeast - direct path goes through Nazgûl
 
@@ -365,7 +365,7 @@ def test_hobbit_routes_around_nazgul_to_avoid_capture() -> None:
 
 def test_hobbit_reaches_goal_when_no_threat() -> None:
     """Baseline: Hobbit should reach Rivendell when Nazgûl is far away"""
-    hobbits = [(5, 5)]
+    hobbits = {0: (5, 5)}
     rivendell = (10, 10)
     nazgul = [(50, 50)]  # Way out of danger distance
 
@@ -385,7 +385,7 @@ def test_hobbit_reaches_goal_when_no_threat() -> None:
 
 def test_hobbit_flees_forward_when_chased_from_behind() -> None:
     """When Nazgûl is behind hobbit, fleeing should move toward goal"""
-    hobbits = [(10, 10)]
+    hobbits = {0: (10, 10)}
     rivendell = (18, 18)  # Southeast
     nazgul = [(5, 5)]  # Behind (northwest)
 
@@ -405,7 +405,7 @@ def test_hobbit_flees_forward_when_chased_from_behind() -> None:
 
 def test_hobbit_evades_perpendicular_threat() -> None:
     """When threat is to the side, hobbit should evade without losing ground"""
-    hobbits = [(10, 10)]
+    hobbits = {0: (10, 10)}
     rivendell = (18, 10)  # Due east
     nazgul = [(10, 5)]  # Due north (perpendicular)
 
@@ -441,7 +441,7 @@ def test_hobbit_with_threats_on_two_axes_doesnt_flee_into_trap() -> None:
     Expected: Hobbit should flee NORTHWEST (away from both threats, toward goal)
     Bug: Hobbit might flee SOUTH (perpendicular from A, but toward B)
     """
-    hobbits = [(5, 5)]
+    hobbits = {0: (5, 5)}
     nazgul = [
         (10, 5),  # East - distance 5
         (5, 10),  # South - distance 5
@@ -452,12 +452,12 @@ def test_hobbit_with_threats_on_two_axes_doesnt_flee_into_trap() -> None:
     # Run simulation
     for tick in range(50):
         print(f"\n--- Tick {tick} ---")
-        print(f"Hobbit: {hobbits[0] if hobbits else 'CAUGHT'}")
+        print(f"Hobbit: {hobbits.get(0, 'CAUGHT')}")
         print(f"Nazgûl: {nazgul}")
         print(f"Goal: {rivendell}")
 
         # Win condition
-        if hobbits and hobbits[0] == rivendell:
+        if hobbits and hobbits.get(0) == rivendell:
             print(f"✓ Victory in {tick} ticks!")
             return
 
@@ -475,16 +475,16 @@ def test_hobbit_with_threats_on_two_axes_doesnt_flee_into_trap() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=hobbits,
+            hobbits=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
 
         # Check captures
-        if hobbits and hobbits[0] in nazgul:
-            hobbits = []
+        if hobbits and hobbits.get(0) in nazgul:
+            hobbits = {}
 
-    pytest.fail(f"Timeout after 50 ticks. Hobbit at {hobbits[0] if hobbits else 'caught'}")
+    pytest.fail(f"Timeout after 50 ticks. Hobbit at {hobbits.get(0, 'caught')}")
 
 
 def test_hobbit_threads_between_two_nazgul_to_reach_goal() -> None:
@@ -509,7 +509,7 @@ def test_hobbit_threads_between_two_nazgul_to_reach_goal() -> None:
     Expected: Hobbit stays on y=5 (middle line), speeds through the gap
     Bug: Hobbit might flee north/south away from goal
     """
-    hobbits = [(5, 5)]
+    hobbits = {0: (5, 5)}
     nazgul = [
         (10, 3),  # Northeast - distance 7
         (10, 7),  # Southeast - distance 7
@@ -520,12 +520,12 @@ def test_hobbit_threads_between_two_nazgul_to_reach_goal() -> None:
     # Run simulation
     for tick in range(50):
         print(f"\n--- Tick {tick} ---")
-        print(f"Hobbit: {hobbits[0] if hobbits else 'CAUGHT'}")
+        print(f"Hobbit: {hobbits.get(0, 'CAUGHT')}")
         print(f"Nazgûl: {nazgul}")
         print(f"Goal: {rivendell}")
 
         # Win condition
-        if hobbits and hobbits[0] == rivendell:
+        if hobbits and hobbits.get(0) == rivendell:
             print(f"✓ Victory in {tick} ticks!")
             return
 
@@ -543,16 +543,16 @@ def test_hobbit_threads_between_two_nazgul_to_reach_goal() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=hobbits,
+            hobbits=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
 
         # Check captures
-        if hobbits and hobbits[0] in nazgul:
-            hobbits = []
+        if hobbits and hobbits.get(0) in nazgul:
+            hobbits = {}
 
-    pytest.fail(f"Timeout after 50 ticks. Hobbit at {hobbits[0] if hobbits else 'caught'}")
+    pytest.fail(f"Timeout after 50 ticks. Hobbit at {hobbits.get(0, 'caught')}")
 
 
 def test_hobbit_navigates_through_three_nazgul_blockade() -> None:
@@ -578,7 +578,7 @@ def test_hobbit_navigates_through_three_nazgul_blockade() -> None:
     Expected: Hobbit routes around (north or south of blockade)
     Bug: Hobbit might get stuck or flee backward away from goal
     """
-    hobbits = [(5, 5)]
+    hobbits = {0: (5, 5)}
     nazgul = [
         (9, 3),   # North guard - distance 6
         (10, 5),  # Center guard - distance 5
@@ -590,12 +590,12 @@ def test_hobbit_navigates_through_three_nazgul_blockade() -> None:
     # Run simulation
     for tick in range(50):
         print(f"\n--- Tick {tick} ---")
-        print(f"Hobbit: {hobbits[0] if hobbits else 'CAUGHT'}")
+        print(f"Hobbit: {hobbits.get(0, 'CAUGHT')}")
         print(f"Nazgûl: {nazgul}")
         print(f"Goal: {rivendell}")
 
         # Win condition
-        if hobbits and hobbits[0] == rivendell:
+        if hobbits and hobbits.get(0) == rivendell:
             print(f"✓ Victory in {tick} ticks!")
             return
 
@@ -613,22 +613,22 @@ def test_hobbit_navigates_through_three_nazgul_blockade() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=hobbits,
+            hobbits=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
 
         # Check captures
-        if hobbits and hobbits[0] in nazgul:
-            hobbits = []
+        if hobbits and hobbits.get(0) in nazgul:
+            hobbits = {}
 
-    pytest.fail(f"Timeout after 50 ticks. Hobbit at {hobbits[0] if hobbits else 'caught'}")
+    pytest.fail(f"Timeout after 50 ticks. Hobbit at {hobbits.get(0, 'caught')}")
 
 
 def test_single_hobbit_escapes_single_nazgul() -> None:
     """Simplest case: 1 hobbit vs 1 Nazgûl, clear path to goal, no terrain complexity"""
     # Hobbit starts northwest, goal is southeast, Nazgûl starts in between
-    hobbits = [(5, 5)]
+    hobbits = {0: (5, 5)}
     rivendell = (15, 15)
     nazgul = [(10, 5)]  # Nazgûl to the NORTH of path
     # This should be a clear path to the goal
@@ -637,12 +637,12 @@ def test_single_hobbit_escapes_single_nazgul() -> None:
     # Run simulation (max 50 ticks)
     for tick in range(50):
         print(f"\n--- Tick {tick} ---")
-        print(f"Hobbit: {hobbits[0] if hobbits else 'CAUGHT'}")
+        print(f"Hobbit: {hobbits.get(0, 'CAUGHT')}")
         print(f"Nazgûl: {nazgul[0]}")
         print(f"Goal: {rivendell}")
 
         # Check win condition
-        if hobbits and hobbits[0] == rivendell:
+        if hobbits and hobbits.get(0) == rivendell:
             print(f"✓ Victory in {tick} ticks!")
             return  # Success!
 
@@ -660,16 +660,16 @@ def test_single_hobbit_escapes_single_nazgul() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=hobbits,
+            hobbits=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
 
         # Check captures
-        if hobbits and hobbits[0] in nazgul:
-            hobbits = []
+        if hobbits and hobbits.get(0) in nazgul:
+            hobbits = {}
 
-    pytest.fail(f"Simulation timeout after 50 ticks. Hobbit at {hobbits[0]}, Nazgûl at {nazgul[0]}")
+    pytest.fail(f"Simulation timeout after 50 ticks. Hobbit at {hobbits.get(0, 'caught')}, Nazgûl at {nazgul[0]}")
 
 
 def test_baseline_three_hobbits_can_reach_rivendell() -> None:
@@ -688,7 +688,7 @@ def test_baseline_three_hobbits_can_reach_rivendell() -> None:
     Success: ALL 3 hobbits reach Rivendell (current sim achieves this in ~16 ticks)
     """
     # Hardcoded setup matching current create_world()
-    hobbits = [(1, 2), (2, 1), (2, 2)]  # Southwest corner
+    hobbits = {0: (1, 2), 1: (2, 1), 2: (2, 2)}  # Southwest corner
     nazgul = [(18, 5)]  # Far east
     rivendell = (18, 18)  # Northeast corner
     WIDTH, HEIGHT = 20, 20
@@ -707,7 +707,7 @@ def test_baseline_three_hobbits_can_reach_rivendell() -> None:
     # Run simulation
     for tick in range(50):  # Current sim finishes in ~16 ticks
         # Check victory: all hobbits at Rivendell
-        if all(h == rivendell for h in hobbits):
+        if all(pos == rivendell for pos in hobbits.values()):
             assert len(hobbits) == starting_hobbit_count, (
                 f"Only {len(hobbits)}/{starting_hobbit_count} hobbits escaped"
             )
@@ -728,14 +728,14 @@ def test_baseline_three_hobbits_can_reach_rivendell() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=hobbits,
+            hobbits=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
             terrain=terrain,
         )
 
         # Remove captured hobbits
-        hobbits = [h for h in hobbits if h not in nazgul]
+        hobbits = {hid: pos for hid, pos in hobbits.items() if pos not in nazgul}
 
     pytest.fail(
         f"Simulation timeout after 50 ticks. "
@@ -765,7 +765,7 @@ def test_current_simulation_configuration_completes() -> None:
     # Run simulation
     for tick in range(100):  # Generous limit for future configs
         # Check victory: all hobbits at Rivendell
-        if all(h == rivendell for h in hobbits):
+        if all(pos == rivendell for pos in hobbits.values()):
             assert len(hobbits) == starting_hobbit_count, (
                 f"Only {len(hobbits)}/{starting_hobbit_count} hobbits escaped"
             )
@@ -786,14 +786,14 @@ def test_current_simulation_configuration_completes() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=hobbits,
+            hobbits=list(hobbits.values()),
             dimensions=dimensions,
             tick=tick,
             terrain=terrain,
         )
 
         # Remove captured hobbits
-        hobbits = [h for h in hobbits if h not in nazgul]
+        hobbits = {hid: pos for hid, pos in hobbits.items() if pos not in nazgul}
 
     pytest.fail(
         f"Simulation timeout after 100 ticks. "
@@ -848,7 +848,7 @@ def test_system_three_hobbits_escape_single_rider() -> None:
     - All hobbits should reach Rivendell (19, 19)
     """
     # Starting positions (match current simulation)
-    hobbits = [(1, 0), (0, 1), (1, 1)]
+    hobbits = {0: (1, 0), 1: (0, 1), 2: (1, 1)}
     nazgul = [(18, 12)]
     rivendell = (18, 18)
     WIDTH, HEIGHT = 20, 20
@@ -856,7 +856,7 @@ def test_system_three_hobbits_escape_single_rider() -> None:
     # Run simulation (max 100 ticks to prevent infinite loop)
     for tick in range(100):
         # Check win condition
-        if all(h == rivendell for h in hobbits):
+        if all(pos == rivendell for pos in hobbits.values()):
             assert len(hobbits) == 3, "All 3 hobbits should escape"
             return  # Success!
 
@@ -874,14 +874,13 @@ def test_system_three_hobbits_escape_single_rider() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=hobbits,
+            hobbits=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
 
         # Check captures
-        hobbits_to_remove = [h for h in hobbits if h in nazgul]
-        hobbits = [h for h in hobbits if h not in hobbits_to_remove]
+        hobbits = {hid: pos for hid, pos in hobbits.items() if pos not in nazgul}
 
     pytest.fail("Simulation didn't complete in 100 ticks")
 
@@ -989,7 +988,7 @@ def test_render_world_shows_hobbit_names() -> None:
         terrain=set(),
         starting_hobbit_count=4,
         starting_nazgul_count=0,
-        hobbits=[(1, 1), (2, 2), (3, 3), (4, 4)],  # Frodo, Sam, Pippin, Merry
+        hobbits={0: (1, 1), 1: (2, 2), 2: (3, 3), 3: (4, 4)},  # Frodo, Sam, Pippin, Merry
         nazgul=[],
     )
 
@@ -1010,7 +1009,7 @@ def test_hobbit_cannot_move_through_terrain() -> None:
     from hobbit_sim import update_hobbits
 
     # Place hobbit next to a wall
-    hobbits = [(5, 5)]
+    hobbits = {0: (5, 5)}
     rivendell = (10, 10)
     nazgul = [(20, 20)]  # Far away, not in danger
 
@@ -1041,7 +1040,7 @@ def test_nazgul_cannot_move_through_terrain() -> None:
 
     # Place nazgul next to a wall
     nazgul = [(5, 5)]
-    hobbits = [(10, 10)]  # Target
+    hobbits = {0: (10, 10)}  # Target
 
     # Create a wall blocking the path
     terrain = {(6, 5), (6, 6), (5, 6)}  # Wall to the right and diagonal
@@ -1049,7 +1048,7 @@ def test_nazgul_cannot_move_through_terrain() -> None:
     # Nazgul wants to move toward (10, 10) but terrain blocks
     new_nazgul = update_nazgul(
         nazgul=nazgul,
-        hobbits=hobbits,
+        hobbits=list(hobbits.values()),  # Convert dict to positions
         dimensions=(20, 20),
         tick=0,
         terrain=terrain,
@@ -1238,3 +1237,60 @@ def test_move_away_from_backward_compatibility() -> None:
 
     # Should match the test we already have
     assert result in [(9, 10), (10, 9)], "Should behave like original when no goal"
+
+
+def test_dict_based_hobbit_movement() -> None:
+    """Proof of concept: hobbits as dict with explicit IDs works end-to-end"""
+    from hobbit_sim import WorldState, render_world
+
+    # Create world with dict-based hobbits (explicit identity)
+    world = WorldState(
+        width=10,
+        height=10,
+        rivendell=(9, 9),
+        terrain=set(),
+        starting_hobbit_count=3,
+        starting_nazgul_count=0,
+        hobbits={
+            0: (1, 1),  # Frodo
+            1: (2, 2),  # Sam
+            2: (3, 3),  # Pippin
+        },
+        nazgul=[],
+        tick=0,
+    )
+
+    # Verify initial state
+    assert isinstance(world.hobbits, dict)
+    assert len(world.hobbits) == 3
+    assert world.hobbits[0] == (1, 1)
+    assert world.hobbits[1] == (2, 2)
+    assert world.hobbits[2] == (3, 3)
+
+    # Move hobbits toward rivendell
+    result = update_hobbits(
+        hobbits=world.hobbits,
+        rivendell=world.rivendell,
+        nazgul=world.nazgul,
+        dimensions=world.dimensions,
+        tick=0,
+        terrain=world.terrain,
+    )
+
+    # update_hobbits now returns dict for identity tracking
+    assert isinstance(result, dict)
+    assert len(result) == 3
+
+    # All hobbits should have moved via Manhattan movement toward (9,9)
+    # Frodo from (1,1) -> (1,2) -> (2,2)
+    # Sam from (2,2) -> (2,3) -> (3,3)
+    # Pippin from (3,3) -> (3,4) -> (4,4)
+    assert (2, 2) in result.values()
+    assert (3, 3) in result.values()
+    assert (4, 4) in result.values()
+
+    # Test rendering with dict hobbits
+    rendered = render_world(world=world, show_hobbit_ids=True)
+    assert "F" in rendered  # Frodo
+    assert "S" in rendered  # Sam
+    assert "P" in rendered  # Pippin

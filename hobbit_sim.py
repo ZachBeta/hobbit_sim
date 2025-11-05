@@ -39,7 +39,7 @@ class WorldState:
     starting_nazgul_count: int
 
     # Entity state (mutable during simulation)
-    hobbits: EntityPositions
+    hobbits: Hobbits
     nazgul: EntityPositions
     tick: int = 0
 
@@ -245,8 +245,8 @@ def render_world(*, world: WorldState, show_hobbit_ids: bool = False) -> str:
     place_entity(grid=grid, position=world.rivendell, symbol="R")
 
     # Place hobbits with optional IDs
-    for index, hobbit_pos in enumerate(world.hobbits):
-        symbol = get_hobbit_symbol(index=index) if show_hobbit_ids else "H"
+    for hobbit_id, hobbit_pos in world.hobbits.items():
+        symbol = get_hobbit_symbol(index=hobbit_id) if show_hobbit_ids else "H"
         place_entity(grid=grid, position=hobbit_pos, symbol=symbol)
 
     # Place nazgul
@@ -562,37 +562,37 @@ def is_valid_position(
     return 0 <= x < width and 0 <= y < height and position not in terrain
 
 
+def _hobbit_positions(*, hobbits: Hobbits) -> list[Position]:
+    """Get hobbit positions as list from dict."""
+    return list(hobbits.values())
+
+
 def update_hobbits(
     *,
-    hobbits: EntityPositions,
+    hobbits: Hobbits,
     rivendell: Position,
     nazgul: EntityPositions,
     dimensions: GridDimensions,
     tick: int,
     terrain: set[Position] | None = None,
-) -> EntityPositions:
+) -> Hobbits:
     """Move all hobbits toward Rivendell at speed 2.
-
-    Adapter: Converts list-based API to internal dict-based implementation.
 
     Each hobbit:
     1. Takes 2 steps (speed 2)
     2. Reassesses world after each step (greedy evaluation)
     3. Autonomously decides behavior based on perceived threats
 
-    Returns new hobbit positions.
+    Returns new hobbit positions as dict.
     """
-    # Adapter: convert list → dict → list
-    hobbit_dict = {i: pos for i, pos in enumerate(hobbits)}
-    result_dict = _update_hobbits_dict(
-        hobbits=hobbit_dict,
+    return _update_hobbits_dict(
+        hobbits=hobbits,
         rivendell=rivendell,
         nazgul=nazgul,
         dimensions=dimensions,
         tick=tick,
         terrain=terrain,
     )
-    return list(result_dict.values())
 
 
 def _update_hobbits_dict(
@@ -728,11 +728,11 @@ def create_world() -> WorldState:
         terrain.add((0, y))  # Left border
         terrain.add((WIDTH - 1, y))  # Right border
 
-    hobbits = [
-        (1, 2),  # Frodo (index 0)
-        (2, 1),  # Sam (index 1)
-        (2, 2),  # Pippin (index 2)
-    ]
+    hobbits = {
+        0: (1, 2),  # Frodo
+        1: (2, 1),  # Sam
+        2: (2, 2),  # Pippin
+    }
 
     # Initialize Nazgûl
     nazgul = [
@@ -780,8 +780,8 @@ def _render_simulation_state(
     place_entity(grid=grid, position=state.rivendell, symbol="R")  # Rivendell
 
     # Place hobbits with identity
-    for index, hobbit_pos in enumerate(state.hobbits):
-        symbol = get_hobbit_symbol(index=index)
+    for hobbit_id, hobbit_pos in state.hobbits.items():
+        symbol = get_hobbit_symbol(index=hobbit_id)
         place_entity(grid=grid, position=hobbit_pos, symbol=symbol)
 
     # Place Nazgûl
@@ -811,7 +811,8 @@ def _run_simulation_loop(
     while True:
         # Check timeout
         if max_ticks is not None and state.tick >= max_ticks:
-            hobbits_escaped = sum(1 for h in state.hobbits if h == state.rivendell)
+            hobbit_positions = _hobbit_positions(hobbits=state.hobbits)
+            hobbits_escaped = sum(1 for h in hobbit_positions if h == state.rivendell)
             hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
             return {
                 "outcome": "timeout",
@@ -821,7 +822,8 @@ def _run_simulation_loop(
             }
 
         # Check win condition if all hobbits are at Rivendell
-        if all(h == state.rivendell for h in state.hobbits):
+        hobbit_positions = _hobbit_positions(hobbits=state.hobbits)
+        if all(h == state.rivendell for h in hobbit_positions):
             emit_event(
                 tick=state.tick,
                 event_type="victory",
@@ -847,7 +849,8 @@ def _run_simulation_loop(
                 nazgul=state.nazgul,
                 rivendell=state.rivendell,
             )
-            hobbits_escaped = sum(1 for h in state.hobbits if h == state.rivendell)
+            hobbit_positions = _hobbit_positions(hobbits=state.hobbits)
+            hobbits_escaped = sum(1 for h in hobbit_positions if h == state.rivendell)
             hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
             return {
                 "outcome": "defeat",
@@ -867,28 +870,27 @@ def _run_simulation_loop(
         )
         state.nazgul = update_nazgul(
             nazgul=state.nazgul,
-            hobbits=state.hobbits,
+            hobbits=_hobbit_positions(hobbits=state.hobbits),
             dimensions=state.dimensions,
             tick=state.tick,
             terrain=state.terrain,
         )
 
         # Check for captures (Nazgûl on same square as hobbit)
-        hobbits_to_remove = []
-        for hobbit in state.hobbits:
+        hobbit_ids_to_remove = []
+        for hobbit_id, hobbit_pos in state.hobbits.items():
             for naz in state.nazgul:
-                if hobbit == naz:
-                    hobbits_to_remove.append(hobbit)
+                if hobbit_pos == naz:
+                    hobbit_ids_to_remove.append(hobbit_id)
                     emit_event(
                         tick=state.tick,
                         event_type="hobbit_captured",
-                        hobbit=hobbit,
+                        hobbit=hobbit_pos,
                         nazgul=naz,
                     )
                     break
-
-        for h in hobbits_to_remove:
-            state.hobbits.remove(h)
+        for hid in hobbit_ids_to_remove:
+            del state.hobbits[hid]
 
         # Call display callback if provided
         if on_tick:
