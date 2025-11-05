@@ -303,21 +303,21 @@ def move_toward(*, current: Position, target: Position) -> Position:
 
 
 def find_nearest_hobbit(
-    *, nazgul: Position, hobbits: EntityPositions
+    *, nazgul: Position, hobbit_positions: EntityPositions
 ) -> tuple[Position | None, int]:
     """Find nearest Hobbit and Manhattan distance.
 
     Returns (hobbit_pos, distance) or (None, 999_999_999) when no hobbits exist.
     Distance is calculated as Manhattan distance: |dx| + |dy|.
     """
-    if not hobbits:
+    if not hobbit_positions:
         return None, 999_999_999  # Nine 9's for the Nine Rings of Men
 
     nazgul_x, nazgul_y = nazgul
-    nearest = hobbits[0]
+    nearest = hobbit_positions[0]
     min_dist = abs(nazgul_x - nearest[0]) + abs(nazgul_y - nearest[1])
 
-    for hobbit in hobbits[1:]:
+    for hobbit in hobbit_positions[1:]:
         dist = abs(nazgul_x - hobbit[0]) + abs(nazgul_y - hobbit[1])
         if dist < min_dist:
             min_dist = dist
@@ -660,7 +660,7 @@ def _update_hobbits_dict(
 def update_nazgul(
     *,
     nazgul: EntityPositions,
-    hobbits: EntityPositions,
+    hobbit_positions: EntityPositions,
     dimensions: GridDimensions,
     tick: int,
     terrain: set[Position] | None = None,
@@ -676,9 +676,9 @@ def update_nazgul(
             tick=tick,
             event_type="nazgul_movement_attempt",
             nazgul=nazgul_pos,
-            hobbits=hobbits,
+            hobbits=hobbit_positions,
         )
-        target, distance = find_nearest_hobbit(nazgul=nazgul_pos, hobbits=hobbits)
+        target, distance = find_nearest_hobbit(nazgul=nazgul_pos, hobbit_positions=hobbit_positions)
         if target:
             emit_event(
                 tick=tick,
@@ -870,7 +870,7 @@ def _run_simulation_loop(
         )
         state.nazgul = update_nazgul(
             nazgul=state.nazgul,
-            hobbits=_hobbit_positions(hobbits=state.hobbits),
+            hobbit_positions=_hobbit_positions(hobbits=state.hobbits),
             dimensions=state.dimensions,
             tick=state.tick,
             terrain=state.terrain,

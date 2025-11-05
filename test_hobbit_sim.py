@@ -155,11 +155,11 @@ def test_move_with_speed_uses_manhattan_movement_with_speed() -> None:
 
 
 def test_find_nearest_hobbit_returns_closest() -> None:
-    assert find_nearest_hobbit(nazgul=(10, 10), hobbits=[(11, 11), (9, 10)]) == ((9, 10), 1)
+    assert find_nearest_hobbit(nazgul=(10, 10), hobbit_positions=[(11, 11), (9, 10)]) == ((9, 10), 1)
 
 
 def test_find_nearest_hobbit_with_no_hobbits() -> None:
-    assert find_nearest_hobbit(nazgul=(10, 10), hobbits=[]) == (None, 999_999_999)
+    assert find_nearest_hobbit(nazgul=(10, 10), hobbit_positions=[]) == (None, 999_999_999)
 
 
 def test_distance_calculations_use_manhattan_distance() -> None:
@@ -179,7 +179,7 @@ def test_distance_calculations_use_manhattan_distance() -> None:
     hobbits: EntityPositions = [(3, 4), (5, 5)]
     nazgul_pos: Position = (0, 0)
 
-    nearest_hobbit, distance = find_nearest_hobbit(nazgul=nazgul_pos, hobbits=hobbits)
+    nearest_hobbit, distance = find_nearest_hobbit(nazgul=nazgul_pos, hobbit_positions=hobbits)
 
     assert nearest_hobbit == (3, 4), "Should find closest hobbit"
     assert distance == 7, "Manhattan distance from (0,0) to (3,4) is |3| + |4| = 7"
@@ -261,7 +261,7 @@ def test_nazgul_cannot_stack_on_same_square() -> None:
     # Both want to move toward (10, 10)
     new_nazgul = update_nazgul(
         nazgul=nazgul,
-        hobbits=list(hobbits.values()),  # Convert dict to positions list
+        hobbit_positions=list(hobbits.values()),  # Convert dict to positions list
         dimensions=(20, 20),
         tick=0,
         terrain=set(),
@@ -314,7 +314,7 @@ def test_nazgul_can_move_onto_hobbit_square_for_capture() -> None:
 
     new_nazgul = update_nazgul(
         nazgul=nazgul,
-        hobbits=list(hobbits.values()),  # Convert dict to positions
+        hobbit_positions=list(hobbits.values()),  # Convert dict to positions
         dimensions=(20, 20),
         tick=0,
         terrain=set(),
@@ -475,7 +475,7 @@ def test_hobbit_with_threats_on_two_axes_doesnt_flee_into_trap() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=list(hobbits.values()),  # Convert dict to positions
+            hobbit_positions=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
@@ -543,7 +543,7 @@ def test_hobbit_threads_between_two_nazgul_to_reach_goal() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=list(hobbits.values()),  # Convert dict to positions
+            hobbit_positions=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
@@ -613,7 +613,7 @@ def test_hobbit_navigates_through_three_nazgul_blockade() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=list(hobbits.values()),  # Convert dict to positions
+            hobbit_positions=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
@@ -660,7 +660,7 @@ def test_single_hobbit_escapes_single_nazgul() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=list(hobbits.values()),  # Convert dict to positions
+            hobbit_positions=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
@@ -731,7 +731,7 @@ def test_baseline_three_hobbits_can_reach_rivendell() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=list(hobbits.values()),  # Convert dict to positions
+            hobbit_positions=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
             terrain=terrain,
@@ -789,7 +789,7 @@ def test_current_simulation_configuration_completes() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=list(hobbits.values()),
+            hobbit_positions=list(hobbits.values()),
             dimensions=dimensions,
             tick=tick,
             terrain=terrain,
@@ -877,7 +877,7 @@ def test_system_three_hobbits_escape_single_rider() -> None:
         )
         nazgul = update_nazgul(
             nazgul=nazgul,
-            hobbits=list(hobbits.values()),  # Convert dict to positions
+            hobbit_positions=list(hobbits.values()),  # Convert dict to positions
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
         )
@@ -1051,7 +1051,7 @@ def test_nazgul_cannot_move_through_terrain() -> None:
     # Nazgul wants to move toward (10, 10) but terrain blocks
     new_nazgul = update_nazgul(
         nazgul=nazgul,
-        hobbits=list(hobbits.values()),  # Convert dict to positions
+        hobbit_positions=list(hobbits.values()),  # Convert dict to positions
         dimensions=(20, 20),
         tick=0,
         terrain=terrain,
