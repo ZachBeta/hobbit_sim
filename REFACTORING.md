@@ -1,136 +1,172 @@
 # REFACTORING.md
 
-This document tracks potential refactoring opportunities for future work sessions. These are improvements to working code, organized by effort and decision-making complexity.
+**Last Updated**: 2025-11-07
+**Purpose**: Bite-sized polish tasks for Zone 1 coding sessions when you want to code but have limited decision-making capacity.
 
-## Purpose
-
-When you want to code but have limited decision-making capacity (recovery days, end of day, etc.), grab an item from "Easy Wins." When you're feeling sharp and want to tackle architecture, pick from "Architectural Improvements."
-
----
-
-## Easy Wins
-
-Mechanical refactors with clear benefits and low decision-making overhead:
-
-### Type Improvements
-
-- [ ] **Convert Position to frozen dataclass**
-  - Current: `Position = tuple[int, int]` (just an alias)
-  - Target: Frozen dataclass with `.x`, `.y` named fields
-  - Benefits: Named access, can add methods (`.distance_to()`, `.adjacent_positions()`), immutable, better IDE support
-  - Impact: ~50 callsites to update from `[0]`/`[1]` to `.x`/`.y`
-  - Estimated effort: 1-2 hours
-
-- [ ] **Convert EntityPositions to NewType or custom class**
-  - Current: `EntityPositions = list[Position]` (just an alias)
-  - Target: NewType for type safety or custom class with methods
-  - Benefits: Type checker can distinguish hobbit positions from nazgul positions
-  - Impact: Minimal - already used throughout
-  - Estimated effort: 30 minutes
-
-- [ ] **Add GridDimensions methods**
-  - Current: `GridDimensions = tuple[int, int]`
-  - Target: Frozen dataclass with `.width`, `.height` and `.contains(position)` method
-  - Benefits: Named access, bounds checking helper
-  - Impact: ~20 callsites
-  - Estimated effort: 1 hour
-
-### Extract Magic Numbers
-
-- [ ] **Extract game constants to module-level**
-  - Candidates: `DANGER_DISTANCE = 6`, `HOBBIT_SPEED = 2`, `NAZGUL_SPEED = 1`
-  - Current: Hardcoded in `update_hobbits()` and `update_nazgul()`
-  - Target: Module-level constants at top of file (after type definitions)
-  - Benefits: Single source of truth, easier to tune gameplay
-  - Impact: 3-5 locations
-  - Estimated effort: 15 minutes
-
-- [ ] **Extract world generation constants**
-  - Candidates: `WORLD_WIDTH = 20`, `WORLD_HEIGHT = 20`, `SHIRE = (1, 1)`, `RIVENDELL = (18, 18)`
-  - Current: Hardcoded in `create_world()`
-  - Benefits: Easier to experiment with different map sizes
-  - Impact: 1 function
-  - Estimated effort: 10 minutes
+This document tracks polish opportunities for the **current working simulation** (hobbits fleeing Nazgûl). Tasks are sized for 15-60 minute sessions and ordered by value + ease.
 
 ---
 
-## Architectural Improvements
+## 🏃‍♂️ Now (Ready to Grab - 15-30 min each)
 
-Larger refactors requiring more design thinking:
+These are mechanical refactors with clear benefits. Grab any of these for a quick win.
 
-### File Organization (SOLID Principles)
+### Extract Movement Constants
+**Current**: Speed and danger distance are magic numbers scattered in code
+**Action**: Create module-level constants
+```python
+# At top of hobbit_sim.py, after type definitions
+DANGER_DISTANCE = 6      # Distance at which hobbits start evading (move_hobbit_one_step:522)
+HOBBIT_SPEED = 2         # Steps per tick (_update_hobbits_dict:654)
+NAZGUL_SPEED = 1         # Steps per tick (update_nazgul:712)
+```
+**Why**: Makes game tuning obvious, clearer intent
+**Risk**: Minimal - just variable extraction
+**Test strategy**: All 33 tests should pass unchanged
+**Estimated**: 15 minutes
 
-- [ ] **Split hobbit_sim.py into modules**
-  - Current: ~900 lines in single file
-  - Proposed structure:
-    ```
-    hobbit_sim/
-      __init__.py          # Public API exports
-      types.py             # WorldState, Position, Grid, type definitions
-      movement.py          # move_toward, move_away_from, move_with_speed, pathfinding
-      rendering.py         # Grid creation, entity placement, print/display
-      simulation.py        # _run_simulation_loop, run_simulation, update functions
-      world.py             # create_world, terrain generation
-      events.py            # Event logging, NarrativeBuffer
-    ```
-  - Benefits: Easier navigation, focused modules, clearer dependencies
-  - Blockers: Need to resolve circular imports, update CLAUDE.md philosophy
-  - Estimated effort: 4-6 hours (includes test updates)
+### Extract World Dimensions
+**Current**: Grid size hardcoded as `(20, 20)` in create_world()
+**Action**: Create constants
+```python
+WORLD_WIDTH = 20
+WORLD_HEIGHT = 20
+```
+**Why**: Makes world size configurable, clearer what 20x20 represents
+**Risk**: Minimal
+**Test strategy**: Tests already parameterized with dimensions
+**Estimated**: 15 minutes
 
-- [ ] **Update CLAUDE.md philosophy**
-  - Current: "Single file initially"
-  - Reality: Project has graduated beyond single-file phase
-  - Action: Update design philosophy to reflect multi-module reality
-  - Estimated effort: 15 minutes
-
-### Separation of Concerns
-
-- [ ] **Extract collision detection**
-  - Current: Inline in `_run_simulation_loop()` (lines ~847-862)
-  - Target: `detect_captures(*, hobbits, nazgul) -> list[Position]`
-  - Benefits: Testable in isolation, clearer main loop
-  - Impact: 1 location
-  - Estimated effort: 30 minutes
-
-- [ ] **Split WorldState into GameConfig + GameState**
-  - Current: Single dataclass mixes immutable (terrain, rivendell) with mutable (hobbits, tick)
-  - Target: Separate frozen config from mutable state
-  - Benefits: Makes mutability explicit, clearer ownership
-  - Trade-offs: More parameter passing, higher cognitive overhead
-  - Decision needed: Is the explicit separation worth the complexity?
-  - Estimated effort: 2-3 hours
-
-### Single Responsibility
-
-- [ ] **Review update_hobbits() and update_nazgul()**
-  - Current: Each function handles movement logic for multiple entities
-  - Concern: Mixing "decide where to move" with "execute movement"
-  - Possible split: `decide_hobbit_move()` + `execute_moves()`
-  - Benefits: More testable, clearer separation of "mind vs body"
-  - Note: Already partially done with `_move_hobbit_evading()` and `_move_hobbit_traveling()`
-  - Estimated effort: Evaluate 30 mins, implement if warranted 2-3 hours
+### Add `get_hobbit_name()` Helper Function
+**Current**: Name lookup logic duplicated in multiple places
+```python
+# Current pattern (scattered):
+name = HOBBIT_NAMES.get(hobbit_id, f"Hobbit {hobbit_id}")
+```
+**Action**: Centralize in helper function
+```python
+def get_hobbit_name(*, hobbit_id: int) -> str:
+    """Get display name for hobbit by ID. Falls back to generic name."""
+    return HOBBIT_NAMES.get(hobbit_id, f"Hobbit {hobbit_id}")
+```
+**Why**: DRY principle, single source of truth for name logic
+**Risk**: Low
+**Estimated**: 20 minutes
 
 ---
 
-## Performance
+## 🔜 Soon (After "Now" items - 30-60 min each)
 
-We're not optimizing yet (pure Python is fine), but track opportunities here:
+These make sense once the constants are extracted.
 
-- [ ] **Profile simulation loop** - Establish baseline before any optimization
-- [ ] **Cache terrain lookups** - Currently using `set` which is already O(1), no action needed
-- [ ] **Distance calculations** - Currently using Manhattan distance which is fast, no action needed
+### Document Movement System
+**Current**: Manhattan movement is implicit, no comments explaining why
+**Action**: Add docstring/comment explaining movement philosophy
+```python
+# Movement System Philosophy:
+# - Manhattan distance (no diagonals): |dx| + |dy|
+# - Move one axis at a time (creates "staircase" pattern)
+# - Prioritizes axis with greater remaining distance
+# - Matches how Nazgûl track hobbits (consistent pursuit logic)
+```
+**Why**: Makes design decisions explicit for future contributors (human or AI)
+**Risk**: None (documentation only)
+**Estimated**: 30 minutes
+
+### Add Type Alias Documentation
+**Current**: Type aliases lack usage examples
+**Action**: Add comments explaining when to use each type
+```python
+Position = tuple[int, int]  # Grid coordinates (x, y)
+EntityPositions = list[Position]  # Multiple entity locations (Nazgûl, etc.)
+Hobbits = dict[HobbitId, Position]  # Maps hobbit IDs to positions
+```
+**Why**: Clarifies intent of each type
+**Risk**: None
+**Estimated**: 15 minutes
 
 ---
 
-## Completed
+## 🤔 Maybe (Needs Validation - 1-2 hours each)
 
-*(Move items here when done, with date)*
+These might be YAGNI. Only tackle if you're feeling the pain.
+
+### Extract Landmark Positions (Probably YAGNI)
+**Current**: Shire at (1,1), Rivendell at (18,18) hardcoded
+**Question**: Is this YAGNI since `world.rivendell` already tracks this?
+**Concern**: Adding constants might duplicate WorldState fields
+**Insight**: Landmark positions will naturally evolve with map concepts (entrances, exits, multiple maps/dungeons, surface world)
+**Decision**: Wait until you need multiple map configurations
+
+### Convert Position to Dataclass
+**Current**: `Position = tuple[int, int]` (type alias)
+**Target**: Frozen dataclass with `.x`, `.y` fields
+**Impact**: ~50 callsites to update from `[0]`/`[1]` to `.x`/`.y`
+**Why**: Named access, can add methods later (`.distance_to()`, etc.)
+**Concern**: Big surgery for modest gain. Wait until you need position methods?
+**Decision needed**: Do we need position methods yet?
+**Estimated**: 2-3 hours
+
+### Split Collision Detection
+**Current**: Collision checks inline in `_run_simulation_loop` (lines ~902-915)
+**Target**: Extract to `detect_captures(*, hobbits, nazgul) -> list[HobbitId]`
+**Why**: Testable in isolation, clearer main loop
+**Concern**: Is 14 lines worth extracting?
+**Decision needed**: Wait until collision logic gets more complex?
+**Estimated**: 30 minutes
+
+---
+
+## 🔮 Later (Architectural - 2-6 hours)
+
+Don't tackle these yet. Revisit when you feel the pain.
+
+### Split Into Modules
+**Current**: ~950 lines in single file (still comfortable)
+**When to do**: When navigation feels cramped OR when adding Bombadil features (entity states, abilities, etc.)
+**Proposed structure**:
+```
+hobbit_sim/
+  __init__.py          # Public API
+  types.py             # WorldState, Position, type definitions
+  movement.py          # move_toward, move_away_from, pathfinding
+  rendering.py         # Grid creation, display
+  simulation.py        # Core loop, update functions
+  world.py             # create_world, terrain generation
+  events.py            # Event logging, NarrativeBuffer
+```
+**Consideration**: Abstractions must be clear for both humans and AI agents
+**Estimated**: 4-6 hours
+
+### Update CLAUDE.md Philosophy
+**Current**: Says "single file initially"
+**Reality**: Ready to split when needed, but comfortable now
+**Action**: Update to reflect multi-module readiness
+**When**: After actually splitting into modules
+**Estimated**: 15 minutes
+
+---
+
+## ✅ Completed
+
+*(Move items here with completion date)*
+
+**2025-11-05**: Migrated hobbits from list indices to dict with explicit IDs
+**2025-11-05**: Added hobbit collision avoidance (hobbits don't stack during evasion)
+**2025-11-05**: Implemented Nazgûl collision prevention (Nazgûl don't stack)
 
 ---
 
 ## Notes
 
-- **Philosophy**: "Make the change easy, then make the easy change" - Kent Beck
-- **Constraint**: Prioritize simplicity and forward momentum over perfect architecture
-- **Recovery-friendly**: Easy Wins are designed for low-capacity coding sessions
-- **Test-driven**: All refactors must maintain green tests (33 passing, 7 skipped)
+**Philosophy**: "Make the change easy, then make the easy change" - Kent Beck
+**Zone 1 friendly**: Tasks sized for low-capacity coding sessions
+**YAGNI principle**: Don't extract until you feel the pain
+**Test-driven**: All refactors must keep 33 tests passing
+**Agent-friendly**: Keep abstractions simple and intuitive
+
+**Why "Now/Soon/Maybe/Later"?**
+- **Now**: Clear value, low risk, mechanical changes
+- **Soon**: Depends on "Now" items, still low risk
+- **Maybe**: Might be over-engineering, validate need first
+- **Later**: Big changes, wait until current structure hurts
