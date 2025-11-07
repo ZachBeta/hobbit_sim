@@ -7,14 +7,15 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Protocol, TypedDict
 
-Position = tuple[int, int]
-GridDimensions = tuple[int, int]
-Grid = list[list[str]]
-EntityPositions = list[Position]
+# Type aliases for grid and positioning
+Position = tuple[int, int]  # Grid coordinates (x, y) - use for any single location
+GridDimensions = tuple[int, int]  # Grid bounds (width, height)
+Grid = list[list[str]]  # 2D grid of display symbols for rendering
+EntityPositions = list[Position]  # Multiple entity locations (for Nazgûl groups, etc.)
 
-# Dict-based hobbit identity (migration target)
-HobbitId = int
-Hobbits = dict[HobbitId, Position]
+# Hobbit identity types
+HobbitId = int  # Unique identifier for a hobbit (0=Frodo, 1=Sam, etc.)
+Hobbits = dict[HobbitId, Position]  # Maps hobbit IDs to their current positions
 
 # Hobbit identification by list index
 # Maps hobbit index to display name/symbol

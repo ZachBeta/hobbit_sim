@@ -11,14 +11,6 @@ This document tracks polish opportunities for the **current working simulation**
 
 These are mechanical refactors with clear benefits. Grab any of these for a quick win.
 
-*(All "Now" tasks completed! Check "Soon" section for next tasks)*
-
----
-
-## 🔜 Soon (After "Now" items - 30-60 min each)
-
-These make sense once the constants are extracted.
-
 ### Document Movement System
 **Current**: Manhattan movement is implicit, no comments explaining why
 **Action**: Add docstring/comment explaining movement philosophy
@@ -33,17 +25,11 @@ These make sense once the constants are extracted.
 **Risk**: None (documentation only)
 **Estimated**: 30 minutes
 
-### Add Type Alias Documentation
-**Current**: Type aliases lack usage examples
-**Action**: Add comments explaining when to use each type
-```python
-Position = tuple[int, int]  # Grid coordinates (x, y)
-EntityPositions = list[Position]  # Multiple entity locations (Nazgûl, etc.)
-Hobbits = dict[HobbitId, Position]  # Maps hobbit IDs to positions
-```
-**Why**: Clarifies intent of each type
-**Risk**: None
-**Estimated**: 15 minutes
+---
+
+## 🔜 Soon (After "Now" items - 30-60 min each)
+
+*(All "Soon" tasks completed! Check "Maybe" section or add new polish ideas)*
 
 ---
 
@@ -111,6 +97,7 @@ hobbit_sim/
 
 *(Move items here with completion date)*
 
+**2025-11-07**: Added type alias documentation (inline comments for Position, Hobbits, etc.)
 **2025-11-07**: Added `get_hobbit_name()` helper function (DRY principle for name lookups)
 **2025-11-07**: Extracted movement constants (DANGER_DISTANCE, HOBBIT_SPEED, NAZGUL_SPEED)
 **2025-11-07**: Extracted world dimension constants (WORLD_WIDTH, WORLD_HEIGHT)
