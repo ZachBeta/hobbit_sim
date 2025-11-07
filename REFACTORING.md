@@ -11,47 +11,7 @@ This document tracks polish opportunities for the **current working simulation**
 
 These are mechanical refactors with clear benefits. Grab any of these for a quick win.
 
-### Extract Movement Constants
-**Current**: Speed and danger distance are magic numbers scattered in code
-**Action**: Create module-level constants
-```python
-# At top of hobbit_sim.py, after type definitions
-DANGER_DISTANCE = 6      # Distance at which hobbits start evading (move_hobbit_one_step:522)
-HOBBIT_SPEED = 2         # Steps per tick (_update_hobbits_dict:654)
-NAZGUL_SPEED = 1         # Steps per tick (update_nazgul:712)
-```
-**Why**: Makes game tuning obvious, clearer intent
-**Risk**: Minimal - just variable extraction
-**Test strategy**: All 33 tests should pass unchanged
-**Estimated**: 15 minutes
-
-### Extract World Dimensions
-**Current**: Grid size hardcoded as `(20, 20)` in create_world()
-**Action**: Create constants
-```python
-WORLD_WIDTH = 20
-WORLD_HEIGHT = 20
-```
-**Why**: Makes world size configurable, clearer what 20x20 represents
-**Risk**: Minimal
-**Test strategy**: Tests already parameterized with dimensions
-**Estimated**: 15 minutes
-
-### Add `get_hobbit_name()` Helper Function
-**Current**: Name lookup logic duplicated in multiple places
-```python
-# Current pattern (scattered):
-name = HOBBIT_NAMES.get(hobbit_id, f"Hobbit {hobbit_id}")
-```
-**Action**: Centralize in helper function
-```python
-def get_hobbit_name(*, hobbit_id: int) -> str:
-    """Get display name for hobbit by ID. Falls back to generic name."""
-    return HOBBIT_NAMES.get(hobbit_id, f"Hobbit {hobbit_id}")
-```
-**Why**: DRY principle, single source of truth for name logic
-**Risk**: Low
-**Estimated**: 20 minutes
+*(All "Now" tasks completed! Check "Soon" section for next tasks)*
 
 ---
 
@@ -151,6 +111,9 @@ hobbit_sim/
 
 *(Move items here with completion date)*
 
+**2025-11-07**: Added `get_hobbit_name()` helper function (DRY principle for name lookups)
+**2025-11-07**: Extracted movement constants (DANGER_DISTANCE, HOBBIT_SPEED, NAZGUL_SPEED)
+**2025-11-07**: Extracted world dimension constants (WORLD_WIDTH, WORLD_HEIGHT)
 **2025-11-05**: Migrated hobbits from list indices to dict with explicit IDs
 **2025-11-05**: Added hobbit collision avoidance (hobbits don't stack during evasion)
 **2025-11-05**: Implemented Nazgûl collision prevention (Nazgûl don't stack)

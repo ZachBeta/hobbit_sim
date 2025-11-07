@@ -26,6 +26,30 @@ HOBBIT_NAMES = {
 }
 
 
+def get_hobbit_name(*, hobbit_id: int) -> str:
+    """Get display name for hobbit by ID.
+
+    Returns the hobbit's name from HOBBIT_NAMES, or a generic fallback.
+
+    Args:
+        hobbit_id: The hobbit's unique identifier
+
+    Returns:
+        Hobbit name like "Frodo" or fallback "Hobbit 4"
+    """
+    return HOBBIT_NAMES.get(hobbit_id, f"Hobbit {hobbit_id}")
+
+
+# Movement constants
+DANGER_DISTANCE = 6  # Distance at which hobbits start evading Nazgûl
+HOBBIT_SPEED = 2  # Steps per tick for hobbit movement
+NAZGUL_SPEED = 1  # Steps per tick for Nazgûl movement
+
+# World configuration
+WORLD_WIDTH = 20
+WORLD_HEIGHT = 20
+
+
 @dataclass
 class WorldState:
     """Complete simulation state including map and entities."""
@@ -519,8 +543,6 @@ def move_hobbit_one_step(
     Returns:
         New position after one step (or current if all options blocked)
     """
-    DANGER_DISTANCE = 6
-
     # Perceive: Find nearest threat
     nearest_threat, distance = find_nearest_nazgul(hobbit=current, nazgul=threats)
 
@@ -641,7 +663,7 @@ def _update_hobbits_dict(
 
     for hobbit_id, hobbit_pos in hobbits.items():
         current = hobbit_pos
-        hobbit_name = HOBBIT_NAMES.get(hobbit_id, f"Hobbit {hobbit_id}")
+        hobbit_name = get_hobbit_name(hobbit_id=hobbit_id)
 
         emit_event(
             tick=tick,
@@ -650,8 +672,8 @@ def _update_hobbits_dict(
             name=hobbit_name,
         )
 
-        # Speed 2: Take 2 steps, reassessing after each
-        for step in range(2):
+        # Take HOBBIT_SPEED steps, reassessing after each
+        for step in range(HOBBIT_SPEED):
             next_pos = move_hobbit_one_step(
                 current=current,
                 goal=rivendell,
@@ -712,7 +734,7 @@ def update_nazgul(
             new_x, new_y = move_with_speed(
                 current=nazgul_pos,
                 target=target,
-                speed=1,
+                speed=NAZGUL_SPEED,
                 dimensions=dimensions,
                 tick=tick,
                 terrain=terrain,
@@ -736,19 +758,18 @@ def create_world() -> WorldState:
 
     Returns WorldState with complete simulation configuration and initial entity positions.
     """
-    WIDTH, HEIGHT = 20, 20
     rivendell = (18, 18)
 
     # Terrain - create border walls (but leave openings at Shire and Rivendell)
     terrain = set()
 
     # Add borders (all edges)
-    for x in range(WIDTH):
+    for x in range(WORLD_WIDTH):
         terrain.add((x, 0))  # Top border
-        terrain.add((x, HEIGHT - 1))  # Bottom border
-    for y in range(HEIGHT):
+        terrain.add((x, WORLD_HEIGHT - 1))  # Bottom border
+    for y in range(WORLD_HEIGHT):
         terrain.add((0, y))  # Left border
-        terrain.add((WIDTH - 1, y))  # Right border
+        terrain.add((WORLD_WIDTH - 1, y))  # Right border
 
     hobbits = {
         0: (1, 2),  # Frodo
@@ -765,8 +786,8 @@ def create_world() -> WorldState:
     starting_nazgul_count = len(nazgul)
 
     return WorldState(
-        width=WIDTH,
-        height=HEIGHT,
+        width=WORLD_WIDTH,
+        height=WORLD_HEIGHT,
         rivendell=rivendell,
         terrain=terrain,
         hobbits=hobbits,
