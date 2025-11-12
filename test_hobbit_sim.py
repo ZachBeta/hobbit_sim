@@ -312,6 +312,8 @@ def test_hobbits_fleeing_to_corner_cannot_stack() -> None:
     assert new_hobbits[0] != new_hobbits[1], "Hobbits must be at different positions"
 
 
+# TODO: test a race where a hobbit makes it to safety while another is en route,
+# the nazgul should not be able to capture the one that made it to safety
 def test_nazgul_can_move_onto_hobbit_square_for_capture() -> None:
     """Nazgûl can move onto a hobbit square for capture"""
     hobbits = {0: (10, 10)}
@@ -975,13 +977,12 @@ def test_render_world_shows_terrain() -> None:
     world = create_world()
     result = render_world(world=world)
 
-    # Check that first row has terrain (borders) and Shire
-    # Row 0: S (Shire), # (borders), ..., # (border)
+    # Check that rendering shows terrain borders and exit marker
     lines = result.split("\n")
     first_row = lines[0]
 
-    assert "S" in first_row, "Should show Shire"
     assert "#" in first_row, "Should show terrain borders"
+    assert "X" in result, "Should show exit marker (X) somewhere in grid"
 
 
 def test_render_world_shows_hobbit_names() -> None:
@@ -992,7 +993,11 @@ def test_render_world_shows_hobbit_names() -> None:
     world = WorldState(
         width=6,
         height=6,
+        map_id=0,
         rivendell=(5, 5),
+        exit_position=(5, 5),
+        entry_symbol="S",
+        exit_symbol="R",
         terrain=set(),
         starting_hobbit_count=4,
         starting_nazgul_count=0,
@@ -1255,7 +1260,11 @@ def test_dict_based_hobbit_movement() -> None:
     world = WorldState(
         width=10,
         height=10,
+        map_id=0,
         rivendell=(9, 9),
+        exit_position=(9, 9),
+        entry_symbol="S",
+        exit_symbol="R",
         terrain=set(),
         starting_hobbit_count=3,
         starting_nazgul_count=0,
@@ -1302,3 +1311,117 @@ def test_dict_based_hobbit_movement() -> None:
     assert "F" in rendered  # Frodo
     assert "S" in rendered  # Sam
     assert "P" in rendered  # Pippin
+
+
+def test_map_config_defines_three_maps() -> None:
+    """Verify MAP_DEFINITIONS contains correct 3-map journey configuration."""
+    from hobbit_sim import MAP_DEFINITIONS
+
+    # Verify we have exactly 3 maps
+    assert len(MAP_DEFINITIONS) == 3
+    assert 0 in MAP_DEFINITIONS
+    assert 1 in MAP_DEFINITIONS
+    assert 2 in MAP_DEFINITIONS
+
+    # Map 0: Bag End
+    bag_end = MAP_DEFINITIONS[0]
+    assert bag_end.map_id == 0
+    assert bag_end.name == "Bag End"
+    assert bag_end.entry_symbol == "B"
+    assert bag_end.exit_symbol == "X"
+    assert bag_end.hobbit_spawns == (1, 1)
+    assert len(bag_end.nazgul_spawns) == 1  # One Nazgûl
+
+    # Map 1: Shire Forest
+    forest = MAP_DEFINITIONS[1]
+    assert forest.map_id == 1
+    assert forest.name == "Shire Forest"
+    assert forest.entry_symbol == "F"
+    assert forest.exit_symbol == "X"
+    assert forest.hobbit_spawns == (1, 1)
+    assert len(forest.nazgul_spawns) == 2  # Two Nazgûl
+
+    # Map 2: Crickhollow
+    crickhollow = MAP_DEFINITIONS[2]
+    assert crickhollow.map_id == 2
+    assert crickhollow.name == "Crickhollow"
+    assert crickhollow.entry_symbol == "C"
+    assert crickhollow.exit_symbol == "X"
+    assert crickhollow.hobbit_spawns == (1, 1)
+    assert len(crickhollow.nazgul_spawns) == 3  # Three Nazgûl
+
+
+def test_all_hobbits_at_exit_returns_true_when_grouped() -> None:
+    """all_hobbits_at_exit() returns True when all hobbits reach the exit."""
+    from hobbit_sim import all_hobbits_at_exit
+
+    exit_pos = (18, 18)
+
+    # All hobbits at exit
+    hobbits_at_exit = {
+        0: (18, 18),  # Frodo at exit
+        1: (18, 18),  # Sam at exit
+        2: (18, 18),  # Pippin at exit
+    }
+    assert all_hobbits_at_exit(hobbits=hobbits_at_exit, exit_position=exit_pos) is True
+
+    # Some hobbits not at exit
+    hobbits_mixed = {
+        0: (18, 18),  # Frodo at exit
+        1: (17, 18),  # Sam not at exit
+        2: (18, 18),  # Pippin at exit
+    }
+    assert all_hobbits_at_exit(hobbits=hobbits_mixed, exit_position=exit_pos) is False
+
+    # No hobbits at exit
+    hobbits_away = {
+        0: (1, 1),  # Frodo far away
+        1: (2, 2),  # Sam far away
+        2: (3, 3),  # Pippin far away
+    }
+    assert all_hobbits_at_exit(hobbits=hobbits_away, exit_position=exit_pos) is False
+
+    # Empty hobbits dict
+    assert all_hobbits_at_exit(hobbits={}, exit_position=exit_pos) is False
+
+
+def test_transition_preserves_hobbit_ids() -> None:
+    """Transition to next map preserves hobbit IDs."""
+    from hobbit_sim import create_map, transition_to_next_map
+
+    # Start on Map 0
+    map0 = create_map(map_id=0)
+    original_hobbit_ids = set(map0.hobbits.keys())
+
+    # Transition to Map 1
+    map1 = transition_to_next_map(current_state=map0)
+    assert map1 is not None
+    assert map1.map_id == 1
+    assert set(map1.hobbits.keys()) == original_hobbit_ids  # Same IDs
+
+
+def test_transition_spawns_new_nazgul() -> None:
+    """Transition to next map spawns fresh Nazgûl from config."""
+    from hobbit_sim import MAP_DEFINITIONS, create_map, transition_to_next_map
+
+    # Start on Map 0
+    map0 = create_map(map_id=0)
+    assert len(map0.nazgul) == 1  # Map 0 has 1 Nazgûl
+
+    # Transition to Map 1
+    map1 = transition_to_next_map(current_state=map0)
+    assert map1 is not None
+    assert len(map1.nazgul) == 2  # Map 1 has 2 Nazgûl
+    assert map1.nazgul == list(MAP_DEFINITIONS[1].nazgul_spawns)
+
+
+def test_exiting_final_map_triggers_victory() -> None:
+    """Exiting Map 2 (final map) returns None (victory condition)."""
+    from hobbit_sim import create_map, transition_to_next_map
+
+    # Start on Map 2 (final map)
+    map2 = create_map(map_id=2)
+
+    # Try to transition beyond final map
+    result = transition_to_next_map(current_state=map2)
+    assert result is None  # No more maps - victory!

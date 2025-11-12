@@ -58,7 +58,11 @@ class WorldState:
     # Map configuration (immutable during simulation)
     width: int
     height: int
-    rivendell: Position
+    map_id: int
+    rivendell: Position  # Legacy field, now same as exit_position
+    exit_position: Position  # Where hobbits transition/win
+    entry_symbol: str  # Display symbol for map entry
+    exit_symbol: str  # Display symbol for map exit
     terrain: set[Position]
     starting_hobbit_count: int
     starting_nazgul_count: int
@@ -72,6 +76,55 @@ class WorldState:
     def dimensions(self) -> GridDimensions:
         """Grid dimensions as tuple."""
         return (self.width, self.height)
+
+
+@dataclass
+class MapConfig:
+    """Configuration for a single map in the journey."""
+
+    map_id: int
+    name: str  # Display name like "Bag End", "Shire Forest"
+    entry_position: Position  # Where hobbits spawn
+    exit_position: Position  # Where hobbits transition to next map
+    entry_symbol: str  # Render symbol for entry ('B', 'F', 'C')
+    exit_symbol: str  # Render symbol for exit (typically 'X')
+    hobbit_spawns: Position  # Single position where all hobbits start
+    nazgul_spawns: list[Position]  # List of Nazgûl starting positions
+
+
+# Map definitions for 3-stage journey
+MAP_DEFINITIONS: dict[int, MapConfig] = {
+    0: MapConfig(
+        map_id=0,
+        name="Bag End",
+        entry_position=(1, 1),
+        exit_position=(18, 18),
+        entry_symbol="B",
+        exit_symbol="X",
+        hobbit_spawns=(1, 1),
+        nazgul_spawns=[(18, 5)],
+    ),
+    1: MapConfig(
+        map_id=1,
+        name="Shire Forest",
+        entry_position=(1, 1),
+        exit_position=(18, 18),
+        entry_symbol="F",
+        exit_symbol="X",
+        hobbit_spawns=(1, 1),
+        nazgul_spawns=[(18, 5), (18, 10)],  # Two Nazgûl in forest
+    ),
+    2: MapConfig(
+        map_id=2,
+        name="Crickhollow",
+        entry_position=(1, 1),
+        exit_position=(18, 18),
+        entry_symbol="C",
+        exit_symbol="X",
+        hobbit_spawns=(1, 1),
+        nazgul_spawns=[(18, 5), (15, 5), (18, 10)],  # Three riders closing in
+    ),
+}
 
 
 class SimulationResult(TypedDict):
@@ -266,8 +319,7 @@ def render_world(*, world: WorldState, show_hobbit_ids: bool = False) -> str:
         place_entity(grid=grid, position=terrain_pos, symbol="#")
 
     # Place landmarks
-    place_entity(grid=grid, position=(0, 0), symbol="S")  # Shire
-    place_entity(grid=grid, position=world.rivendell, symbol="R")
+    place_entity(grid=grid, position=world.exit_position, symbol=world.exit_symbol)
 
     # Place hobbits with optional IDs
     for hobbit_id, hobbit_pos in world.hobbits.items():
@@ -607,6 +659,21 @@ def _hobbit_positions(*, hobbits: Hobbits) -> list[Position]:
     return list(hobbits.values())
 
 
+def all_hobbits_at_exit(*, hobbits: Hobbits, exit_position: Position) -> bool:
+    """Check if all hobbits have reached the map exit.
+
+    Args:
+        hobbits: Dict mapping hobbit IDs to positions
+        exit_position: Target position for map exit
+
+    Returns:
+        True if all hobbits are at the exit position, False otherwise
+    """
+    if not hobbits:
+        return False
+    return all(pos == exit_position for pos in hobbits.values())
+
+
 def update_hobbits(
     *,
     hobbits: Hobbits,
@@ -754,14 +821,22 @@ def update_nazgul(
     return list(new_nazgul)
 
 
-def create_world() -> WorldState:
-    """Initialize world state (terrain, entities, landmarks)
+def create_map(*, map_id: int) -> WorldState:
+    """Initialize world state for a specific map in the journey.
 
-    Returns WorldState with complete simulation configuration and initial entity positions.
+    Args:
+        map_id: Map identifier (0=Bag End, 1=Shire Forest, 2=Crickhollow)
+
+    Returns:
+        WorldState configured for the specified map with spawned entities.
     """
-    rivendell = (18, 18)
+    # Load map configuration
+    if map_id not in MAP_DEFINITIONS:
+        raise ValueError(f"Invalid map_id: {map_id}. Valid IDs: {list(MAP_DEFINITIONS.keys())}")
 
-    # Terrain - create border walls (but leave openings at Shire and Rivendell)
+    config = MAP_DEFINITIONS[map_id]
+
+    # Terrain - create border walls (leave openings at entry and exit)
     terrain = set()
 
     # Add borders (all edges)
@@ -772,16 +847,15 @@ def create_world() -> WorldState:
         terrain.add((0, y))  # Left border
         terrain.add((WORLD_WIDTH - 1, y))  # Right border
 
+    # Spawn hobbits at configured position (all together)
     hobbits = {
-        0: (1, 2),  # Frodo
-        1: (2, 1),  # Sam
-        2: (2, 2),  # Pippin
+        0: config.hobbit_spawns,  # Frodo
+        1: config.hobbit_spawns,  # Sam
+        2: config.hobbit_spawns,  # Pippin
     }
 
-    # Initialize Nazgûl
-    nazgul = [
-        (18, 5),  # Far from hobbits
-    ]
+    # Spawn Nazgûl from config
+    nazgul = list(config.nazgul_spawns)
 
     starting_hobbit_count = len(hobbits)
     starting_nazgul_count = len(nazgul)
@@ -789,7 +863,11 @@ def create_world() -> WorldState:
     return WorldState(
         width=WORLD_WIDTH,
         height=WORLD_HEIGHT,
-        rivendell=rivendell,
+        map_id=config.map_id,
+        rivendell=config.exit_position,  # Legacy field
+        exit_position=config.exit_position,
+        entry_symbol=config.entry_symbol,
+        exit_symbol=config.exit_symbol,
         terrain=terrain,
         hobbits=hobbits,
         nazgul=nazgul,
@@ -797,6 +875,43 @@ def create_world() -> WorldState:
         starting_nazgul_count=starting_nazgul_count,
         tick=0,
     )
+
+
+def create_world() -> WorldState:
+    """Initialize world state (terrain, entities, landmarks)
+
+    Backward compatibility wrapper - creates Map 0 (Bag End).
+
+    Returns WorldState with complete simulation configuration and initial entity positions.
+    """
+    return create_map(map_id=0)
+
+
+def transition_to_next_map(*, current_state: WorldState) -> WorldState | None:
+    """Transition to the next map in the journey, preserving hobbit identities.
+
+    Args:
+        current_state: Current world state with hobbits at exit
+
+    Returns:
+        New WorldState for next map with hobbits respawned at entry, or None if journey complete
+    """
+    next_map_id = current_state.map_id + 1
+
+    # Check if there's a next map
+    if next_map_id not in MAP_DEFINITIONS:
+        return None  # Journey complete! Victory!
+
+    # Create new map
+    new_state = create_map(map_id=next_map_id)
+
+    # Preserve hobbit IDs, place all at new map's entry position
+    new_state.hobbits = dict.fromkeys(
+        current_state.hobbits.keys(),
+        new_state.hobbits[0],  # All hobbits spawn at same position
+    )
+
+    return new_state
 
 
 def _render_simulation_state(
@@ -819,9 +934,8 @@ def _render_simulation_state(
     for terrain_pos in state.terrain:
         place_entity(grid=grid, position=terrain_pos, symbol="#")
 
-    # Place landmarks
-    place_entity(grid=grid, position=(1, 1), symbol="S")  # Shire
-    place_entity(grid=grid, position=state.rivendell, symbol="R")  # Rivendell
+    # Place landmarks (exit point for current map)
+    place_entity(grid=grid, position=state.exit_position, symbol=state.exit_symbol)
 
     # Place hobbits with identity
     for hobbit_id, hobbit_pos in state.hobbits.items():
@@ -865,24 +979,41 @@ def _run_simulation_loop(
                 "hobbits_captured": hobbits_captured,
             }
 
-        # Check win condition if all hobbits are at Rivendell
-        hobbit_positions = _hobbit_positions(hobbits=state.hobbits)
-        if all(h == state.rivendell for h in hobbit_positions):
-            emit_event(
-                tick=state.tick,
-                event_type="victory",
-                hobbits=state.hobbits,
-                nazgul=state.nazgul,
-                rivendell=state.rivendell,
-            )
-            hobbits_escaped = len(state.hobbits)
-            hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
-            return {
-                "outcome": "victory",
-                "ticks": state.tick,
-                "hobbits_escaped": hobbits_escaped,
-                "hobbits_captured": hobbits_captured,
-            }
+        # Check if all hobbits reached exit (map transition or final victory)
+        if all_hobbits_at_exit(hobbits=state.hobbits, exit_position=state.exit_position):
+            # Try to transition to next map
+            next_state = transition_to_next_map(current_state=state)
+
+            if next_state is None:
+                # No more maps - final victory!
+                emit_event(
+                    tick=state.tick,
+                    event_type="victory",
+                    hobbits=state.hobbits,
+                    nazgul=state.nazgul,
+                    rivendell=state.rivendell,
+                )
+                hobbits_escaped = len(state.hobbits)
+                hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
+                return {
+                    "outcome": "victory",
+                    "ticks": state.tick,
+                    "hobbits_escaped": hobbits_escaped,
+                    "hobbits_captured": hobbits_captured,
+                }
+            else:
+                # Transition to next map
+                emit_event(
+                    tick=state.tick,
+                    event_type="map_transition",
+                    hobbits=state.hobbits,
+                    nazgul=state.nazgul,
+                    rivendell=state.rivendell,
+                    from_map_id=state.map_id,
+                    to_map_id=next_state.map_id,
+                )
+                state = next_state
+                continue  # Continue simulation on new map
 
         # Check loss condition
         if len(state.hobbits) != state.starting_hobbit_count:
@@ -954,7 +1085,10 @@ def run_simulation() -> None:
         # Render the grid from current state
         grid = _render_simulation_state(state=state)
 
-        print(f"=== Tick {state.tick} ===")
+        # Get map name from definitions
+        map_name = MAP_DEFINITIONS[state.map_id].name
+
+        print(f"=== Tick {state.tick} | {map_name} ===")
         print(f"Hobbits remaining: {len(state.hobbits)}")
         NarrativeBuffer.flush()
         print_grid(grid=grid)
