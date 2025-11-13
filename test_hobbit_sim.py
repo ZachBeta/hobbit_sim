@@ -312,8 +312,6 @@ def test_hobbits_fleeing_to_corner_cannot_stack() -> None:
     assert new_hobbits[0] != new_hobbits[1], "Hobbits must be at different positions"
 
 
-# TODO: test a race where a hobbit makes it to safety while another is en route,
-# the nazgul should not be able to capture the one that made it to safety
 def test_nazgul_can_move_onto_hobbit_square_for_capture() -> None:
     """Nazgûl can move onto a hobbit square for capture"""
     hobbits = {0: (10, 10)}

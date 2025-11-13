@@ -23,21 +23,7 @@ Completed in ~35 minutes during low-capacity session:
 
 ## 🏃‍♂️ Now (Ready to Grab - 15-30 min each)
 
-These are mechanical refactors with clear benefits. Grab any of these for a quick win.
-
-### Document Movement System
-**Current**: Manhattan movement is implicit, no comments explaining why
-**Action**: Add docstring/comment explaining movement philosophy
-```python
-# Movement System Philosophy:
-# - Manhattan distance (no diagonals): |dx| + |dy|
-# - Move one axis at a time (creates "staircase" pattern)
-# - Prioritizes axis with greater remaining distance
-# - Matches how Nazgûl track hobbits (consistent pursuit logic)
-```
-**Why**: Makes design decisions explicit for future contributors (human or AI)
-**Risk**: None (documentation only)
-**Estimated**: 30 minutes
+*(All "Now" items completed! See "Completed" section below)*
 
 ---
 
@@ -45,7 +31,7 @@ These are mechanical refactors with clear benefits. Grab any of these for a quic
 
 **📍 Cleanup tasks now in [NEXT_SESSION.md](NEXT_SESSION.md)**
 
-The following refactoring task is ready to tackle:
+The following refactoring task is ready to tackle (deferred to separate session):
 - Complete rivendell cleanup (30 min) - Remove all `rivendell` references, standardize on `exit_position`
 
 See NEXT_SESSION.md for full details.
@@ -116,6 +102,7 @@ hobbit_sim/
 
 *(Move items here with completion date)*
 
+**2025-11-13**: Documented Movement System - Added philosophy section comment + enhanced docstrings for `move_toward()` and `move_with_speed()` (makes Manhattan distance design explicit for contributors)
 **2025-11-12**: Extracted duplicate rendering logic to `_render_world_to_grid()` helper (DRY - eliminated 40 lines of duplication)
 **2025-11-12**: Removed `show_hobbit_ids` parameter (simplified API - always show IDs, consistent with production behavior)
 **2025-11-12**: Replaced `rivendell` field usages with `exit_position` in escape count logic (partial cleanup - parameter name deferred)

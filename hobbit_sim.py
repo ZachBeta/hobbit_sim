@@ -373,10 +373,55 @@ def place_entity(*, grid: Grid, position: Position, symbol: str) -> None:
         grid[y][x] = symbol
 
 
+# ============================================================================
+# Movement System
+# ============================================================================
+#
+# This simulation uses Manhattan distance for all movement and pathfinding.
+#
+# Key principles:
+# - Manhattan distance: |dx| + |dy| (no diagonal movement)
+# - Move one axis at a time (creates characteristic "staircase" pattern)
+# - Prioritize the axis with greater remaining distance
+# - Consistent for both hobbits and Nazgûl (pursuit/evasion symmetry)
+#
+# Why Manhattan?
+# - Simpler than Euclidean pathfinding (no A*, no diagonal movement)
+# - Creates emergent behaviors (threading gaps, corner evasions)
+# - Matches grid-based roguelike movement conventions
+# - Makes threat detection and evasion calculations consistent
+#
+# Movement functions work in layers:
+# - move_toward() / move_away_from(): Single-step, no collision checking
+# - move_with_speed(): Multi-step wrapper with boundary/terrain collision
+# - update_hobbits() / update_nazgul(): Per-entity decision logic
+# ============================================================================
+
+
 def move_toward(*, current: Position, target: Position) -> Position:
     """Move one step toward target using Manhattan distance (no diagonals).
 
-    Prioritizes moving on the axis with greater distance first.
+    This is the base movement function - it calculates direction only and does
+    not check boundaries or terrain. Use move_with_speed() for collision-aware
+    movement.
+
+    Movement pattern:
+    - Moves exactly one square per call
+    - Only one coordinate changes (either X or Y, never both)
+    - Prioritizes the axis with greater remaining distance
+    - Creates a "staircase" pattern toward the target
+
+    Example:
+        Moving from (0,0) to (3,2):
+        (0,0) → (1,0) → (2,0) → (3,0) → (3,1) → (3,2)
+        (moved on X axis 3 times, then Y axis 2 times)
+
+    Args:
+        current: Starting position
+        target: Destination position
+
+    Returns:
+        New position one step closer to target (or current if already at target)
     """
     current_x, current_y = current
     target_x, target_y = target
@@ -434,7 +479,36 @@ def move_with_speed(
     tick: int,
     terrain: set[Position] | None = None,
 ) -> Position:
-    """Move toward target for 'speed' steps, stopping at boundaries or terrain."""
+    """Move toward target for multiple steps with collision detection.
+
+    Wraps move_toward() in a loop to enable multi-step movement. Stops
+    immediately when encountering boundaries or terrain obstacles.
+
+    Collision behavior:
+    - Checks boundaries (0 <= x < width, 0 <= y < height)
+    - Checks terrain obstacles (impassable positions)
+    - Stops at first blocked move (doesn't continue trying)
+    - Returns last valid position before collision
+
+    Example:
+        With speed=2, moving from (5,5) to (10,10):
+        Step 1: (5,5) → (5,6) via move_toward()
+        Step 2: (5,6) → (6,6) via move_toward()
+        Returns (6,6) - moved 2 Manhattan steps
+
+        If terrain at (5,6), stops at (5,5) after first blocked move.
+
+    Args:
+        current: Starting position
+        target: Destination to move toward
+        speed: Maximum number of steps to take
+        dimensions: Grid (width, height) for boundary checking
+        tick: Current simulation tick (for event logging)
+        terrain: Set of impassable positions (optional)
+
+    Returns:
+        Final position after movement (may be less than 'speed' steps if blocked)
+    """
     current_x, current_y = current
     width, height = dimensions
     if terrain is None:

@@ -39,48 +39,28 @@ These tests represent **intentionally deferred features**, not bugs. They are sk
 
 ---
 
-## 🧪 Soon (Test Coverage - 30-60 min each)
+## 🧪 Soon (Test Coverage - 30 min)
 
-**Current coverage:** 89% (41 lines uncovered). **Target:** 92-95% on core simulation logic.
+**Current coverage:** 89% (41 lines uncovered)
+
+**Focus:** Validate success path (multi-map victory), defer edge cases for now
 
 **📍 For detailed test coverage work, see [NEXT_SESSION.md](NEXT_SESSION.md) Path A (Foundation)**
 
-### System Test: Multi-Map Victory Journey
-**Current**: Only one system test (`test_system_three_hobbits_escape_single_rider`), written pre-multi-map
-**Gap**: No test verifying full 3-map journey with transitions
-**Action**: Write `test_system_all_hobbits_complete_three_map_journey()`
-**Test scenario**:
-- Call `_run_simulation_loop(max_ticks=500)` with favorable spawn config
-- Verify `outcome == "victory"` (not just reaching first exit)
-- Verify hobbits traverse all 3 maps
-- Check event log contains 2 "map_transition" events + 1 "victory" event
-**Coverage target**: Lines 982-1016 (transition logic, final victory detection)
+### System Test: Multi-Map Victory Journey (Enhance Existing)
+**Current**: `test_acceptance_full_simulation_succeeds()` validates victory outcome but doesn't verify the 3-map journey
+**Gap**: Test doesn't confirm hobbits actually traverse all 3 maps (Map 0 → Map 1 → Map 2)
+**Action**: Enhance existing test to check event log for map transitions
+**Test enhancements**:
+- Verify event log contains 2 "map_transition" events
+- Confirm transitions are Map 0→1 and Map 1→2
+- Validate hobbits complete full journey, not just reach "victory"
 **Why**: Core feature needs end-to-end validation
-**Estimated**: 45 minutes
-
-### System Test: Capture on Second Map
-**Current**: No system test for defeat during map transitions
-**Gap**: Defeat handling (lines 1019-1030) untested at system level
-**Action**: Write `test_system_hobbits_captured_on_map_1_triggers_defeat()`
-**Test scenario**:
-- Mock/configure Map 1 with Nazgûl spawns surrounding hobbits
-- Verify simulation ends with `outcome == "defeat"`
-- Verify `hobbits_captured > 0`
-**Coverage target**: Lines 1019-1030 (defeat handling in multi-map context)
-**Why**: Negative path testing - verify failure conditions work across maps
 **Estimated**: 30 minutes
 
-### System Test: Timeout Handling
-**Current**: Timeout branch (lines 972-975) untested
-**Gap**: No test verifying simulation halts at max_ticks
-**Action**: Write `test_system_timeout_returns_partial_progress()`
-**Test scenario**:
-- Set `max_ticks=10` (too short to complete journey)
-- Verify `outcome == "timeout"`
-- Verify `ticks == 10`
-**Coverage target**: Lines 972-975
-**Why**: Edge case validation, ensures infinite loops can't happen
-**Estimated**: 20 minutes
+**Deferred (focus on success path for now):**
+- Defeat test - Revisit when adding difficulty scaling
+- Timeout test - Tests infrastructure, not user-facing value
 
 ### Coverage: Interactive Display Code
 **Current**: Lines 1080-1097 (`run_simulation()` and `display_tick`) untested
@@ -101,6 +81,7 @@ These might add value but need validation. Playtest and feel the pain before imp
 ### Exit Buffer System (Skipped Test)
 **Current**: Hobbits "stack" at exit position, then respawn together on next map
 **Skipped test**: `test_escaped_hobbits_tracked_separately_from_active` (line 236)
+**Related test case**: "Test a race where a hobbit makes it to safety while another is en route - the nazgul should not be able to capture the one that made it to safety" (removed from code TODO on 2025-11-13, tracked here instead)
 **Question**: Should we track "permanently escaped" vs "still active in journey"?
 **Use case**: Display "2/3 hobbits safe" when one gets captured on Map 1
 **Current behavior**: If hobbit captured on Map 1, they're just... gone. No "2 escaped earlier" tracking.
