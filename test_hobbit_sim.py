@@ -767,7 +767,7 @@ def test_current_simulation_configuration_completes() -> None:
     world = create_world()
     hobbits = world.hobbits
     nazgul = world.nazgul
-    rivendell = world.rivendell
+    rivendell = world.exit_position
     terrain = world.terrain
     dimensions = world.dimensions
     starting_hobbit_count = world.starting_hobbit_count
@@ -903,7 +903,7 @@ def test_create_world_returns_valid_state() -> None:
 
     assert world.width == 20
     assert world.height == 20
-    assert world.rivendell == (18, 18)
+    assert world.exit_position == (18, 18)
     assert len(world.hobbits) == 3
     assert len(world.nazgul) == 1
     assert isinstance(world.terrain, set)
@@ -978,6 +978,7 @@ def test_render_world_shows_terrain() -> None:
     result = render_world(world=world)
 
     # Check that rendering shows terrain borders and exit marker
+    # Note: Entry marker (B) at (1,1) is covered by hobbit spawn position
     lines = result.split("\n")
     first_row = lines[0]
 
@@ -985,8 +986,60 @@ def test_render_world_shows_terrain() -> None:
     assert "X" in result, "Should show exit marker (X) somewhere in grid"
 
 
+def test_entry_marker_visible_after_hobbits_leave_spawn() -> None:
+    """Entry marker should be visible once all hobbits move away from spawn point."""
+    from hobbit_sim import WorldState, render_world
+
+    # Create world with hobbits at entry position initially
+    world_at_spawn = WorldState(
+        width=10,
+        height=10,
+        map_id=0,
+        rivendell=(9, 9),
+        entry_position=(1, 1),
+        exit_position=(9, 9),
+        entry_symbol="B",
+        exit_symbol="X",
+        terrain=set(),
+        starting_hobbit_count=3,
+        starting_nazgul_count=0,
+        hobbits={0: (1, 1), 1: (1, 1), 2: (1, 1)},  # All at spawn
+        nazgul=[],
+    )
+
+    # Entry marker should be covered by hobbits
+    result_at_spawn = render_world(world=world_at_spawn)
+    assert "B" not in result_at_spawn, "Entry marker should be covered by hobbits at spawn"
+    # Hobbits show as F, S, P (IDs 0, 1, 2) - check for any of them
+    assert any(h in result_at_spawn for h in ["F", "S", "P"]), (
+        "Hobbits should be visible at spawn with ID symbols"
+    )
+
+    # Move all hobbits away from entry position
+    world_after_move = WorldState(
+        width=10,
+        height=10,
+        map_id=0,
+        rivendell=(9, 9),
+        entry_position=(1, 1),
+        exit_position=(9, 9),
+        entry_symbol="B",
+        exit_symbol="X",
+        terrain=set(),
+        starting_hobbit_count=3,
+        starting_nazgul_count=0,
+        hobbits={0: (2, 2), 1: (3, 3), 2: (4, 4)},  # All moved away
+        nazgul=[],
+    )
+
+    # Entry marker should now be visible
+    result_after_move = render_world(world=world_after_move)
+    assert "B" in result_after_move, "Entry marker should be visible after hobbits leave"
+    assert "X" in result_after_move, "Exit marker should always be visible"
+
+
 def test_render_world_shows_hobbit_names() -> None:
-    """render_world() can show hobbit names as F, S, P, M"""
+    """render_world() shows hobbit names as F, S, P, M"""
     from hobbit_sim import WorldState, render_world
 
     # Create simple world with 4 hobbits at known positions
@@ -995,6 +1048,7 @@ def test_render_world_shows_hobbit_names() -> None:
         height=6,
         map_id=0,
         rivendell=(5, 5),
+        entry_position=(0, 0),
         exit_position=(5, 5),
         entry_symbol="S",
         exit_symbol="R",
@@ -1005,16 +1059,12 @@ def test_render_world_shows_hobbit_names() -> None:
         nazgul=[],
     )
 
-    # Render without IDs (default) - should show generic 'H'
-    result_default = render_world(world=world)
-    assert result_default.count("H") == 4, "Should show 4 generic 'H' symbols by default"
-
-    # Render with IDs enabled - should show F, S, P, M
-    result_with_ids = render_world(world=world, show_hobbit_ids=True)
-    assert "F" in result_with_ids, "Should show Frodo as 'F'"
-    assert "S" in result_with_ids, "Should show Sam as 'S'"
-    assert "P" in result_with_ids, "Should show Pippin as 'P'"
-    assert "M" in result_with_ids, "Should show Merry as 'M'"
+    # Render world - should show F, S, P, M (always shows hobbit identities)
+    result = render_world(world=world)
+    assert "F" in result, "Should show Frodo as 'F'"
+    assert "S" in result, "Should show Sam as 'S'"
+    assert "P" in result, "Should show Pippin as 'P'"
+    assert "M" in result, "Should show Merry as 'M'"
 
 
 def test_hobbit_cannot_move_through_terrain() -> None:
@@ -1262,6 +1312,7 @@ def test_dict_based_hobbit_movement() -> None:
         height=10,
         map_id=0,
         rivendell=(9, 9),
+        entry_position=(0, 0),
         exit_position=(9, 9),
         entry_symbol="S",
         exit_symbol="R",
@@ -1306,8 +1357,8 @@ def test_dict_based_hobbit_movement() -> None:
     assert (3, 3) in result.values()
     assert (4, 4) in result.values()
 
-    # Test rendering with dict hobbits
-    rendered = render_world(world=world, show_hobbit_ids=True)
+    # Test rendering with dict hobbits (always shows IDs)
+    rendered = render_world(world=world)
     assert "F" in rendered  # Frodo
     assert "S" in rendered  # Sam
     assert "P" in rendered  # Pippin

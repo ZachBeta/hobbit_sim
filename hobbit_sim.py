@@ -60,6 +60,7 @@ class WorldState:
     height: int
     map_id: int
     rivendell: Position  # Legacy field, now same as exit_position
+    entry_position: Position  # Where hobbits spawn/enter map
     exit_position: Position  # Where hobbits transition/win
     entry_symbol: str  # Display symbol for map entry
     exit_symbol: str  # Display symbol for map exit
@@ -301,35 +302,56 @@ def get_hobbit_symbol(*, index: int) -> str:
     return "H"  # Fallback for unknown hobbits
 
 
-def render_world(*, world: WorldState, show_hobbit_ids: bool = False) -> str:
-    """Render world state as string (high-level test helper)
+def _render_world_to_grid(*, state: WorldState) -> Grid:
+    """Build grid from world state (internal rendering helper).
+
+    Shared logic for both test and production rendering. Always shows hobbit
+    identities (F, S, P, M) using get_hobbit_symbol().
+
+    Args:
+        state: Current world state to render
+
+    Returns:
+        Grid with all entities placed (terrain, landmarks, hobbits, Nazgûl)
+    """
+    # Create fresh grid
+    grid = create_grid(dimensions=state.dimensions)
+
+    # Place terrain (if any)
+    for terrain_pos in state.terrain:
+        place_entity(grid=grid, position=terrain_pos, symbol="#")
+
+    # Place landmarks (entry and exit points)
+    place_entity(grid=grid, position=state.entry_position, symbol=state.entry_symbol)
+    place_entity(grid=grid, position=state.exit_position, symbol=state.exit_symbol)
+
+    # Place hobbits with identity symbols (F, S, P, M)
+    for hobbit_id, hobbit_pos in state.hobbits.items():
+        symbol = get_hobbit_symbol(index=hobbit_id)
+        place_entity(grid=grid, position=hobbit_pos, symbol=symbol)
+
+    # Place Nazgûl
+    for nazgul_pos in state.nazgul:
+        place_entity(grid=grid, position=nazgul_pos, symbol="N")
+
+    return grid
+
+
+def render_world(*, world: WorldState) -> str:
+    """Render world state as string (high-level test helper).
 
     Takes WorldState from create_world() and returns visual representation.
     Useful for testing complete scenes without manual entity placement.
 
+    Hobbits are displayed with their identity symbols (F, S, P, M).
+
     Args:
         world: Current world state to render
-        show_hobbit_ids: If True, show hobbit index (0,1,2,3). If False, show 'H'
+
+    Returns:
+        String representation of the grid with all entities
     """
-    # Create fresh grid
-    grid = create_grid(dimensions=world.dimensions)
-
-    # Place terrain (if any)
-    for terrain_pos in world.terrain:
-        place_entity(grid=grid, position=terrain_pos, symbol="#")
-
-    # Place landmarks
-    place_entity(grid=grid, position=world.exit_position, symbol=world.exit_symbol)
-
-    # Place hobbits with optional IDs
-    for hobbit_id, hobbit_pos in world.hobbits.items():
-        symbol = get_hobbit_symbol(index=hobbit_id) if show_hobbit_ids else "H"
-        place_entity(grid=grid, position=hobbit_pos, symbol=symbol)
-
-    # Place nazgul
-    for nazgul_pos in world.nazgul:
-        place_entity(grid=grid, position=nazgul_pos, symbol="N")
-
+    grid = _render_world_to_grid(state=world)
     return render_grid(grid=grid)
 
 
@@ -865,6 +887,7 @@ def create_map(*, map_id: int) -> WorldState:
         height=WORLD_HEIGHT,
         map_id=config.map_id,
         rivendell=config.exit_position,  # Legacy field
+        entry_position=config.entry_position,
         exit_position=config.exit_position,
         entry_symbol=config.entry_symbol,
         exit_symbol=config.exit_symbol,
@@ -918,8 +941,7 @@ def _render_simulation_state(
     *,
     state: WorldState,
 ) -> Grid:
-    """
-    Render current simulation state to a grid.
+    """Render current simulation state to a grid.
 
     Args:
         state: Complete world state
@@ -927,26 +949,7 @@ def _render_simulation_state(
     Returns:
         Grid with all entities placed
     """
-    # Create fresh grid
-    grid = create_grid(dimensions=state.dimensions)
-
-    # Place terrain
-    for terrain_pos in state.terrain:
-        place_entity(grid=grid, position=terrain_pos, symbol="#")
-
-    # Place landmarks (exit point for current map)
-    place_entity(grid=grid, position=state.exit_position, symbol=state.exit_symbol)
-
-    # Place hobbits with identity
-    for hobbit_id, hobbit_pos in state.hobbits.items():
-        symbol = get_hobbit_symbol(index=hobbit_id)
-        place_entity(grid=grid, position=hobbit_pos, symbol=symbol)
-
-    # Place Nazgûl
-    for nazgul_pos in state.nazgul:
-        place_entity(grid=grid, position=nazgul_pos, symbol="N")
-
-    return grid
+    return _render_world_to_grid(state=state)
 
 
 def _run_simulation_loop(
@@ -970,7 +973,7 @@ def _run_simulation_loop(
         # Check timeout
         if max_ticks is not None and state.tick >= max_ticks:
             hobbit_positions = _hobbit_positions(hobbits=state.hobbits)
-            hobbits_escaped = sum(1 for h in hobbit_positions if h == state.rivendell)
+            hobbits_escaped = sum(1 for h in hobbit_positions if h == state.exit_position)
             hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
             return {
                 "outcome": "timeout",
@@ -1025,7 +1028,7 @@ def _run_simulation_loop(
                 rivendell=state.rivendell,
             )
             hobbit_positions = _hobbit_positions(hobbits=state.hobbits)
-            hobbits_escaped = sum(1 for h in hobbit_positions if h == state.rivendell)
+            hobbits_escaped = sum(1 for h in hobbit_positions if h == state.exit_position)
             hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
             return {
                 "outcome": "defeat",
@@ -1094,7 +1097,16 @@ def run_simulation() -> None:
         print_grid(grid=grid)
         time.sleep(0.3)
 
-    _run_simulation_loop(on_tick=display_tick)
+    result = _run_simulation_loop(on_tick=display_tick)
+
+    # Display final outcome
+    print(f"\n{'=' * 50}")
+    print(f"SIMULATION COMPLETE: {result['outcome'].upper()}")
+    print(f"{'=' * 50}")
+    print(f"Total ticks: {result['ticks']}")
+    print(f"Hobbits escaped: {result['hobbits_escaped']}")
+    print(f"Hobbits captured: {result['hobbits_captured']}")
+    print(f"{'=' * 50}")
 
 
 if __name__ == "__main__":
