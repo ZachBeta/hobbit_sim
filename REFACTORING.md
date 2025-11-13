@@ -29,7 +29,34 @@ These are mechanical refactors with clear benefits. Grab any of these for a quic
 
 ## 🔜 Soon (After "Now" items - 30-60 min each)
 
-*(All "Soon" tasks completed! Check "Maybe" section or add new polish ideas)*
+### Standardize Variable Naming: `state`/`world` → `world_state`
+**Current**: Inconsistent - tests use `world`, production uses `state`, parameters use both
+**Issue**: Confusing at a glance, requires mental mapping between conventions
+**Action**: Rename all `WorldState` variables to `world_state` for consistency
+**Scope**:
+- hobbit_sim.py: 3 parameter names (`state:` → `world_state:`), 2 local vars
+- test_hobbit_sim.py: ~60 references (`world` → `world_state`)
+**Why**: Matches type name exactly, self-documenting, eliminates ambiguity
+**Risk**: Low (mechanical search/replace, tests will catch issues)
+**Estimated**: 20 minutes
+
+### Rename `render_world()` → `render_world_to_string()`
+**Current**: Function name doesn't indicate return type (returns `str`, not `Grid` or `WorldState`)
+**Issue**: Unclear at call sites what you're getting back
+**Action**: Rename to match `_render_world_to_grid()` pattern (input → output naming)
+**Scope**: 1 function definition + ~8 call sites in tests
+**Why**: Consistent with `_render_world_to_grid()`, clear about return type at call sites
+**Risk**: Low (mechanical rename, type system catches errors)
+**Estimated**: 10 minutes
+
+### Remove `_render_simulation_state()` Wrapper
+**Current**: Thin shim around `_render_world_to_grid()` - just returns `_render_world_to_grid(state=state)`
+**Issue**: Adds no value, extra layer of indirection
+**Action**: Replace single call site in `display_tick()` with direct call to `_render_world_to_grid()`
+**Scope**: 1 function deletion, 1 call site update (line ~1090)
+**Why**: Eliminate needless indirection, simpler call graph
+**Risk**: None (trivial wrapper removal)
+**Estimated**: 5 minutes
 
 ---
 
@@ -97,6 +124,9 @@ hobbit_sim/
 
 *(Move items here with completion date)*
 
+**2025-11-12**: Extracted duplicate rendering logic to `_render_world_to_grid()` helper (DRY - eliminated 40 lines of duplication)
+**2025-11-12**: Removed `show_hobbit_ids` parameter (simplified API - always show IDs, consistent with production behavior)
+**2025-11-12**: Replaced `rivendell` field usages with `exit_position` in escape count logic (partial cleanup - parameter name deferred)
 **2025-11-07**: Added type alias documentation (inline comments for Position, Hobbits, etc.)
 **2025-11-07**: Added `get_hobbit_name()` helper function (DRY principle for name lookups)
 **2025-11-07**: Extracted movement constants (DANGER_DISTANCE, HOBBIT_SPEED, NAZGUL_SPEED)
