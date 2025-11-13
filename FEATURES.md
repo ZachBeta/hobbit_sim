@@ -5,6 +5,32 @@
 
 This document tracks feature work, bug fixes, and test coverage improvements for the **current working simulation** (multi-map hobbit escape). Tasks are sized for Zone 1 sessions and ordered by urgency + value.
 
+**📍 For immediate next session work, see [NEXT_SESSION.md](NEXT_SESSION.md)**
+
+---
+
+## ⏭️ Skipped Tests (Deferred Features)
+
+**Test Suite Status:** 52 passed, 2 skipped
+
+These tests represent **intentionally deferred features**, not bugs. They are skipped because the current implementation works and the features are YAGNI until proven otherwise.
+
+### SKIP #1: Exit Buffer System
+**Test:** `test_escaped_hobbits_tracked_separately_from_active` (test_hobbit_sim.py:232)
+**What:** Separate tracking for exited hobbits vs active ones
+**Current Behavior:** Hobbits "stack" at exit position to represent escaped state
+**When to implement:** When multi-map journey tracking needs to distinguish "truly escaped" from "still fleeing"
+**Estimated:** 4-6 hours (architectural change)
+
+### SKIP #2: Pathfinding Around Nazgûl
+**Test:** `test_hobbit_routes_around_nazgul_to_avoid_capture` (test_hobbit_sim.py:333)
+**What:** Hobbits detect Nazgûl in their path and route around them
+**Current Behavior:** Hobbits move directly toward goal, may walk into Nazgûl
+**When to implement:** When playtesting reveals frustrating/unfair captures
+**Estimated:** 2-3 hours (pathfinding enhancement)
+
+**Decision:** Keep tests skipped. Unskip only when features become necessary.
+
 ---
 
 ## 🐛 Now (Bugs/Missing Pieces - 15-30 min each)
@@ -15,7 +41,9 @@ This document tracks feature work, bug fixes, and test coverage improvements for
 
 ## 🧪 Soon (Test Coverage - 30-60 min each)
 
-Current coverage: 88% (43 lines uncovered). Target: 92-95% on core simulation logic.
+**Current coverage:** 89% (41 lines uncovered). **Target:** 92-95% on core simulation logic.
+
+**📍 For detailed test coverage work, see [NEXT_SESSION.md](NEXT_SESSION.md) Path A (Foundation)**
 
 ### System Test: Multi-Map Victory Journey
 **Current**: Only one system test (`test_system_three_hobbits_escape_single_rider`), written pre-multi-map

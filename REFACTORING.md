@@ -1,9 +1,11 @@
 # REFACTORING.md
 
-**Last Updated**: 2025-11-07
+**Last Updated**: 2025-11-12
 **Purpose**: Bite-sized polish tasks for Zone 1 coding sessions when you want to code but have limited decision-making capacity.
 
 This document tracks polish opportunities for the **current working simulation** (hobbits fleeing Nazgûl). Tasks are sized for 15-60 minute sessions and ordered by value + ease.
+
+**📍 For immediate next session work, see [NEXT_SESSION.md](NEXT_SESSION.md)**
 
 ---
 
@@ -29,34 +31,15 @@ These are mechanical refactors with clear benefits. Grab any of these for a quic
 
 ## 🔜 Soon (After "Now" items - 30-60 min each)
 
-### Standardize Variable Naming: `state`/`world` → `world_state`
-**Current**: Inconsistent - tests use `world`, production uses `state`, parameters use both
-**Issue**: Confusing at a glance, requires mental mapping between conventions
-**Action**: Rename all `WorldState` variables to `world_state` for consistency
-**Scope**:
-- hobbit_sim.py: 3 parameter names (`state:` → `world_state:`), 2 local vars
-- test_hobbit_sim.py: ~60 references (`world` → `world_state`)
-**Why**: Matches type name exactly, self-documenting, eliminates ambiguity
-**Risk**: Low (mechanical search/replace, tests will catch issues)
-**Estimated**: 20 minutes
+**📍 Naming and cleanup tasks moved to [NEXT_SESSION.md](NEXT_SESSION.md) Path B (Quick Wins)**
 
-### Rename `render_world()` → `render_world_to_string()`
-**Current**: Function name doesn't indicate return type (returns `str`, not `Grid` or `WorldState`)
-**Issue**: Unclear at call sites what you're getting back
-**Action**: Rename to match `_render_world_to_grid()` pattern (input → output naming)
-**Scope**: 1 function definition + ~8 call sites in tests
-**Why**: Consistent with `_render_world_to_grid()`, clear about return type at call sites
-**Risk**: Low (mechanical rename, type system catches errors)
-**Estimated**: 10 minutes
+The following refactoring tasks are ready to tackle:
+- Standardize variable naming to `world_state` (20 min)
+- Rename `render_world()` → `render_world_to_string()` (10 min)
+- Remove `_render_simulation_state()` wrapper (5 min)
+- Complete rivendell cleanup (30 min)
 
-### Remove `_render_simulation_state()` Wrapper
-**Current**: Thin shim around `_render_world_to_grid()` - just returns `_render_world_to_grid(state=state)`
-**Issue**: Adds no value, extra layer of indirection
-**Action**: Replace single call site in `display_tick()` with direct call to `_render_world_to_grid()`
-**Scope**: 1 function deletion, 1 call site update (line ~1090)
-**Why**: Eliminate needless indirection, simpler call graph
-**Risk**: None (trivial wrapper removal)
-**Estimated**: 5 minutes
+See NEXT_SESSION.md for full details and execution order.
 
 ---
 
