@@ -143,7 +143,7 @@ class TickCallback(Protocol):
     def __call__(
         self,
         *,
-        state: WorldState,
+        world_state: WorldState,
     ) -> None:
         """Called each simulation tick with current world state."""
         ...
@@ -302,42 +302,42 @@ def get_hobbit_symbol(*, index: int) -> str:
     return "H"  # Fallback for unknown hobbits
 
 
-def _render_world_to_grid(*, state: WorldState) -> Grid:
+def _render_world_to_grid(*, world_state: WorldState) -> Grid:
     """Build grid from world state (internal rendering helper).
 
     Shared logic for both test and production rendering. Always shows hobbit
     identities (F, S, P, M) using get_hobbit_symbol().
 
     Args:
-        state: Current world state to render
+        world_state: Current world state to render
 
     Returns:
         Grid with all entities placed (terrain, landmarks, hobbits, Nazgûl)
     """
     # Create fresh grid
-    grid = create_grid(dimensions=state.dimensions)
+    grid = create_grid(dimensions=world_state.dimensions)
 
     # Place terrain (if any)
-    for terrain_pos in state.terrain:
+    for terrain_pos in world_state.terrain:
         place_entity(grid=grid, position=terrain_pos, symbol="#")
 
     # Place landmarks (entry and exit points)
-    place_entity(grid=grid, position=state.entry_position, symbol=state.entry_symbol)
-    place_entity(grid=grid, position=state.exit_position, symbol=state.exit_symbol)
+    place_entity(grid=grid, position=world_state.entry_position, symbol=world_state.entry_symbol)
+    place_entity(grid=grid, position=world_state.exit_position, symbol=world_state.exit_symbol)
 
     # Place hobbits with identity symbols (F, S, P, M)
-    for hobbit_id, hobbit_pos in state.hobbits.items():
+    for hobbit_id, hobbit_pos in world_state.hobbits.items():
         symbol = get_hobbit_symbol(index=hobbit_id)
         place_entity(grid=grid, position=hobbit_pos, symbol=symbol)
 
     # Place Nazgûl
-    for nazgul_pos in state.nazgul:
+    for nazgul_pos in world_state.nazgul:
         place_entity(grid=grid, position=nazgul_pos, symbol="N")
 
     return grid
 
 
-def render_world(*, world: WorldState) -> str:
+def render_world_to_string(*, world_state: WorldState) -> str:
     """Render world state as string (high-level test helper).
 
     Takes WorldState from create_world() and returns visual representation.
@@ -346,12 +346,12 @@ def render_world(*, world: WorldState) -> str:
     Hobbits are displayed with their identity symbols (F, S, P, M).
 
     Args:
-        world: Current world state to render
+        world_state: Current world state to render
 
     Returns:
         String representation of the grid with all entities
     """
-    grid = _render_world_to_grid(state=world)
+    grid = _render_world_to_grid(world_state=world_state)
     return render_grid(grid=grid)
 
 
@@ -937,21 +937,6 @@ def transition_to_next_map(*, current_state: WorldState) -> WorldState | None:
     return new_state
 
 
-def _render_simulation_state(
-    *,
-    state: WorldState,
-) -> Grid:
-    """Render current simulation state to a grid.
-
-    Args:
-        state: Complete world state
-
-    Returns:
-        Grid with all entities placed
-    """
-    return _render_world_to_grid(state=state)
-
-
 def _run_simulation_loop(
     *,
     max_ticks: int | None = None,
@@ -967,114 +952,114 @@ def _run_simulation_loop(
     Returns:
         Dict with keys: outcome, ticks, hobbits_escaped, hobbits_captured
     """
-    state = create_world()
+    world_state = create_world()
 
     while True:
         # Check timeout
-        if max_ticks is not None and state.tick >= max_ticks:
-            hobbit_positions = _hobbit_positions(hobbits=state.hobbits)
-            hobbits_escaped = sum(1 for h in hobbit_positions if h == state.exit_position)
-            hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
+        if max_ticks is not None and world_state.tick >= max_ticks:
+            hobbit_positions = _hobbit_positions(hobbits=world_state.hobbits)
+            hobbits_escaped = sum(1 for h in hobbit_positions if h == world_state.exit_position)
+            hobbits_captured = world_state.starting_hobbit_count - len(world_state.hobbits)
             return {
                 "outcome": "timeout",
-                "ticks": state.tick,
+                "ticks": world_state.tick,
                 "hobbits_escaped": hobbits_escaped,
                 "hobbits_captured": hobbits_captured,
             }
 
         # Check if all hobbits reached exit (map transition or final victory)
-        if all_hobbits_at_exit(hobbits=state.hobbits, exit_position=state.exit_position):
+        if all_hobbits_at_exit(hobbits=world_state.hobbits, exit_position=world_state.exit_position):
             # Try to transition to next map
-            next_state = transition_to_next_map(current_state=state)
+            next_world_state = transition_to_next_map(current_state=world_state)
 
-            if next_state is None:
+            if next_world_state is None:
                 # No more maps - final victory!
                 emit_event(
-                    tick=state.tick,
+                    tick=world_state.tick,
                     event_type="victory",
-                    hobbits=state.hobbits,
-                    nazgul=state.nazgul,
-                    rivendell=state.rivendell,
+                    hobbits=world_state.hobbits,
+                    nazgul=world_state.nazgul,
+                    rivendell=world_state.rivendell,
                 )
-                hobbits_escaped = len(state.hobbits)
-                hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
+                hobbits_escaped = len(world_state.hobbits)
+                hobbits_captured = world_state.starting_hobbit_count - len(world_state.hobbits)
                 return {
                     "outcome": "victory",
-                    "ticks": state.tick,
+                    "ticks": world_state.tick,
                     "hobbits_escaped": hobbits_escaped,
                     "hobbits_captured": hobbits_captured,
                 }
             else:
                 # Transition to next map
                 emit_event(
-                    tick=state.tick,
+                    tick=world_state.tick,
                     event_type="map_transition",
-                    hobbits=state.hobbits,
-                    nazgul=state.nazgul,
-                    rivendell=state.rivendell,
-                    from_map_id=state.map_id,
-                    to_map_id=next_state.map_id,
+                    hobbits=world_state.hobbits,
+                    nazgul=world_state.nazgul,
+                    rivendell=world_state.rivendell,
+                    from_map_id=world_state.map_id,
+                    to_map_id=next_world_state.map_id,
                 )
-                state = next_state
+                world_state = next_world_state
                 continue  # Continue simulation on new map
 
         # Check loss condition
-        if len(state.hobbits) != state.starting_hobbit_count:
+        if len(world_state.hobbits) != world_state.starting_hobbit_count:
             emit_event(
-                tick=state.tick,
+                tick=world_state.tick,
                 event_type="defeat",
-                hobbits=state.hobbits,
-                nazgul=state.nazgul,
-                rivendell=state.rivendell,
+                hobbits=world_state.hobbits,
+                nazgul=world_state.nazgul,
+                rivendell=world_state.rivendell,
             )
-            hobbit_positions = _hobbit_positions(hobbits=state.hobbits)
-            hobbits_escaped = sum(1 for h in hobbit_positions if h == state.exit_position)
-            hobbits_captured = state.starting_hobbit_count - len(state.hobbits)
+            hobbit_positions = _hobbit_positions(hobbits=world_state.hobbits)
+            hobbits_escaped = sum(1 for h in hobbit_positions if h == world_state.exit_position)
+            hobbits_captured = world_state.starting_hobbit_count - len(world_state.hobbits)
             return {
                 "outcome": "defeat",
-                "ticks": state.tick,
+                "ticks": world_state.tick,
                 "hobbits_escaped": hobbits_escaped,
                 "hobbits_captured": hobbits_captured,
             }
 
         # Move entities
-        state.hobbits = update_hobbits(
-            hobbits=state.hobbits,
-            rivendell=state.rivendell,
-            nazgul=state.nazgul,
-            dimensions=state.dimensions,
-            tick=state.tick,
-            terrain=state.terrain,
+        world_state.hobbits = update_hobbits(
+            hobbits=world_state.hobbits,
+            rivendell=world_state.rivendell,
+            nazgul=world_state.nazgul,
+            dimensions=world_state.dimensions,
+            tick=world_state.tick,
+            terrain=world_state.terrain,
         )
-        state.nazgul = update_nazgul(
-            nazgul=state.nazgul,
-            hobbit_positions=_hobbit_positions(hobbits=state.hobbits),
-            dimensions=state.dimensions,
-            tick=state.tick,
-            terrain=state.terrain,
+        world_state.nazgul = update_nazgul(
+            nazgul=world_state.nazgul,
+            hobbit_positions=_hobbit_positions(hobbits=world_state.hobbits),
+            dimensions=world_state.dimensions,
+            tick=world_state.tick,
+            terrain=world_state.terrain,
         )
 
         # Check for captures (Nazgûl on same square as hobbit)
         hobbit_ids_to_remove = []
-        for hobbit_id, hobbit_pos in state.hobbits.items():
-            for naz in state.nazgul:
+        for hobbit_id, hobbit_pos in world_state.hobbits.items():
+            for naz in world_state.nazgul:
                 if hobbit_pos == naz:
                     hobbit_ids_to_remove.append(hobbit_id)
                     emit_event(
-                        tick=state.tick,
+                        tick=world_state.tick,
                         event_type="hobbit_captured",
                         hobbit=hobbit_pos,
                         nazgul=naz,
                     )
                     break
         for hid in hobbit_ids_to_remove:
-            del state.hobbits[hid]
+            del world_state.hobbits[hid]
 
         # Call display callback if provided
         if on_tick:
-            on_tick(state=state)
+            on_tick(world_state=world_state)
 
-        state.tick += 1
+        world_state.tick += 1
 
 
 def run_simulation() -> None:
@@ -1082,17 +1067,17 @@ def run_simulation() -> None:
 
     def display_tick(
         *,
-        state: WorldState,
+        world_state: WorldState,
     ) -> None:
         """Display callback for interactive simulation."""
         # Render the grid from current state
-        grid = _render_simulation_state(state=state)
+        grid = _render_world_to_grid(world_state=world_state)
 
         # Get map name from definitions
-        map_name = MAP_DEFINITIONS[state.map_id].name
+        map_name = MAP_DEFINITIONS[world_state.map_id].name
 
-        print(f"=== Tick {state.tick} | {map_name} ===")
-        print(f"Hobbits remaining: {len(state.hobbits)}")
+        print(f"=== Tick {world_state.tick} | {map_name} ===")
+        print(f"Hobbits remaining: {len(world_state.hobbits)}")
         NarrativeBuffer.flush()
         print_grid(grid=grid)
         time.sleep(0.3)

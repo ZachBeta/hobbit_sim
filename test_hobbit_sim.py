@@ -970,12 +970,12 @@ def test_terrain_creates_borders_with_openings() -> None:
     assert (18, 18) not in terrain, "Rivendell should be passable"
 
 
-def test_render_world_shows_terrain() -> None:
-    """render_world() should display terrain as # symbols"""
-    from hobbit_sim import create_world, render_world
+def test_render_world_to_string_shows_terrain() -> None:
+    """render_world_to_string() should display terrain as # symbols"""
+    from hobbit_sim import create_world, render_world_to_string
 
     world = create_world()
-    result = render_world(world=world)
+    result = render_world_to_string(world_state=world)
 
     # Check that rendering shows terrain borders and exit marker
     # Note: Entry marker (B) at (1,1) is covered by hobbit spawn position
@@ -988,7 +988,7 @@ def test_render_world_shows_terrain() -> None:
 
 def test_entry_marker_visible_after_hobbits_leave_spawn() -> None:
     """Entry marker should be visible once all hobbits move away from spawn point."""
-    from hobbit_sim import WorldState, render_world
+    from hobbit_sim import WorldState, render_world_to_string
 
     # Create world with hobbits at entry position initially
     world_at_spawn = WorldState(
@@ -1008,7 +1008,7 @@ def test_entry_marker_visible_after_hobbits_leave_spawn() -> None:
     )
 
     # Entry marker should be covered by hobbits
-    result_at_spawn = render_world(world=world_at_spawn)
+    result_at_spawn = render_world_to_string(world_state=world_at_spawn)
     assert "B" not in result_at_spawn, "Entry marker should be covered by hobbits at spawn"
     # Hobbits show as F, S, P (IDs 0, 1, 2) - check for any of them
     assert any(h in result_at_spawn for h in ["F", "S", "P"]), (
@@ -1033,14 +1033,14 @@ def test_entry_marker_visible_after_hobbits_leave_spawn() -> None:
     )
 
     # Entry marker should now be visible
-    result_after_move = render_world(world=world_after_move)
+    result_after_move = render_world_to_string(world_state=world_after_move)
     assert "B" in result_after_move, "Entry marker should be visible after hobbits leave"
     assert "X" in result_after_move, "Exit marker should always be visible"
 
 
-def test_render_world_shows_hobbit_names() -> None:
-    """render_world() shows hobbit names as F, S, P, M"""
-    from hobbit_sim import WorldState, render_world
+def test_render_world_to_string_shows_hobbit_names() -> None:
+    """render_world_to_string() shows hobbit names as F, S, P, M"""
+    from hobbit_sim import WorldState, render_world_to_string
 
     # Create simple world with 4 hobbits at known positions
     world = WorldState(
@@ -1060,7 +1060,7 @@ def test_render_world_shows_hobbit_names() -> None:
     )
 
     # Render world - should show F, S, P, M (always shows hobbit identities)
-    result = render_world(world=world)
+    result = render_world_to_string(world_state=world)
     assert "F" in result, "Should show Frodo as 'F'"
     assert "S" in result, "Should show Sam as 'S'"
     assert "P" in result, "Should show Pippin as 'P'"
@@ -1304,7 +1304,7 @@ def test_move_away_from_backward_compatibility() -> None:
 
 def test_dict_based_hobbit_movement() -> None:
     """Proof of concept: hobbits as dict with explicit IDs works end-to-end"""
-    from hobbit_sim import WorldState, render_world
+    from hobbit_sim import WorldState, render_world_to_string
 
     # Create world with dict-based hobbits (explicit identity)
     world = WorldState(
@@ -1358,7 +1358,7 @@ def test_dict_based_hobbit_movement() -> None:
     assert (4, 4) in result.values()
 
     # Test rendering with dict hobbits (always shows IDs)
-    rendered = render_world(world=world)
+    rendered = render_world_to_string(world_state=world)
     assert "F" in rendered  # Frodo
     assert "S" in rendered  # Sam
     assert "P" in rendered  # Pippin
