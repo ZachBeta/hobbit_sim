@@ -1,11 +1,23 @@
 # REFACTORING.md
 
-**Last Updated**: 2025-11-12
+**Last Updated**: 2025-11-13
 **Purpose**: Bite-sized polish tasks for Zone 1 coding sessions when you want to code but have limited decision-making capacity.
 
 This document tracks polish opportunities for the **current working simulation** (hobbits fleeing Nazgûl). Tasks are sized for 15-60 minute sessions and ordered by value + ease.
 
 **📍 For immediate next session work, see [NEXT_SESSION.md](NEXT_SESSION.md)**
+
+---
+
+## ✅ Done (Completed Refactorings)
+
+### Quick Wins - Naming Consistency (2025-11-13)
+Completed in ~35 minutes during low-capacity session:
+- ✅ Standardized variable naming to `world_state` (~70 references)
+- ✅ Renamed `render_world()` → `render_world_to_string()`
+- ✅ Removed `_render_simulation_state()` wrapper function
+
+**Result**: Consistent, self-documenting naming throughout codebase
 
 ---
 
@@ -31,15 +43,12 @@ These are mechanical refactors with clear benefits. Grab any of these for a quic
 
 ## 🔜 Soon (After "Now" items - 30-60 min each)
 
-**📍 Naming and cleanup tasks moved to [NEXT_SESSION.md](NEXT_SESSION.md) Path B (Quick Wins)**
+**📍 Cleanup tasks now in [NEXT_SESSION.md](NEXT_SESSION.md)**
 
-The following refactoring tasks are ready to tackle:
-- Standardize variable naming to `world_state` (20 min)
-- Rename `render_world()` → `render_world_to_string()` (10 min)
-- Remove `_render_simulation_state()` wrapper (5 min)
-- Complete rivendell cleanup (30 min)
+The following refactoring task is ready to tackle:
+- Complete rivendell cleanup (30 min) - Remove all `rivendell` references, standardize on `exit_position`
 
-See NEXT_SESSION.md for full details and execution order.
+See NEXT_SESSION.md for full details.
 
 ---
 
