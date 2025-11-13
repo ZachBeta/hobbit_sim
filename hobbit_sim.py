@@ -968,7 +968,9 @@ def _run_simulation_loop(
             }
 
         # Check if all hobbits reached exit (map transition or final victory)
-        if all_hobbits_at_exit(hobbits=world_state.hobbits, exit_position=world_state.exit_position):
+        if all_hobbits_at_exit(
+            hobbits=world_state.hobbits, exit_position=world_state.exit_position
+        ):
             # Try to transition to next map
             next_world_state = transition_to_next_map(current_state=world_state)
 
