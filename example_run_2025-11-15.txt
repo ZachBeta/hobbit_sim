@@ -1,0 +1,2743 @@
+Hobbit Nazgûl Escape Simulation - v0
+
+=== Tick 0 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 1), 'to_pos': (1, 2), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 2), 'to_pos': (2, 2), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 1), 'to_pos': (1, 2), 'step': 1}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Pippin'}
+  Nazgûl at (18, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (2, 2) from (18, 5)
+    → moved to (17, 5)
+# # # # # # # # # # # # # # # # # # # #
+# P . . . . . . . . . . . . . . . . . #
+# S F . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . N . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 1 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (2, 2), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 2), 'to_pos': (2, 3), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 3), 'to_pos': (3, 3), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 2), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 2), 'to_pos': (2, 2), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 2), 'to_pos': (2, 3), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 1), 'to_pos': (1, 2), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 2), 'to_pos': (2, 2), 'step': 2}
+  Nazgûl at (17, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (3, 3) from (17, 5)
+    → moved to (16, 5)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . P . . . . . . . . . . . . . . . . #
+# . S F . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . N . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 2 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (3, 3), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 3), 'to_pos': (3, 4), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 4), 'to_pos': (4, 4), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 3), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 3), 'to_pos': (3, 3), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 3), 'to_pos': (3, 4), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 2), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 2), 'to_pos': (2, 3), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 3), 'to_pos': (3, 3), 'step': 2}
+  Nazgûl at (16, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (4, 4) from (16, 5)
+    → moved to (15, 5)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . P . . . . . . . . . . . . . . . #
+# . . S F . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . N . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 3 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (4, 4), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 4), 'to_pos': (4, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 5), 'to_pos': (5, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 4), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 4), 'to_pos': (4, 4), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 4), 'to_pos': (4, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 3), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 3), 'to_pos': (3, 4), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 4), 'to_pos': (4, 4), 'step': 2}
+  Nazgûl at (15, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (5, 5) from (15, 5)
+    → moved to (14, 5)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . P . . . . . . . . . . . . . . #
+# . . . S F . . . . . . . . N . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 4 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (5, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 5), 'to_pos': (5, 6), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 6), 'to_pos': (6, 6), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 5), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 5), 'to_pos': (5, 5), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 5), 'to_pos': (5, 6), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 4), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 4), 'to_pos': (4, 5), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 5), 'to_pos': (5, 5), 'step': 2}
+  Nazgûl at (14, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (6, 6) from (14, 5)
+    → moved to (13, 5)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . P . . . . . . . N . . . . . #
+# . . . . S F . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 5 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (6, 6), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (6, 6), 'to_pos': (6, 7), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (6, 7), 'to_pos': (7, 7), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 6), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 6), 'to_pos': (6, 6), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (6, 6), 'to_pos': (6, 7), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 5), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 5), 'to_pos': (5, 6), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 6), 'to_pos': (6, 6), 'step': 2}
+  Nazgûl at (13, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (7, 7) from (13, 5)
+    → moved to (12, 5)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . N . . . . . . #
+# . . . . . P . . . . . . . . . . . . #
+# . . . . . S F . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 6 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (7, 7), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (7, 7), 'to_pos': (7, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (7, 8), 'to_pos': (8, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (6, 7), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (6, 7), 'to_pos': (7, 7), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (7, 7), 'to_pos': (7, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (6, 6), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (6, 6), 'to_pos': (6, 7), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (6, 7), 'to_pos': (7, 7), 'step': 2}
+  Nazgûl at (12, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (8, 8) from (12, 5)
+    → moved to (11, 5)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . P . . . . . . . . . . . #
+# . . . . . . S F . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 7 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (8, 8), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (8, 8), 'to_pos': (8, 9), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (8, 9), 'to_pos': (9, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (7, 8), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (7, 8), 'to_pos': (8, 8), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (8, 8), 'to_pos': (8, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (7, 7), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (7, 7), 'to_pos': (7, 8), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (7, 8), 'to_pos': (8, 8), 'step': 2}
+  Nazgûl at (11, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (9, 9) from (11, 5)
+    → moved to (11, 6)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . P . . . . . . . . . . #
+# . . . . . . . S F . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 8 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (9, 9), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (9, 9), 'to_pos': (9, 10), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (9, 10), 'to_pos': (9, 11), 'step': 2}
+[hobbit_turn_start] {'hobbit': (8, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (8, 9), 'to_pos': (8, 10), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (8, 10), 'to_pos': (9, 10), 'step': 2}
+[hobbit_turn_start] {'hobbit': (8, 8), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (8, 8), 'to_pos': (8, 9), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (8, 9), 'to_pos': (8, 10), 'step': 2}
+  Nazgûl at (11, 6) seeking target
+  Nazgûl[0] chasing Hobbit at (9, 10) from (11, 6)
+    → moved to (11, 7)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . P S . . . . . . . . . #
+# . . . . . . . . F . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 9 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (9, 11), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (9, 11), 'to_pos': (9, 12), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (9, 12), 'to_pos': (10, 12), 'step': 2}
+[hobbit_turn_start] {'hobbit': (9, 10), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (9, 10), 'to_pos': (9, 11), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (9, 11), 'to_pos': (9, 12), 'step': 2}
+[hobbit_turn_start] {'hobbit': (8, 10), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (8, 10), 'to_pos': (8, 11), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (8, 11), 'to_pos': (9, 11), 'step': 2}
+  Nazgûl at (11, 7) seeking target
+  Nazgûl[0] chasing Hobbit at (10, 12) from (11, 7)
+    → moved to (11, 8)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . P . . . . . . . . . #
+# . . . . . . . . S F . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 10 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (10, 12), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (10, 12), 'to_pos': (10, 13), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (10, 13), 'to_pos': (10, 14), 'step': 2}
+[hobbit_turn_start] {'hobbit': (9, 12), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (9, 12), 'to_pos': (9, 13), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (9, 13), 'to_pos': (10, 13), 'step': 2}
+[hobbit_turn_start] {'hobbit': (9, 11), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (9, 11), 'to_pos': (9, 12), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (9, 12), 'to_pos': (9, 13), 'step': 2}
+  Nazgûl at (11, 8) seeking target
+  Nazgûl[0] chasing Hobbit at (10, 13) from (11, 8)
+    → moved to (11, 9)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . P S . . . . . . . . #
+# . . . . . . . . . F . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 11 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (10, 14), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (10, 14), 'to_pos': (10, 15), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (10, 15), 'to_pos': (11, 15), 'step': 2}
+[hobbit_turn_start] {'hobbit': (10, 13), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (10, 13), 'to_pos': (10, 14), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (10, 14), 'to_pos': (10, 15), 'step': 2}
+[hobbit_turn_start] {'hobbit': (9, 13), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (9, 13), 'to_pos': (9, 14), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (9, 14), 'to_pos': (10, 14), 'step': 2}
+  Nazgûl at (11, 9) seeking target
+  Nazgûl[0] chasing Hobbit at (11, 15) from (11, 9)
+    → moved to (11, 10)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . P . . . . . . . . #
+# . . . . . . . . . S F . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 12 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (11, 15), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (11, 15), 'to_pos': (11, 16), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (11, 16), 'to_pos': (11, 17), 'step': 2}
+[hobbit_turn_start] {'hobbit': (10, 15), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (10, 15), 'to_pos': (10, 16), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (10, 16), 'to_pos': (11, 16), 'step': 2}
+[hobbit_turn_start] {'hobbit': (10, 14), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (10, 14), 'to_pos': (10, 15), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (10, 15), 'to_pos': (10, 16), 'step': 2}
+  Nazgûl at (11, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (11, 16) from (11, 10)
+    → moved to (11, 11)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . P S . . . . . . . #
+# . . . . . . . . . . F . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 13 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (11, 17), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (11, 17), 'to_pos': (11, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (11, 18), 'to_pos': (12, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (11, 16), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (11, 16), 'to_pos': (11, 17), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (11, 17), 'to_pos': (11, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (10, 16), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (10, 16), 'to_pos': (10, 17), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (10, 17), 'to_pos': (11, 17), 'step': 2}
+  Nazgûl at (11, 11) seeking target
+  Nazgûl[0] chasing Hobbit at (11, 17) from (11, 11)
+    → moved to (11, 12)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . P . . . . . . . #
+# . . . . . . . . . . S F . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 14 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (12, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (12, 18), 'to_pos': (13, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (13, 18), 'to_pos': (14, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (11, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (11, 18), 'to_pos': (12, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (12, 18), 'to_pos': (13, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (11, 17), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (11, 17), 'to_pos': (11, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (11, 18), 'to_pos': (12, 18), 'step': 2}
+  Nazgûl at (11, 12) seeking target
+  Nazgûl[0] chasing Hobbit at (12, 18) from (11, 12)
+    → moved to (11, 13)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . P S F . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 15 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (14, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (14, 18), 'to_pos': (15, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (15, 18), 'to_pos': (16, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (13, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (13, 18), 'to_pos': (14, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (14, 18), 'to_pos': (15, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (12, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (12, 18), 'to_pos': (13, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (13, 18), 'to_pos': (14, 18), 'step': 2}
+  Nazgûl at (11, 13) seeking target
+  Nazgûl[0] chasing Hobbit at (14, 18) from (11, 13)
+    → moved to (11, 14)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . P S F . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 16 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (16, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (16, 18), 'to_pos': (17, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (17, 18), 'to_pos': (18, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (15, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (15, 18), 'to_pos': (16, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (16, 18), 'to_pos': (17, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (14, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (14, 18), 'to_pos': (15, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (15, 18), 'to_pos': (16, 18), 'step': 2}
+  Nazgûl at (11, 14) seeking target
+  Nazgûl[0] chasing Hobbit at (16, 18) from (11, 14)
+    → moved to (12, 14)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . N . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . P S F #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 17 | Bag End ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (18, 18), 'name': 'Frodo'}
+[hobbit_turn_start] {'hobbit': (17, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (17, 18), 'to_pos': (18, 18), 'step': 1}
+[hobbit_turn_start] {'hobbit': (16, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (16, 18), 'to_pos': (17, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (17, 18), 'to_pos': (18, 18), 'step': 2}
+  Nazgûl at (12, 14) seeking target
+  Nazgûl[0] chasing Hobbit at (18, 18) from (12, 14)
+    → moved to (13, 14)
+# # # # # # # # # # # # # # # # # # # #
+# B . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . N . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . P #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 0 | Shire Forest ===
+Hobbits remaining: 3
+[map_transition] {'hobbits': {0: (18, 18), 1: (18, 18), 2: (18, 18)}, 'nazgul': [(13, 14)], 'rivendell': (18, 18), 'from_map_id': 0, 'to_map_id': 1}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 1), 'to_pos': (1, 2), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 2), 'to_pos': (2, 2), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 1), 'to_pos': (1, 2), 'step': 1}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Pippin'}
+  Nazgûl at (18, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (2, 2) from (18, 5)
+    → moved to (17, 5)
+  Nazgûl at (18, 10) seeking target
+  Nazgûl[1] chasing Hobbit at (2, 2) from (18, 10)
+    → moved to (17, 10)
+# # # # # # # # # # # # # # # # # # # #
+# P . . . . . . . . . . . . . . . . . #
+# S F . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . N . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . N . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 1 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (2, 2), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 2), 'to_pos': (2, 3), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 3), 'to_pos': (3, 3), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 2), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 2), 'to_pos': (2, 2), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 2), 'to_pos': (2, 3), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 1), 'to_pos': (1, 2), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 2), 'to_pos': (2, 2), 'step': 2}
+  Nazgûl at (17, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (3, 3) from (17, 5)
+    → moved to (16, 5)
+  Nazgûl at (17, 10) seeking target
+  Nazgûl[1] chasing Hobbit at (3, 3) from (17, 10)
+    → moved to (16, 10)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . P . . . . . . . . . . . . . . . . #
+# . S F . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . N . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . N . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 2 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (3, 3), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 3), 'to_pos': (3, 4), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 4), 'to_pos': (4, 4), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 3), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 3), 'to_pos': (3, 3), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 3), 'to_pos': (3, 4), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 2), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 2), 'to_pos': (2, 3), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 3), 'to_pos': (3, 3), 'step': 2}
+  Nazgûl at (16, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (4, 4) from (16, 10)
+    → moved to (15, 10)
+  Nazgûl at (16, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (4, 4) from (16, 5)
+    → moved to (15, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . P . . . . . . . . . . . . . . . #
+# . . S F . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . N . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . N . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 3 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (4, 4), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 4), 'to_pos': (4, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 5), 'to_pos': (5, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 4), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 4), 'to_pos': (4, 4), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 4), 'to_pos': (4, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 3), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 3), 'to_pos': (3, 4), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 4), 'to_pos': (4, 4), 'step': 2}
+  Nazgûl at (15, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (5, 5) from (15, 10)
+    → moved to (14, 10)
+  Nazgûl at (15, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (5, 5) from (15, 5)
+    → moved to (14, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . P . . . . . . . . . . . . . . #
+# . . . S F . . . . . . . . N . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . N . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 4 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (5, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 5), 'to_pos': (5, 6), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 6), 'to_pos': (6, 6), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 5), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 5), 'to_pos': (5, 5), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 5), 'to_pos': (5, 6), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 4), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 4), 'to_pos': (4, 5), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 5), 'to_pos': (5, 5), 'step': 2}
+  Nazgûl at (14, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (6, 6) from (14, 10)
+    → moved to (13, 10)
+  Nazgûl at (14, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (6, 6) from (14, 5)
+    → moved to (13, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . P . . . . . . . N . . . . . #
+# . . . . S F . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . N . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 5 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (6, 6), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (6, 6), 'to_pos': (6, 7), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (6, 7), 'to_pos': (7, 7), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 6), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 6), 'to_pos': (6, 6), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (6, 6), 'to_pos': (6, 7), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 5), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 5), 'to_pos': (5, 6), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 6), 'to_pos': (6, 6), 'step': 2}
+  Nazgûl at (13, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (7, 7) from (13, 10)
+    → moved to (12, 10)
+  Nazgûl at (13, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (7, 7) from (13, 5)
+    → moved to (12, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . N . . . . . . #
+# . . . . . P . . . . . . . . . . . . #
+# . . . . . S F . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . N . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 6 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (7, 7), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (7, 7), 'to_pos': (7, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (7, 8), 'to_pos': (8, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (6, 7), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (6, 7), 'to_pos': (7, 7), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (7, 7), 'to_pos': (7, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (6, 6), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (6, 6), 'to_pos': (6, 7), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (6, 7), 'to_pos': (7, 7), 'step': 2}
+  Nazgûl at (12, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (8, 8) from (12, 10)
+    → moved to (11, 10)
+  Nazgûl at (12, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (8, 8) from (12, 5)
+    → moved to (11, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . P . . . . . . . . . . . #
+# . . . . . . S F . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 7 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (8, 8), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (8, 8), 'to_pos': (7, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (7, 8), 'to_pos': (6, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (7, 8), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (7, 8), 'to_pos': (7, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (7, 9), 'to_pos': (6, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (7, 7), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (7, 7), 'to_pos': (7, 8), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (7, 8), 'to_pos': (7, 9), 'step': 2}
+  Nazgûl at (11, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (7, 9) from (11, 10)
+    → moved to (10, 10)
+  Nazgûl at (11, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (6, 8) from (11, 5)
+    → moved to (10, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . N . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . F . . . . . . . . . . . . #
+# . . . . . S P . . . . . . . . . . . #
+# . . . . . . . . . N . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 8 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (6, 8), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (6, 8), 'to_pos': (5, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 8), 'to_pos': (6, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (6, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (6, 9), 'to_pos': (5, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 9), 'to_pos': (4, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (7, 9), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (7, 9), 'to_pos': (6, 9), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (6, 9), 'to_pos': (5, 9), 'step': 2}
+  Nazgûl at (10, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (6, 8) from (10, 10)
+    → moved to (9, 10)
+  Nazgûl at (10, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (6, 8) from (10, 5)
+    → moved to (9, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . N . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . F . . . . . . . . . . . . #
+# . . . S P . . . . . . . . . . . . . #
+# . . . . . . . . N . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 9 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (6, 8), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (6, 8), 'to_pos': (5, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 8), 'to_pos': (4, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 9), 'to_pos': (3, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 9), 'to_pos': (4, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 9), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 9), 'to_pos': (5, 10), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 10), 'to_pos': (4, 10), 'step': 2}
+  Nazgûl at (9, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (4, 10) from (9, 10)
+    → moved to (8, 10)
+  Nazgûl at (9, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (4, 8) from (9, 5)
+    → moved to (8, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . N . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . F . . . . . . . . . . . . . . #
+# . . . S . . . . . . . . . . . . . . #
+# . . . P . . . N . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 10 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (4, 8), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 8), 'to_pos': (3, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 8), 'to_pos': (4, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 9), 'to_pos': (3, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 9), 'to_pos': (2, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 10), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 10), 'to_pos': (3, 10), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 10), 'to_pos': (2, 10), 'step': 2}
+  Nazgûl at (8, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (4, 8) from (8, 10)
+    → moved to (7, 10)
+  Nazgûl at (8, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (4, 8) from (8, 5)
+    → moved to (7, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . N . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . F . . . . . . . . . . . . . . #
+# . S . . . . . . . . . . . . . . . . #
+# . P . . . . N . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 11 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (4, 8), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 8), 'to_pos': (3, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 8), 'to_pos': (2, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 9), 'to_pos': (1, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 9), 'to_pos': (2, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 10), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 10), 'to_pos': (1, 10), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 10), 'to_pos': (1, 11), 'step': 2}
+  Nazgûl at (7, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (2, 9) from (7, 10)
+    → moved to (6, 10)
+  Nazgûl at (7, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (2, 8) from (7, 5)
+    → moved to (6, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . F . . . . . . . . . . . . . . . . #
+# . S . . . . . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# P . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 12 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (2, 8), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 8), 'to_pos': (1, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 8), 'to_pos': (2, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 9), 'to_pos': (1, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 9), 'to_pos': (1, 10), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 11), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 11), 'to_pos': (1, 12), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 12), 'to_pos': (2, 12), 'step': 2}
+  Nazgûl at (6, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (1, 10) from (6, 10)
+    → moved to (5, 10)
+  Nazgûl at (6, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (2, 8) from (6, 5)
+    → moved to (5, 5)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . F . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# S . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . P . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 13 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (2, 8), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 8), 'to_pos': (1, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 8), 'to_pos': (1, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 10), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 10), 'to_pos': (1, 11), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 11), 'to_pos': (1, 12), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 12), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 12), 'to_pos': (2, 13), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 13), 'to_pos': (2, 14), 'step': 2}
+  Nazgûl at (5, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (1, 9) from (5, 10)
+    → moved to (4, 10)
+  Nazgûl at (5, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 9) from (5, 5)
+    → moved to (5, 6)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# F . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# S . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . P . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 14 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 9), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 9), 'to_pos': (1, 10), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 10), 'to_pos': (1, 11), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 12), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 12), 'to_pos': (1, 13), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 13), 'to_pos': (1, 14), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 14), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 14), 'to_pos': (2, 15), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 15), 'to_pos': (3, 15), 'step': 2}
+  Nazgûl at (4, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (1, 11) from (4, 10)
+    → moved to (3, 10)
+  Nazgûl at (5, 6) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 11) from (5, 6)
+    → moved to (5, 7)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# S . . . . . . . . . . . . . . . . . #
+# . . P . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 15 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 11), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 11), 'to_pos': (1, 12), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 12), 'to_pos': (1, 13), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 14), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 14), 'to_pos': (1, 15), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 15), 'to_pos': (2, 15), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 15), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 15), 'to_pos': (3, 16), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 16), 'to_pos': (3, 17), 'step': 2}
+  Nazgûl at (3, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (1, 13) from (3, 10)
+    → moved to (3, 11)
+  Nazgûl at (5, 7) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 13) from (5, 7)
+    → moved to (5, 8)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . S . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . P . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 16 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 13), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 13), 'to_pos': (1, 14), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 14), 'to_pos': (1, 15), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 15), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 15), 'to_pos': (2, 16), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 16), 'to_pos': (2, 17), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 17), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 17), 'to_pos': (3, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 18), 'to_pos': (4, 18), 'step': 2}
+  Nazgûl at (5, 8) seeking target
+  Nazgûl[0] chasing Hobbit at (1, 15) from (5, 8)
+    → moved to (5, 9)
+  Nazgûl at (3, 11) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 15) from (3, 11)
+    → moved to (3, 12)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . S . . . . . . . . . . . . . . . . #
+# . . . P . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 17 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 15), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 15), 'to_pos': (1, 16), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 16), 'to_pos': (1, 17), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 17), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 17), 'to_pos': (2, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 18), 'to_pos': (3, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 18), 'to_pos': (5, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 18), 'to_pos': (6, 18), 'step': 2}
+  Nazgûl at (3, 12) seeking target
+  Nazgûl[0] chasing Hobbit at (3, 18) from (3, 12)
+    → moved to (3, 13)
+  Nazgûl at (5, 9) seeking target
+  Nazgûl[1] chasing Hobbit at (6, 18) from (5, 9)
+    → moved to (5, 10)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# F . . . . . . . . . . . . . . . . . #
+# . . S . . P . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 18 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 17), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 17), 'to_pos': (1, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 18), 'to_pos': (2, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 18), 'to_pos': (4, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 18), 'to_pos': (5, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (6, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (6, 18), 'to_pos': (7, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (7, 18), 'to_pos': (8, 18), 'step': 2}
+  Nazgûl at (3, 13) seeking target
+  Nazgûl[0] chasing Hobbit at (2, 18) from (3, 13)
+    → moved to (3, 14)
+  Nazgûl at (5, 10) seeking target
+  Nazgûl[1] chasing Hobbit at (5, 18) from (5, 10)
+    → moved to (5, 11)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . F . . S . . P . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 19 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (2, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 18), 'to_pos': (3, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 18), 'to_pos': (4, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 18), 'to_pos': (6, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (6, 18), 'to_pos': (7, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (8, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (8, 18), 'to_pos': (9, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (9, 18), 'to_pos': (10, 18), 'step': 2}
+  Nazgûl at (3, 14) seeking target
+  Nazgûl[0] chasing Hobbit at (4, 18) from (3, 14)
+    → moved to (3, 15)
+  Nazgûl at (5, 11) seeking target
+  Nazgûl[1] chasing Hobbit at (4, 18) from (5, 11)
+    → moved to (5, 12)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . F . . S . . P . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 20 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (4, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 18), 'to_pos': (5, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 18), 'to_pos': (6, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (7, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (7, 18), 'to_pos': (8, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (8, 18), 'to_pos': (9, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (10, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (10, 18), 'to_pos': (11, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (11, 18), 'to_pos': (12, 18), 'step': 2}
+  Nazgûl at (3, 15) seeking target
+  Nazgûl[0] chasing Hobbit at (6, 18) from (3, 15)
+    → moved to (3, 16)
+  Nazgûl at (5, 12) seeking target
+  Nazgûl[1] chasing Hobbit at (6, 18) from (5, 12)
+    → moved to (5, 13)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . F . . S . . P . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 21 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (6, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (6, 18), 'to_pos': (7, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (7, 18), 'to_pos': (8, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (9, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (9, 18), 'to_pos': (10, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (10, 18), 'to_pos': (11, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (12, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (12, 18), 'to_pos': (13, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (13, 18), 'to_pos': (14, 18), 'step': 2}
+  Nazgûl at (3, 16) seeking target
+  Nazgûl[0] chasing Hobbit at (8, 18) from (3, 16)
+    → moved to (4, 16)
+  Nazgûl at (5, 13) seeking target
+  Nazgûl[1] chasing Hobbit at (8, 18) from (5, 13)
+    → moved to (5, 14)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . F . . S . . P . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 22 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (8, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (8, 18), 'to_pos': (9, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (9, 18), 'to_pos': (10, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (11, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (11, 18), 'to_pos': (12, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (12, 18), 'to_pos': (13, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (14, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (14, 18), 'to_pos': (15, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (15, 18), 'to_pos': (16, 18), 'step': 2}
+  Nazgûl at (5, 14) seeking target
+  Nazgûl[0] chasing Hobbit at (10, 18) from (5, 14)
+    → moved to (6, 14)
+  Nazgûl at (4, 16) seeking target
+  Nazgûl[1] chasing Hobbit at (10, 18) from (4, 16)
+    → moved to (5, 16)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . F . . S . . P . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 23 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (10, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (10, 18), 'to_pos': (11, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (11, 18), 'to_pos': (12, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (13, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (13, 18), 'to_pos': (14, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (14, 18), 'to_pos': (15, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (16, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (16, 18), 'to_pos': (17, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (17, 18), 'to_pos': (18, 18), 'step': 2}
+  Nazgûl at (6, 14) seeking target
+  Nazgûl[0] chasing Hobbit at (12, 18) from (6, 14)
+    → moved to (7, 14)
+  Nazgûl at (5, 16) seeking target
+  Nazgûl[1] chasing Hobbit at (12, 18) from (5, 16)
+    → moved to (6, 16)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . N . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . F . . S . . P #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 24 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (12, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (12, 18), 'to_pos': (13, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (13, 18), 'to_pos': (14, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (15, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (15, 18), 'to_pos': (16, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (16, 18), 'to_pos': (17, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (18, 18), 'name': 'Pippin'}
+  Nazgûl at (6, 16) seeking target
+  Nazgûl[0] chasing Hobbit at (14, 18) from (6, 16)
+    → moved to (7, 16)
+  Nazgûl at (7, 14) seeking target
+  Nazgûl[1] chasing Hobbit at (14, 18) from (7, 14)
+    → moved to (8, 14)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . N . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . N . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . F . . S P #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 25 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (14, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (14, 18), 'to_pos': (15, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (15, 18), 'to_pos': (16, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (17, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (17, 18), 'to_pos': (18, 18), 'step': 1}
+[hobbit_turn_start] {'hobbit': (18, 18), 'name': 'Pippin'}
+  Nazgûl at (8, 14) seeking target
+  Nazgûl[0] chasing Hobbit at (16, 18) from (8, 14)
+    → moved to (9, 14)
+  Nazgûl at (7, 16) seeking target
+  Nazgûl[1] chasing Hobbit at (16, 18) from (7, 16)
+    → moved to (8, 16)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . N . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . N . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . F . P #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 26 | Shire Forest ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (16, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (16, 18), 'to_pos': (17, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (17, 18), 'to_pos': (18, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (18, 18), 'name': 'Sam'}
+[hobbit_turn_start] {'hobbit': (18, 18), 'name': 'Pippin'}
+  Nazgûl at (8, 16) seeking target
+  Nazgûl[0] chasing Hobbit at (18, 18) from (8, 16)
+    → moved to (9, 16)
+  Nazgûl at (9, 14) seeking target
+  Nazgûl[1] chasing Hobbit at (18, 18) from (9, 14)
+    → moved to (10, 14)
+# # # # # # # # # # # # # # # # # # # #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . N . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . N . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . P #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 0 | Crickhollow ===
+Hobbits remaining: 3
+[map_transition] {'hobbits': {0: (18, 18), 1: (18, 18), 2: (18, 18)}, 'nazgul': [(9, 16), (10, 14)], 'rivendell': (18, 18), 'from_map_id': 1, 'to_map_id': 2}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 1), 'to_pos': (1, 2), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 2), 'to_pos': (2, 2), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 1), 'to_pos': (1, 2), 'step': 1}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Pippin'}
+  Nazgûl at (18, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (2, 2) from (18, 5)
+    → moved to (17, 5)
+  Nazgûl at (15, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (2, 2) from (15, 5)
+    → moved to (14, 5)
+  Nazgûl at (18, 10) seeking target
+  Nazgûl[2] chasing Hobbit at (2, 2) from (18, 10)
+    → moved to (17, 10)
+# # # # # # # # # # # # # # # # # # # #
+# P . . . . . . . . . . . . . . . . . #
+# S F . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . N . . N . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . N . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 1 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (2, 2), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 2), 'to_pos': (2, 3), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 3), 'to_pos': (3, 3), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 2), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 2), 'to_pos': (2, 2), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 2), 'to_pos': (2, 3), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 1), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 1), 'to_pos': (1, 2), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 2), 'to_pos': (2, 2), 'step': 2}
+  Nazgûl at (17, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (3, 3) from (17, 5)
+    → moved to (16, 5)
+  Nazgûl at (14, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (3, 3) from (14, 5)
+    → moved to (13, 5)
+  Nazgûl at (17, 10) seeking target
+  Nazgûl[2] chasing Hobbit at (3, 3) from (17, 10)
+    → moved to (16, 10)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . P . . . . . . . . . . . . . . . . #
+# . S F . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . N . . N . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . N . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 2 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (3, 3), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 3), 'to_pos': (3, 4), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 4), 'to_pos': (4, 4), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 3), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 3), 'to_pos': (3, 3), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 3), 'to_pos': (3, 4), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 2), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 2), 'to_pos': (2, 3), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 3), 'to_pos': (3, 3), 'step': 2}
+  Nazgûl at (16, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (4, 4) from (16, 10)
+    → moved to (15, 10)
+  Nazgûl at (13, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (4, 4) from (13, 5)
+    → moved to (12, 5)
+  Nazgûl at (16, 5) seeking target
+  Nazgûl[2] chasing Hobbit at (4, 4) from (16, 5)
+    → moved to (15, 5)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . P . . . . . . . . . . . . . . . #
+# . . S F . . . . . . . . . . . . . . #
+# . . . . . . . . . . . N . . N . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . N . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 3 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (4, 4), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 4), 'to_pos': (4, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 5), 'to_pos': (5, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 4), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 4), 'to_pos': (4, 4), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 4), 'to_pos': (4, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 3), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 3), 'to_pos': (3, 4), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 4), 'to_pos': (4, 4), 'step': 2}
+  Nazgûl at (15, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (5, 5) from (15, 10)
+    → moved to (14, 10)
+  Nazgûl at (12, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (5, 5) from (12, 5)
+    → moved to (11, 5)
+  Nazgûl at (15, 5) seeking target
+  Nazgûl[2] chasing Hobbit at (5, 5) from (15, 5)
+    → moved to (14, 5)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . P . . . . . . . . . . . . . . #
+# . . . S F . . . . . N . . N . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . N . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 4 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (5, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 5), 'to_pos': (4, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 5), 'to_pos': (5, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 5), 'name': 'Sam'}
+[hobbit_turn_start] {'hobbit': (4, 4), 'name': 'Pippin'}
+  Nazgûl at (14, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (5, 5) from (14, 5)
+    → moved to (13, 5)
+  Nazgûl at (14, 10) seeking target
+  Nazgûl[1] chasing Hobbit at (5, 5) from (14, 10)
+    → moved to (13, 10)
+  Nazgûl at (11, 5) seeking target
+  Nazgûl[2] chasing Hobbit at (5, 5) from (11, 5)
+    → moved to (10, 5)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . P . . . . . . . . . . . . . . #
+# . . . S F . . . . N . . N . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . N . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 5 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (5, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 5), 'to_pos': (4, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 5), 'to_pos': (3, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 5), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 5), 'to_pos': (4, 6), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 6), 'to_pos': (5, 6), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 4), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 4), 'to_pos': (4, 5), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 5), 'to_pos': (4, 6), 'step': 2}
+  Nazgûl at (10, 5) seeking target
+  Nazgûl[0] chasing Hobbit at (5, 6) from (10, 5)
+    → moved to (9, 5)
+  Nazgûl at (13, 10) seeking target
+  Nazgûl[1] chasing Hobbit at (5, 6) from (13, 10)
+    → moved to (12, 10)
+  Nazgûl at (13, 5) seeking target
+  Nazgûl[2] chasing Hobbit at (5, 6) from (13, 5)
+    → moved to (12, 5)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . F . . . . . N . . N . . . . . . #
+# . . . P S . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . N . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 6 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (3, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 5), 'to_pos': (2, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 5), 'to_pos': (3, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 6), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 6), 'to_pos': (5, 7), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 7), 'to_pos': (5, 8), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 6), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 6), 'to_pos': (4, 7), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 7), 'to_pos': (5, 7), 'step': 2}
+  Nazgûl at (12, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (5, 8) from (12, 10)
+    → moved to (11, 10)
+  Nazgûl at (9, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (3, 5) from (9, 5)
+    → moved to (8, 5)
+  Nazgûl at (12, 5) seeking target
+  Nazgûl[2] chasing Hobbit at (3, 5) from (12, 5)
+    → moved to (11, 5)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . F . . . . N . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . P . . . . . . . . . . . . . #
+# . . . . S . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . N . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 7 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (3, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 5), 'to_pos': (2, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 5), 'to_pos': (1, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 8), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 8), 'to_pos': (5, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 9), 'to_pos': (6, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 7), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 7), 'to_pos': (5, 8), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 8), 'to_pos': (5, 9), 'step': 2}
+  Nazgûl at (11, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (6, 9) from (11, 10)
+    → moved to (10, 10)
+  Nazgûl at (11, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (6, 9) from (11, 5)
+    → moved to (10, 5)
+  Nazgûl at (8, 5) seeking target
+  Nazgûl[2] chasing Hobbit at (6, 9) from (8, 5)
+    → moved to (8, 6)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# F . . . . . . . . N . . . . . . . . #
+# . . . . . . . N . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . P S . . . . . . . . . . . . #
+# . . . . . . . . . N . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 8 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 5), 'to_pos': (2, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 5), 'to_pos': (3, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (6, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (6, 9), 'to_pos': (5, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 9), 'to_pos': (4, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 9), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 9), 'to_pos': (5, 10), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 10), 'to_pos': (4, 10), 'step': 2}
+  Nazgûl at (10, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (4, 10) from (10, 10)
+    → moved to (9, 10)
+  Nazgûl at (10, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (3, 5) from (10, 5)
+    → moved to (9, 5)
+  Nazgûl at (8, 6) seeking target
+  Nazgûl[2] chasing Hobbit at (3, 5) from (8, 6)
+    → moved to (7, 6)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . F . . . . . N . . . . . . . . . #
+# . . . . . . N . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . S . . . . . . . . . . . . . . #
+# . . . P . . . . N . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 9 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (3, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 5), 'to_pos': (2, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 5), 'to_pos': (1, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 9), 'to_pos': (3, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 9), 'to_pos': (4, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 10), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 10), 'to_pos': (3, 10), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 10), 'to_pos': (2, 10), 'step': 2}
+  Nazgûl at (9, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (4, 9) from (9, 10)
+    → moved to (8, 10)
+  Nazgûl at (9, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 5) from (9, 5)
+    → moved to (8, 5)
+  Nazgûl at (7, 6) seeking target
+  Nazgûl[2] chasing Hobbit at (4, 9) from (7, 6)
+    → moved to (7, 7)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# F . . . . . . N . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . N . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . S . . . . . . . . . . . . . . #
+# . P . . . . . N . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 10 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 5), 'to_pos': (2, 5), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 5), 'to_pos': (1, 5), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 9), 'to_pos': (3, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 9), 'to_pos': (2, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 10), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 10), 'to_pos': (1, 10), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 10), 'to_pos': (2, 10), 'step': 2}
+  Nazgûl at (8, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (2, 10) from (8, 10)
+    → moved to (7, 10)
+  Nazgûl at (8, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 5) from (8, 5)
+    → moved to (7, 5)
+  Nazgûl at (7, 7) seeking target
+  Nazgûl[2] chasing Hobbit at (2, 9) from (7, 7)
+    → moved to (6, 7)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# F . . . . . N . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . S . . . . . . . . . . . . . . . . #
+# . P . . . . N . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 11 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 5), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 5), 'to_pos': (1, 6), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 6), 'to_pos': (1, 7), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 9), 'to_pos': (1, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 9), 'to_pos': (2, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 10), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 10), 'to_pos': (1, 10), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 10), 'to_pos': (1, 11), 'step': 2}
+  Nazgûl at (7, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (2, 9) from (7, 10)
+    → moved to (6, 10)
+  Nazgûl at (7, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 7) from (7, 5)
+    → moved to (6, 5)
+  Nazgûl at (6, 7) seeking target
+  Nazgûl[2] chasing Hobbit at (1, 7) from (6, 7)
+    → moved to (5, 7)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# F . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . S . . . . . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# P . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 12 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 7), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 7), 'to_pos': (1, 8), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 8), 'to_pos': (1, 9), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 9), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 9), 'to_pos': (2, 10), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 10), 'to_pos': (1, 10), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 11), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 11), 'to_pos': (1, 12), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (1, 12), 'to_pos': (2, 12), 'step': 2}
+  Nazgûl at (5, 7) seeking target
+  Nazgûl[0] chasing Hobbit at (1, 9) from (5, 7)
+    → moved to (4, 7)
+  Nazgûl at (6, 10) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 10) from (6, 10)
+    → moved to (5, 10)
+  Nazgûl at (6, 5) seeking target
+  Nazgûl[2] chasing Hobbit at (1, 9) from (6, 5)
+    → moved to (5, 5)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# F . . . . . . . . . . . . . . . . . #
+# S . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . P . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 13 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 9), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 9), 'to_pos': (1, 10), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 10), 'to_pos': (1, 11), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 10), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 10), 'to_pos': (1, 9), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 9), 'to_pos': (1, 10), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 12), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 12), 'to_pos': (2, 13), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 13), 'to_pos': (2, 14), 'step': 2}
+  Nazgûl at (5, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (1, 10) from (5, 10)
+    → moved to (4, 10)
+  Nazgûl at (5, 5) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 10) from (5, 5)
+    → moved to (5, 6)
+  Nazgûl at (4, 7) seeking target
+  Nazgûl[2] chasing Hobbit at (1, 10) from (4, 7)
+    → moved to (4, 8)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# S . . N . . . . . . . . . . . . . . #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . P . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 14 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 11), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 11), 'to_pos': (1, 12), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 12), 'to_pos': (1, 13), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 10), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 10), 'to_pos': (1, 11), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 11), 'to_pos': (1, 12), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 14), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 14), 'to_pos': (2, 15), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (2, 15), 'to_pos': (3, 15), 'step': 2}
+  Nazgûl at (4, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (1, 12) from (4, 10)
+    → moved to (3, 10)
+  Nazgûl at (5, 6) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 12) from (5, 6)
+    → moved to (5, 7)
+  Nazgûl at (4, 8) seeking target
+  Nazgûl[2] chasing Hobbit at (1, 12) from (4, 8)
+    → moved to (4, 9)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# S . . . . . . . . . . . . . . . . . #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . P . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 15 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 13), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 13), 'to_pos': (1, 14), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 14), 'to_pos': (1, 15), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 12), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 12), 'to_pos': (1, 13), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 13), 'to_pos': (1, 14), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 15), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 15), 'to_pos': (3, 16), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 16), 'to_pos': (3, 17), 'step': 2}
+  Nazgûl at (4, 9) seeking target
+  Nazgûl[0] chasing Hobbit at (1, 14) from (4, 9)
+    → moved to (4, 10)
+  Nazgûl at (3, 10) seeking target
+  Nazgûl[1] chasing Hobbit at (1, 14) from (3, 10)
+    → moved to (3, 11)
+  Nazgûl at (5, 7) seeking target
+  Nazgûl[2] chasing Hobbit at (1, 14) from (5, 7)
+    → moved to (5, 8)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# S . . . . . . . . . . . . . . . . . #
+# F . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . P . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 16 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (1, 15), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 15), 'to_pos': (1, 16), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (1, 16), 'to_pos': (2, 16), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 14), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 14), 'to_pos': (1, 15), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 15), 'to_pos': (1, 16), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 17), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 17), 'to_pos': (3, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (3, 18), 'to_pos': (4, 18), 'step': 2}
+  Nazgûl at (4, 10) seeking target
+  Nazgûl[0] chasing Hobbit at (2, 16) from (4, 10)
+    → moved to (4, 11)
+  Nazgûl at (5, 8) seeking target
+  Nazgûl[1] chasing Hobbit at (2, 16) from (5, 8)
+    → moved to (5, 9)
+  Nazgûl at (3, 11) seeking target
+  Nazgûl[2] chasing Hobbit at (2, 16) from (3, 11)
+    → moved to (3, 12)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# S F . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . P . . . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 17 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (2, 16), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 16), 'to_pos': (2, 17), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 17), 'to_pos': (2, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (1, 16), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 16), 'to_pos': (1, 17), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (1, 17), 'to_pos': (2, 17), 'step': 2}
+[hobbit_turn_start] {'hobbit': (4, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (4, 18), 'to_pos': (5, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (5, 18), 'to_pos': (6, 18), 'step': 2}
+  Nazgûl at (3, 12) seeking target
+  Nazgûl[0] chasing Hobbit at (2, 17) from (3, 12)
+    → moved to (3, 13)
+  Nazgûl at (5, 9) seeking target
+  Nazgûl[1] chasing Hobbit at (6, 18) from (5, 9)
+    → moved to (5, 10)
+  Nazgûl at (4, 11) seeking target
+  Nazgûl[2] chasing Hobbit at (2, 17) from (4, 11)
+    → moved to (4, 12)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . S . . . . . . . . . . . . . . . . #
+# . F . . . P . . . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 18 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (2, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (2, 18), 'to_pos': (3, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (3, 18), 'to_pos': (4, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (2, 17), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 17), 'to_pos': (2, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (2, 18), 'to_pos': (3, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (6, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (6, 18), 'to_pos': (7, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (7, 18), 'to_pos': (8, 18), 'step': 2}
+  Nazgûl at (3, 13) seeking target
+  Nazgûl[0] chasing Hobbit at (3, 18) from (3, 13)
+    → moved to (3, 14)
+  Nazgûl at (5, 10) seeking target
+  Nazgûl[1] chasing Hobbit at (4, 18) from (5, 10)
+    → moved to (5, 11)
+  Nazgûl at (4, 12) seeking target
+  Nazgûl[2] chasing Hobbit at (4, 18) from (4, 12)
+    → moved to (4, 13)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . S F . . . P . . . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 19 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (4, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (4, 18), 'to_pos': (5, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (5, 18), 'to_pos': (6, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (3, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (3, 18), 'to_pos': (4, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (4, 18), 'to_pos': (5, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (8, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (8, 18), 'to_pos': (9, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (9, 18), 'to_pos': (10, 18), 'step': 2}
+  Nazgûl at (3, 14) seeking target
+  Nazgûl[0] chasing Hobbit at (5, 18) from (3, 14)
+    → moved to (3, 15)
+  Nazgûl at (5, 11) seeking target
+  Nazgûl[1] chasing Hobbit at (5, 18) from (5, 11)
+    → moved to (5, 12)
+  Nazgûl at (4, 13) seeking target
+  Nazgûl[2] chasing Hobbit at (5, 18) from (4, 13)
+    → moved to (4, 14)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . N . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . S F . . . P . . . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 20 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (6, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (6, 18), 'to_pos': (7, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (7, 18), 'to_pos': (8, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (5, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (5, 18), 'to_pos': (6, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (6, 18), 'to_pos': (7, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (10, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (10, 18), 'to_pos': (11, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (11, 18), 'to_pos': (12, 18), 'step': 2}
+  Nazgûl at (3, 15) seeking target
+  Nazgûl[0] chasing Hobbit at (7, 18) from (3, 15)
+    → moved to (4, 15)
+  Nazgûl at (5, 12) seeking target
+  Nazgûl[1] chasing Hobbit at (7, 18) from (5, 12)
+    → moved to (5, 13)
+  Nazgûl at (4, 14) seeking target
+  Nazgûl[2] chasing Hobbit at (7, 18) from (4, 14)
+    → moved to (4, 15)
+  Nazgûl[2] cannot move to (4, 15) (occupied)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . . N . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . S F . . . P . . . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 21 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (8, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (8, 18), 'to_pos': (9, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (9, 18), 'to_pos': (10, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (7, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (7, 18), 'to_pos': (8, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (8, 18), 'to_pos': (9, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (12, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (12, 18), 'to_pos': (13, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (13, 18), 'to_pos': (14, 18), 'step': 2}
+  Nazgûl at (4, 15) seeking target
+  Nazgûl[0] chasing Hobbit at (9, 18) from (4, 15)
+    → moved to (5, 15)
+  Nazgûl at (4, 14) seeking target
+  Nazgûl[1] chasing Hobbit at (9, 18) from (4, 14)
+    → moved to (5, 14)
+  Nazgûl at (5, 13) seeking target
+  Nazgûl[2] chasing Hobbit at (9, 18) from (5, 13)
+    → moved to (5, 14)
+  Nazgûl[2] cannot move to (5, 14) (occupied)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . N . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . S F . . . P . . . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 22 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (10, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (10, 18), 'to_pos': (11, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (11, 18), 'to_pos': (12, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (9, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (9, 18), 'to_pos': (10, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (10, 18), 'to_pos': (11, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (14, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (14, 18), 'to_pos': (15, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (15, 18), 'to_pos': (16, 18), 'step': 2}
+  Nazgûl at (5, 14) seeking target
+  Nazgûl[0] chasing Hobbit at (11, 18) from (5, 14)
+    → moved to (6, 14)
+  Nazgûl at (5, 15) seeking target
+  Nazgûl[1] chasing Hobbit at (11, 18) from (5, 15)
+    → moved to (6, 15)
+  Nazgûl at (5, 13) seeking target
+  Nazgûl[2] chasing Hobbit at (11, 18) from (5, 13)
+    → moved to (6, 13)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# . . . . . N . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . S F . . . P . X #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 23 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (12, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (12, 18), 'to_pos': (13, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (13, 18), 'to_pos': (14, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (11, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (11, 18), 'to_pos': (12, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (12, 18), 'to_pos': (13, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (16, 18), 'name': 'Pippin'}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (16, 18), 'to_pos': (17, 18), 'step': 1}
+[hobbit_moved] {'name': 'Pippin', 'from_pos': (17, 18), 'to_pos': (18, 18), 'step': 2}
+  Nazgûl at (6, 13) seeking target
+  Nazgûl[0] chasing Hobbit at (13, 18) from (6, 13)
+    → moved to (7, 13)
+  Nazgûl at (6, 14) seeking target
+  Nazgûl[1] chasing Hobbit at (13, 18) from (6, 14)
+    → moved to (7, 14)
+  Nazgûl at (6, 15) seeking target
+  Nazgûl[2] chasing Hobbit at (13, 18) from (6, 15)
+    → moved to (7, 15)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . N . . . . . . . . . . . #
+# . . . . . . N . . . . . . . . . . . #
+# . . . . . . N . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . S F . . . P #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 24 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (14, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (14, 18), 'to_pos': (15, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (15, 18), 'to_pos': (16, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (13, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (13, 18), 'to_pos': (14, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (14, 18), 'to_pos': (15, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (18, 18), 'name': 'Pippin'}
+  Nazgûl at (7, 15) seeking target
+  Nazgûl[0] chasing Hobbit at (15, 18) from (7, 15)
+    → moved to (8, 15)
+  Nazgûl at (7, 13) seeking target
+  Nazgûl[1] chasing Hobbit at (15, 18) from (7, 13)
+    → moved to (8, 13)
+  Nazgûl at (7, 14) seeking target
+  Nazgûl[2] chasing Hobbit at (15, 18) from (7, 14)
+    → moved to (8, 14)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . N . . . . . . . . . . #
+# . . . . . . . N . . . . . . . . . . #
+# . . . . . . . N . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . S F . P #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 25 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (16, 18), 'name': 'Frodo'}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (16, 18), 'to_pos': (17, 18), 'step': 1}
+[hobbit_moved] {'name': 'Frodo', 'from_pos': (17, 18), 'to_pos': (18, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (15, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (15, 18), 'to_pos': (16, 18), 'step': 1}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (16, 18), 'to_pos': (17, 18), 'step': 2}
+[hobbit_turn_start] {'hobbit': (18, 18), 'name': 'Pippin'}
+  Nazgûl at (8, 13) seeking target
+  Nazgûl[0] chasing Hobbit at (17, 18) from (8, 13)
+    → moved to (9, 13)
+  Nazgûl at (8, 14) seeking target
+  Nazgûl[1] chasing Hobbit at (17, 18) from (8, 14)
+    → moved to (9, 14)
+  Nazgûl at (8, 15) seeking target
+  Nazgûl[2] chasing Hobbit at (17, 18) from (8, 15)
+    → moved to (9, 15)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . N . . . . . . . . . #
+# . . . . . . . . N . . . . . . . . . #
+# . . . . . . . . N . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . S P #
+# # # # # # # # # # # # # # # # # # # #
+
+=== Tick 26 | Crickhollow ===
+Hobbits remaining: 3
+[hobbit_turn_start] {'hobbit': (18, 18), 'name': 'Frodo'}
+[hobbit_turn_start] {'hobbit': (17, 18), 'name': 'Sam'}
+[hobbit_moved] {'name': 'Sam', 'from_pos': (17, 18), 'to_pos': (18, 18), 'step': 1}
+[hobbit_turn_start] {'hobbit': (18, 18), 'name': 'Pippin'}
+  Nazgûl at (9, 13) seeking target
+  Nazgûl[0] chasing Hobbit at (18, 18) from (9, 13)
+    → moved to (10, 13)
+  Nazgûl at (9, 14) seeking target
+  Nazgûl[1] chasing Hobbit at (18, 18) from (9, 14)
+    → moved to (10, 14)
+  Nazgûl at (9, 15) seeking target
+  Nazgûl[2] chasing Hobbit at (18, 18) from (9, 15)
+    → moved to (10, 15)
+# # # # # # # # # # # # # # # # # # # #
+# C . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . N . . . . . . . . #
+# . . . . . . . . . N . . . . . . . . #
+# . . . . . . . . . N . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . . #
+# . . . . . . . . . . . . . . . . . P #
+# # # # # # # # # # # # # # # # # # # #
+
+
+==================================================
+SIMULATION COMPLETE: VICTORY
+==================================================
+Total ticks: 27
+Hobbits escaped: 3
+Hobbits captured: 0
+==================================================
