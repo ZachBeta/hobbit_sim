@@ -60,6 +60,18 @@ uv run pytest test_hobbit_sim.py::test_move_toward_moves_diagonally
 uv run pytest --cov=hobbit_sim --cov-report=term-missing
 ```
 
+### Generating Example Runs
+To capture simulation output for documentation or sharing:
+```bash
+# Generate a timestamped example run
+uv run python hobbit_sim.py > examples/example_run_$(date +%Y-%m-%d).txt
+
+# Or with full timestamp
+uv run python hobbit_sim.py > examples/example_run_$(date +%Y-%m-%d_%H%M%S).txt
+```
+
+Example runs are stored in the `examples/` directory and can be referenced in README.md or shared with other developers to demonstrate the simulation's behavior.
+
 ### Linting and Type Checking
 ```bash
 # Check linting issues
@@ -139,7 +151,9 @@ All significant events are logged to `logs/*.jsonl`:
 - Development: `logs/simulation_<timestamp>.jsonl`
 - Events: movement attempts, evasions, captures, victories, defeats
 
-## Design Philosophy (from INIT.md)
+## Design Philosophy
+
+See [docs/DEVELOPMENT_APPROACH.md](docs/DEVELOPMENT_APPROACH.md) for full details.
 
 1. **Easy mode first** - Start simple, avoid scope creep
 2. **Single file initially** - Currently `hobbit_sim.py` + tests

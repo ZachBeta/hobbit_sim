@@ -52,7 +52,7 @@ Hobbits remaining: 3
 
 **Legend:** `F/S/P/M` = hobbits (Frodo/Sam/Pippin/Merry), `N` = Nazgûl, `X` = exit to Rivendell, `#` = terrain
 
-See the complete run with all three maps: [example_run_2025-11-15.txt](./example_run_2025-11-15.txt)
+See the complete run with all three maps: [example_run_2025-11-15.txt](./examples/example_run_2025-11-15.txt)
 
 ## Setup
 
@@ -68,9 +68,11 @@ uv sync
 # Run the full simulation (all 3 maps)
 uv run python hobbit_sim.py
 
-# Capture output to file
-uv run python hobbit_sim.py > my_simulation_run.txt
+# Capture output to file for sharing
+uv run python hobbit_sim.py > examples/example_run_$(date +%Y-%m-%d).txt
 ```
+
+Sample runs are saved in `examples/` directory for documentation and sharing purposes.
 
 ## Development
 
@@ -110,11 +112,11 @@ uv run mypy hobbit_sim.py test_hobbit_sim.py
 
 This is a **mind fitness project** emphasizing sustainable development and incremental progress. The documentation system helps manage cognitive load:
 
-- **[NEXT_SESSION.md](./NEXT_SESSION.md)** - "Setting out gym clothes the night before" - single source of truth for next coding session
-- **[FEATURES.md](./FEATURES.md)** - Feature development pipeline (Now/Soon/Maybe/Later)
-- **[REFACTORING.md](./REFACTORING.md)** - Bite-sized polish tasks (15-60 min)
-- **[TESTS.md](./TESTS.md)** - Test strategy and progressive difficulty scenarios
-- **[DEVELOPMENT_APPROACH.md](./DEVELOPMENT_APPROACH.md)** - Zone 1 pacing philosophy and approach
+- **[NEXT_SESSION.md](./docs/NEXT_SESSION.md)** - "Setting out gym clothes the night before" - single source of truth for next coding session
+- **[FEATURES.md](./docs/FEATURES.md)** - Feature development pipeline (Now/Soon/Maybe/Later)
+- **[REFACTORING.md](./docs/REFACTORING.md)** - Bite-sized polish tasks (15-60 min)
+- **[TESTS.md](./docs/TESTS.md)** - Test strategy and progressive difficulty scenarios
+- **[DEVELOPMENT_APPROACH.md](./docs/DEVELOPMENT_APPROACH.md)** - Zone 1 pacing philosophy and approach
 
 **Development philosophy:**
 - Easy mode first (start simple, avoid scope creep)
@@ -131,7 +133,7 @@ The long-term goal is a state-based LOTR narrative simulation with progressive c
 - **Next phase:** Tom Bombadil encounter (Old Man Willow, Barrow-wights)
 - **Future:** Weathertop, Moria, tactical battles, spell/ability framework
 
-See **[hobbit-sim-bombadil-design.md](./hobbit-sim-bombadil-design.md)** and **[IDEAS.md](./IDEAS.md)** for the full roadmap.
+See **[hobbit-sim-bombadil-design.md](./docs/hobbit-sim-bombadil-design.md)** and **[IDEAS.md](./docs/IDEAS.md)** for the full roadmap.
 
 ## Project Structure
 
@@ -139,10 +141,21 @@ See **[hobbit-sim-bombadil-design.md](./hobbit-sim-bombadil-design.md)** and **[
 hobbit_sim/
 ├── hobbit_sim.py              # Main simulation (single file ~1000 lines)
 ├── test_hobbit_sim.py         # Test suite (52 passing tests)
-├── example_run_2025-11-15.txt # Example simulation output
+├── CLAUDE.md                  # Claude Code project instructions
+├── README.md                  # This file
+├── docs/                      # Planning, features, philosophy, roadmap
+│   ├── NEXT_SESSION.md
+│   ├── FEATURES.md
+│   ├── REFACTORING.md
+│   ├── TESTS.md
+│   ├── DEVELOPMENT_APPROACH.md
+│   ├── IDEAS.md
+│   ├── hobbit-sim-bombadil-design.md
+│   └── hobbit-sim-context.md
+├── examples/                  # Example simulation outputs
+│   └── example_run_2025-11-15.txt
 ├── logs/                      # JSONL event logs from simulation runs
-├── .claude/agents/            # Specialized code quality agents
-└── docs (*.md files)          # Planning, features, philosophy, roadmap
+└── .claude/agents/            # Specialized code quality agents
 ```
 
 ## Why This Project Exists
