@@ -2,7 +2,11 @@
 
 ## Purpose
 
-This project is part of mind fitness work during long COVID recovery. The goal is to find flow state in coding through playful, sustainable practice that builds endurance without causing crashes.
+This project is mind fitness work exploring new stacks:
+- **Tech stack:** Python, strict type checking (mypy), linting (ruff), test-driven development (pytest)
+- **Development stack:** Claude Code subagents, automated code quality pipelines, AI-assisted workflows
+
+The goal is to find flow state in coding through playful, sustainable practice that builds technical capacity gradually—learning both new languages/tools and new ways of working with AI assistance.
 
 ## Core Principles
 
@@ -45,4 +49,4 @@ The ping-pong pairing with Claude Code should:
 - Process feels engaging (not frustrating)
 - Forward momentum maintained across sessions
 
-Remember: The goal isn't perfect code. The goal is rebuilding coding capacity through playful, sustainable practice.
+Remember: The goal isn't perfect code. The goal is building capacity with new stacks (tech and development) through playful, sustainable practice.

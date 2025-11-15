@@ -147,7 +147,7 @@ All significant events are logged to `logs/*.jsonl`:
 4. **Hardcoded before configurable** - Get it working first
 5. **No premature optimization** - Pure Python is fine
 
-This is a mind fitness project for long COVID recovery - prioritize playful exploration, tiny wins, and forward momentum over perfect code. Build incrementally, one feature at a time.
+This is a mind fitness project exploring new tech stacks (Python/mypy/ruff) and development stacks (Claude Code subagents) through sustainable practice - prioritize playful exploration, tiny wins, and forward momentum over perfect code. Build incrementally, one feature at a time.
 
 ## Testing Strategy
 
