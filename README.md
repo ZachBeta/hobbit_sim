@@ -56,11 +56,18 @@ See the complete run with all three maps: [example_run_2025-11-15.txt](./example
 
 ## Setup
 
-Install dependencies using `uv`:
+### 1. Install uv (Python package manager)
+
+For installation options and information about uv, see [github.com/astral-sh/uv](https://github.com/astral-sh/uv).
+
+### 2. Install project dependencies
+
 ```bash
 # One-time setup: create venv and install dependencies
 uv sync
 ```
+
+This will create a virtual environment and install all required packages (pytest, mypy, ruff, etc.).
 
 ## Running the Simulation
 

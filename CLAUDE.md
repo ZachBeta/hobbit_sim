@@ -40,6 +40,22 @@ This approach makes it easier to:
 ## Development Commands
 
 ### Environment Setup
+
+**Install uv first (if not already installed):**
+
+See [github.com/astral-sh/uv](https://github.com/astral-sh/uv) for more information.
+
+macOS/Linux:
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Windows:
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**Then install project dependencies:**
 ```bash
 # One-time setup: create venv and install dependencies
 uv sync
