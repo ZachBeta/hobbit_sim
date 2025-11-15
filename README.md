@@ -1,6 +1,6 @@
 # Hobbit Nazgûl Escape Simulation
 
-A grid-based autonomous simulation where hobbits flee from Nazgûl to reach Rivendell. The outcome emerges from entity behaviors—no scripted victories, just AI making decisions and consequences playing out on a 20x20 grid.
+A grid-based autonomous simulation where hobbits flee from Nazgûl to reach safety, and then Rivendell. The outcome emerges from entity behaviors—no scripted victories, just AI making decisions and consequences playing out on a 20x20 grid.
 
 Inspired by Dwarf Fortress and roguelikes, this project explores emergent gameplay through simple rules and incremental complexity.
 
@@ -50,7 +50,7 @@ Hobbits remaining: 3
 ...
 ```
 
-**Legend:** `F/S/P/M` = hobbits (Frodo/Sam/Pippin/Merry), `N` = Nazgûl, `X` = exit to Rivendell, `#` = terrain
+**Legend:** `F/S/P/M` = hobbits (Frodo/Sam/Pippin/Merry), `N` = Nazgûl, `X` = exit toward Rivendell (or generally in that "direction"), `#` = terrain
 
 See the complete run with all three maps: [example_run_2025-11-15.txt](./examples/example_run_2025-11-15.txt)
 
