@@ -134,6 +134,7 @@ class SimulationResult(TypedDict):
     ticks: int
     hobbits_escaped: int
     hobbits_captured: int
+    events: list[dict[str, Any]]
 
 
 class TickCallback(Protocol):
@@ -256,8 +257,17 @@ EVENT_FORMATTERS: dict[str, Callable[[dict[str, Any]], str]] = {
 }
 
 
-def emit_event(*, tick: int, event_type: str, **event_data: Any) -> None:
-    """Emit a game event - handles both logging and narrative output"""
+def emit_event(
+    *, tick: int, event_type: str, collector: list[dict] | None = None, **event_data: Any
+) -> None:
+    """Emit a game event - handles both logging and narrative output
+
+    Args:
+        tick: Current simulation tick
+        event_type: Type of event (e.g., "movement", "capture", "victory")
+        collector: Optional list to collect events for testing/inspection
+        **event_data: Additional event-specific data
+    """
     event = GameEvent(tick=tick, event_type=event_type, data=event_data)
 
     # Write structured log
@@ -265,6 +275,10 @@ def emit_event(*, tick: int, event_type: str, **event_data: Any) -> None:
     with open(LOG_FILENAME, "a") as f:
         json.dump(log_entry, f)
         f.write("\n")
+
+    # Collect event if collector provided (for testing/inspection)
+    if collector is not None:
+        collector.append(log_entry)
 
     # Add narrative to buffer
     narrative = event.to_narrative()
@@ -1022,9 +1036,11 @@ def _run_simulation_loop(
         on_tick: Optional callback called each tick with current world state
 
     Returns:
-        Dict with keys: outcome, ticks, hobbits_escaped, hobbits_captured
+        Dict with keys: outcome, ticks, hobbits_escaped, hobbits_captured, events
     """
     world_state = create_world()
+    events: list[dict] = []  # Collect all events for testing/inspection
+    cumulative_ticks = 0  # Track total ticks across all maps
 
     while True:
         # Check timeout
@@ -1034,9 +1050,10 @@ def _run_simulation_loop(
             hobbits_captured = world_state.starting_hobbit_count - len(world_state.hobbits)
             return {
                 "outcome": "timeout",
-                "ticks": world_state.tick,
+                "ticks": cumulative_ticks + world_state.tick,
                 "hobbits_escaped": hobbits_escaped,
                 "hobbits_captured": hobbits_captured,
+                "events": events,
             }
 
         # Check if all hobbits reached exit (map transition or final victory)
@@ -1051,6 +1068,7 @@ def _run_simulation_loop(
                 emit_event(
                     tick=world_state.tick,
                     event_type="victory",
+                    collector=events,
                     hobbits=world_state.hobbits,
                     nazgul=world_state.nazgul,
                     exit_position=world_state.exit_position,
@@ -1059,21 +1077,25 @@ def _run_simulation_loop(
                 hobbits_captured = world_state.starting_hobbit_count - len(world_state.hobbits)
                 return {
                     "outcome": "victory",
-                    "ticks": world_state.tick,
+                    "ticks": cumulative_ticks + world_state.tick,
                     "hobbits_escaped": hobbits_escaped,
                     "hobbits_captured": hobbits_captured,
+                    "events": events,
                 }
             else:
                 # Transition to next map
                 emit_event(
                     tick=world_state.tick,
                     event_type="map_transition",
+                    collector=events,
                     hobbits=world_state.hobbits,
                     nazgul=world_state.nazgul,
                     exit_position=world_state.exit_position,
                     from_map_id=world_state.map_id,
                     to_map_id=next_world_state.map_id,
                 )
+                # Accumulate ticks from completed map before transitioning
+                cumulative_ticks += world_state.tick
                 world_state = next_world_state
                 continue  # Continue simulation on new map
 
@@ -1082,6 +1104,7 @@ def _run_simulation_loop(
             emit_event(
                 tick=world_state.tick,
                 event_type="defeat",
+                collector=events,
                 hobbits=world_state.hobbits,
                 nazgul=world_state.nazgul,
                 exit_position=world_state.exit_position,
@@ -1091,9 +1114,10 @@ def _run_simulation_loop(
             hobbits_captured = world_state.starting_hobbit_count - len(world_state.hobbits)
             return {
                 "outcome": "defeat",
-                "ticks": world_state.tick,
+                "ticks": cumulative_ticks + world_state.tick,
                 "hobbits_escaped": hobbits_escaped,
                 "hobbits_captured": hobbits_captured,
+                "events": events,
             }
 
         # Move entities
@@ -1122,6 +1146,7 @@ def _run_simulation_loop(
                     emit_event(
                         tick=world_state.tick,
                         event_type="hobbit_captured",
+                        collector=events,
                         hobbit=hobbit_pos,
                         nazgul=naz,
                     )

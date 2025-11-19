@@ -1,4 +1,6 @@
 # test_hobbit_sim.py
+from typing import Any
+
 import pytest
 
 from hobbit_sim import (
@@ -842,9 +844,23 @@ def test_acceptance_full_simulation_succeeds() -> None:
         f"Expected no captures, but {result['hobbits_captured']} hobbits were caught"
     )
 
-    # Assert reasonable completion time (current sim finishes in ~16 ticks)
-    assert result["ticks"] < 50, (
-        f"Simulation took {result['ticks']} ticks, expected < 50 (current baseline is ~16)"
+    # NEW: Verify multi-map journey
+    events: list[dict[str, Any]] = result.get("events", [])
+    transition_events = [e for e in events if e.get("event_type") == "map_transition"]
+
+    assert len(transition_events) == 2, (
+        f"Should transition through 2 maps (0→1, 1→2), but got {len(transition_events)} transitions"
+    )
+    assert transition_events[0]["event_data"]["from_map_id"] == 0, "First transition should be from Map 0"
+    assert transition_events[0]["event_data"]["to_map_id"] == 1, "First transition should be to Map 1"
+    assert transition_events[1]["event_data"]["from_map_id"] == 1, "Second transition should be from Map 1"
+    assert transition_events[1]["event_data"]["to_map_id"] == 2, "Second transition should be to Map 2"
+
+    # Assert reasonable completion time (cumulative across all 3 maps)
+    # With 3 maps, expect > 50 ticks total (not just last map's ~27)
+    assert result["ticks"] > 50, (
+        f"Simulation took {result['ticks']} ticks, expected > 50 for 3-map journey "
+        f"(was showing only last map's ticks due to bug)"
     )
 
 

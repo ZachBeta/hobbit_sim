@@ -68,6 +68,9 @@ These test the full simulation stack:
 
 - ✅ `test_current_simulation_configuration_completes` - Default config works
 - ✅ `test_acceptance_full_simulation_succeeds` - Full `_run_simulation_loop()` path
+  - Validates victory outcome, all hobbits escaped, no captures
+  - **NEW (2025-11-19):** Verifies multi-map journey with 2 map transitions (0→1, 1→2)
+  - **NEW (2025-11-19):** Validates cumulative tick count across all 3 maps (> 50 ticks total)
 
 ### Rendering Tests
 Display layer validation:
@@ -185,5 +188,12 @@ pytest --cov=hobbit_sim --cov-report=term-missing
 ---
 
 **Last Updated**: 2025-11-19
-**Test Count**: 52 passing, 2 skipped
+**Test Count**: 54 total (52 passing, 2 skipped)
 **Coverage**: 89%
+
+### Recent Test Enhancements (2025-11-19)
+
+**Multi-Map Journey Validation**
+- Enhanced `test_acceptance_full_simulation_succeeds()` to verify hobbits actually travel through all 3 maps
+- Added event collection infrastructure to `SimulationResult` for testing/analytics
+- Fixed cumulative tick tracking bug (was showing only last map's ticks instead of total)

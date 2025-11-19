@@ -8,37 +8,25 @@
 - ✅ 89% coverage
 - ✅ 0 TODO comments in code
 - ✅ Movement system documented
+- ✅ Multi-map journey validated
+- ✅ Cumulative tick tracking fixed
 
 ---
 
 ## 🎯 Choose Your Path (Based on Capacity)
 
-### Path A: Validate Multi-Map Journey (30 min) ⭐ RECOMMENDED
+### Open Canvas: What's Next?
 
-**Goal:** Verify hobbits traverse all 3 maps end-to-end
+With the multi-map journey validated and tick tracking fixed, the simulation is feature-complete for the core "hobbits flee to safety" gameplay loop.
 
-**Task:** Enhance existing `test_acceptance_full_simulation_succeeds()`
-**Location:** test_hobbit_sim.py line 814
+**Potential directions:**
+- 🎨 **Playtesting & Tuning** - Run simulation multiple times, observe emergent behavior, adjust difficulty
+- 📊 **Analytics** - Build tools to analyze event logs, track success rates, identify failure patterns
+- 🎭 **New Content** - Design new maps, enemy types, or mechanics (see Bombadil phase in FEATURES.md)
+- 🔧 **Architecture** - Refactor for pubsub events, modular map loading, or plugin system
+- 📝 **Documentation** - Write user guide, architecture diagrams, or contributor onboarding
 
-**Add these checks:**
-- Event log contains 2 map_transition events (Map 0→1, Map 1→2)
-- Final map is Map 2 (Crickhollow)
-- Full 3-map journey completed, not just "victory" outcome
-
-**Why:** Current test validates victory but doesn't confirm the multi-map journey actually happened
-
-**Code to add:**
-```python
-# NEW: Verify multi-map journey
-events = result.get("events", [])
-transition_events = [e for e in events if e.get("event") == "map_transition"]
-
-assert len(transition_events) == 2, "Should transition through 2 maps (0→1, 1→2)"
-assert transition_events[0]["from_map"] == 0
-assert transition_events[0]["to_map"] == 1
-assert transition_events[1]["from_map"] == 1
-assert transition_events[1]["to_map"] == 2
-```
+**No pressure to pick any of these!** The codebase is stable and ready to pause.
 
 ---
 
@@ -106,16 +94,34 @@ These tests were discussed but deferred to focus on success path:
 
 ### Latest Completion (2025-11-19)
 
-**Complete Rivendell Cleanup** (45 min)
+**Multi-Map Journey Validation + Tick Tracking Fix** (~60 min)
+
+**Problem 1:** Test validated "victory" but didn't confirm hobbits actually traveled through all 3 maps
+**Problem 2:** Final display showed "Total ticks: 27" (last map only) instead of 72 (cumulative across all maps)
+
+**Implementation:**
+- ✅ Modified `emit_event()` to accept optional `collector` parameter for in-memory event collection
+- ✅ Added events list to `_run_simulation_loop()` that collects all events during simulation
+- ✅ Updated `SimulationResult` TypedDict to include `events: list[dict[str, Any]]`
+- ✅ Added `cumulative_ticks` tracking across map transitions (accumulates before reset)
+- ✅ Enhanced `test_acceptance_full_simulation_succeeds()` with multi-map journey verification:
+  - Verifies 2 map transitions occurred (Map 0→1, Map 1→2)
+  - Validates correct `from_map_id` and `to_map_id` in events
+  - Asserts cumulative tick count > 50 (confirms 3-map journey, not just last map)
+- ✅ All tests passing (52 passed, 2 skipped), 89% coverage maintained
+- ✅ Code quality checks: ruff ✓, mypy ✓, style guide ✓
+
+**Result:**
+- Multi-map journey now validated in acceptance test
+- Simulation displays correct cumulative ticks: **72 ticks** (was 27 before)
+- Events accessible for future testing and analytics
+
+**Previous Completion (2025-11-19): Complete Rivendell Cleanup** (45 min)
 - ✅ Renamed `update_hobbits(rivendell=...)` parameter to `goal_position` (27 call sites)
 - ✅ Updated event logging to use `exit_position` instead of `rivendell` (4 locations)
 - ✅ Removed `WorldState.rivendell` field from dataclass
 - ✅ Updated docstrings and comments ("Rivendell" → "goal")
 - ✅ Fixed style guide violations in class methods (4 fixes)
-- ✅ All tests passing (52 passed, 2 skipped), 89% coverage maintained
-- ✅ Code quality checks: ruff ✓, mypy ✓, style guide ✓
-
-**Result:** Legacy `rivendell` parameter completely removed. All code now uses `goal_position` parameter and `exit_position` field consistently.
 
 ### Previous Completion (2025-11-13)
 
