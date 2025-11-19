@@ -30,7 +30,7 @@ def test_hobbit_evading_at_south_edge_doesnt_get_stuck() -> None:
     # Move hobbits (should evade)
     new_hobbits = update_hobbits(
         hobbits=hobbits,
-        rivendell=rivendell,
+        goal_position=rivendell,
         nazgul=nazgul,
         dimensions=(20, 20),
         tick=0,
@@ -62,7 +62,7 @@ def test_hobbit_evading_at_south_edge_with_terrain_doesnt_get_stuck() -> None:
     # Move hobbits (should evade)
     new_hobbits = update_hobbits(
         hobbits=hobbits,
-        rivendell=rivendell,
+        goal_position=rivendell,
         nazgul=nazgul,
         dimensions=(20, 20),
         tick=0,
@@ -218,7 +218,7 @@ def test_hobbits_at_rivendell_represent_exited_state() -> None:
     # Both hobbits move toward Rivendell (the exit)
     new_hobbits = update_hobbits(
         hobbits=hobbits,
-        rivendell=rivendell,
+        goal_position=rivendell,
         nazgul=nazgul,
         dimensions=(20, 20),
         tick=0,
@@ -297,7 +297,7 @@ def test_hobbits_fleeing_to_corner_cannot_stack() -> None:
     # Both want to reach (4, 4) area
     new_hobbits = update_hobbits(
         hobbits=hobbits,
-        rivendell=rivendell,
+        goal_position=rivendell,
         nazgul=nazgul,
         dimensions=(20, 20),
         tick=0,
@@ -349,7 +349,7 @@ def test_hobbit_routes_around_nazgul_to_avoid_capture() -> None:
 
     new_hobbits = update_hobbits(
         hobbits=hobbits,
-        rivendell=rivendell,
+        goal_position=rivendell,
         nazgul=nazgul,
         dimensions=(20, 20),
         tick=0,
@@ -379,7 +379,7 @@ def test_hobbit_reaches_goal_when_no_threat() -> None:
             return  # Success!
         hobbits = update_hobbits(
             hobbits=hobbits,
-            rivendell=rivendell,
+            goal_position=rivendell,
             nazgul=nazgul,
             dimensions=(60, 60),
             tick=tick,
@@ -397,7 +397,7 @@ def test_hobbit_flees_forward_when_chased_from_behind() -> None:
     # Move once
     hobbits = update_hobbits(
         hobbits=hobbits,
-        rivendell=rivendell,
+        goal_position=rivendell,
         nazgul=nazgul,
         dimensions=(20, 20),
         tick=0,
@@ -417,7 +417,7 @@ def test_hobbit_evades_perpendicular_threat() -> None:
     # Move once
     hobbits = update_hobbits(
         hobbits=hobbits,
-        rivendell=rivendell,
+        goal_position=rivendell,
         nazgul=nazgul,
         dimensions=(20, 20),
         tick=0,
@@ -473,7 +473,7 @@ def test_hobbit_with_threats_on_two_axes_doesnt_flee_into_trap() -> None:
         # Move entities
         hobbits = update_hobbits(
             hobbits=hobbits,
-            rivendell=rivendell,
+            goal_position=rivendell,
             nazgul=nazgul,
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
@@ -541,7 +541,7 @@ def test_hobbit_threads_between_two_nazgul_to_reach_goal() -> None:
         # Move entities
         hobbits = update_hobbits(
             hobbits=hobbits,
-            rivendell=rivendell,
+            goal_position=rivendell,
             nazgul=nazgul,
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
@@ -611,7 +611,7 @@ def test_hobbit_navigates_through_three_nazgul_blockade() -> None:
         # Move entities
         hobbits = update_hobbits(
             hobbits=hobbits,
-            rivendell=rivendell,
+            goal_position=rivendell,
             nazgul=nazgul,
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
@@ -658,7 +658,7 @@ def test_single_hobbit_escapes_single_nazgul() -> None:
         # Move entities
         hobbits = update_hobbits(
             hobbits=hobbits,
-            rivendell=rivendell,
+            goal_position=rivendell,
             nazgul=nazgul,
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
@@ -728,7 +728,7 @@ def test_baseline_three_hobbits_can_reach_rivendell() -> None:
         # Update entities
         hobbits = update_hobbits(
             hobbits=hobbits,
-            rivendell=rivendell,
+            goal_position=rivendell,
             nazgul=nazgul,
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
@@ -786,7 +786,7 @@ def test_current_simulation_configuration_completes() -> None:
         # Update entities
         hobbits = update_hobbits(
             hobbits=hobbits,
-            rivendell=rivendell,
+            goal_position=rivendell,
             nazgul=nazgul,
             dimensions=dimensions,
             tick=tick,
@@ -875,7 +875,7 @@ def test_system_three_hobbits_escape_single_rider() -> None:
         # Move entities
         hobbits = update_hobbits(
             hobbits=hobbits,
-            rivendell=rivendell,
+            goal_position=rivendell,
             nazgul=nazgul,
             dimensions=(WIDTH, HEIGHT),
             tick=tick,
@@ -993,7 +993,6 @@ def test_entry_marker_visible_after_hobbits_leave_spawn() -> None:
         width=10,
         height=10,
         map_id=0,
-        rivendell=(9, 9),
         entry_position=(1, 1),
         exit_position=(9, 9),
         entry_symbol="B",
@@ -1018,7 +1017,6 @@ def test_entry_marker_visible_after_hobbits_leave_spawn() -> None:
         width=10,
         height=10,
         map_id=0,
-        rivendell=(9, 9),
         entry_position=(1, 1),
         exit_position=(9, 9),
         entry_symbol="B",
@@ -1045,7 +1043,6 @@ def test_render_world_to_string_shows_hobbit_names() -> None:
         width=6,
         height=6,
         map_id=0,
-        rivendell=(5, 5),
         entry_position=(0, 0),
         exit_position=(5, 5),
         entry_symbol="S",
@@ -1080,7 +1077,7 @@ def test_hobbit_cannot_move_through_terrain() -> None:
     # Hobbit wants to move toward (10, 10) but terrain blocks (6, 6)
     new_hobbits = update_hobbits(
         hobbits=hobbits,
-        rivendell=rivendell,
+        goal_position=rivendell,
         nazgul=nazgul,
         dimensions=(20, 20),
         tick=0,
@@ -1309,7 +1306,6 @@ def test_dict_based_hobbit_movement() -> None:
         width=10,
         height=10,
         map_id=0,
-        rivendell=(9, 9),
         entry_position=(0, 0),
         exit_position=(9, 9),
         entry_symbol="S",
@@ -1336,7 +1332,7 @@ def test_dict_based_hobbit_movement() -> None:
     # Move hobbits toward rivendell
     result = update_hobbits(
         hobbits=world.hobbits,
-        rivendell=world.rivendell,
+        goal_position=world.exit_position,
         nazgul=world.nazgul,
         dimensions=world.dimensions,
         tick=0,

@@ -184,6 +184,6 @@ pytest --cov=hobbit_sim --cov-report=term-missing
 
 ---
 
-**Last Updated**: 2025-11-02
-**Test Count**: 43 passing, 4 skipped
-**Coverage**: 85%
+**Last Updated**: 2025-11-19
+**Test Count**: 52 passing, 2 skipped
+**Coverage**: 89%

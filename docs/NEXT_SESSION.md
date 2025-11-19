@@ -1,6 +1,6 @@
 # NEXT_SESSION.md
 
-**Last Updated:** 2025-11-13
+**Last Updated:** 2025-11-19
 **Purpose:** Setting out your gym clothes the night before — single source of truth for next coding session
 
 **Current Status:**
@@ -42,23 +42,6 @@ assert transition_events[1]["to_map"] == 2
 
 ---
 
-### Path B: Complete Rivendell Cleanup (30 min)
-
-**Goal:** Remove legacy `rivendell` parameter, standardize on `exit_position`
-
-**Progress:** 50% complete
-- ✅ Escape count logic uses `exit_position`
-- ✅ Test assertions use `exit_position`
-
-**Remaining tasks:**
-- [ ] Rename `update_hobbits(rivendell=...)` parameter to `goal_position` (10+ call sites)
-- [ ] Update event logging to use `exit_position` instead of `rivendell`
-- [ ] Remove `WorldState.rivendell` field from dataclass
-
-**Why:** Completes partially-finished refactoring, eliminates naming confusion
-
----
-
 ## 📋 Reference Information
 
 ### Skipped Tests (2 total — intentionally deferred)
@@ -87,7 +70,7 @@ These tests were discussed but deferred to focus on success path:
 
 ---
 
-## ✅ Completed This Session (2025-11-13)
+## ✅ Completed - Previous Session (2025-11-13)
 
 **Session Focus:** Quick wins + documentation cleanup (~45 min total)
 
@@ -121,7 +104,20 @@ These tests were discussed but deferred to focus on success path:
 - Marked "Document Movement System" as completed (2025-11-13)
 - Updated rivendell cleanup status
 
-### Previous Completion (Earlier Today)
+### Latest Completion (2025-11-19)
+
+**Complete Rivendell Cleanup** (45 min)
+- ✅ Renamed `update_hobbits(rivendell=...)` parameter to `goal_position` (27 call sites)
+- ✅ Updated event logging to use `exit_position` instead of `rivendell` (4 locations)
+- ✅ Removed `WorldState.rivendell` field from dataclass
+- ✅ Updated docstrings and comments ("Rivendell" → "goal")
+- ✅ Fixed style guide violations in class methods (4 fixes)
+- ✅ All tests passing (52 passed, 2 skipped), 89% coverage maintained
+- ✅ Code quality checks: ruff ✓, mypy ✓, style guide ✓
+
+**Result:** Legacy `rivendell` parameter completely removed. All code now uses `goal_position` parameter and `exit_position` field consistently.
+
+### Previous Completion (2025-11-13)
 
 **Path B: Quick Wins** (35 min)
 - ✅ Removed `_render_simulation_state()` wrapper function

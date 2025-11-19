@@ -59,7 +59,6 @@ class WorldState:
     width: int
     height: int
     map_id: int
-    rivendell: Position  # Legacy field, now same as exit_position
     entry_position: Position  # Where hobbits spawn/enter map
     exit_position: Position  # Where hobbits transition/win
     entry_symbol: str  # Display symbol for map entry
@@ -171,11 +170,11 @@ class GameEvent:
     event_type: str
     data: dict[str, Any]
 
-    def to_log_entry(self) -> dict:
+    def to_log_entry(self, /) -> dict[str, Any]:
         """Format for JSON logging (includes all data, including indices)"""
         return {"tick": self.tick, "event_type": self.event_type, "event_data": self.data}
 
-    def to_narrative(self) -> str:
+    def to_narrative(self, /) -> str:
         """Format as narrative text for watching the simulation unfold"""
         formatter = EVENT_FORMATTERS.get(self.event_type)
         if formatter:
@@ -189,13 +188,13 @@ class NarrativeBuffer:
     _buffer: list[str] = []
 
     @classmethod
-    def append(cls, message: str) -> None:
+    def append(cls, *, message: str) -> None:
         """Add a message to the narrative buffer"""
         if message:  # Only add non-empty messages
             cls._buffer.append(message)
 
     @classmethod
-    def flush(cls) -> None:
+    def flush(cls, /) -> None:
         """Print all buffered messages and clear the buffer"""
         for msg in cls._buffer:
             print(msg)
@@ -223,7 +222,7 @@ EVENT_FORMATTERS: dict[str, Callable[[dict[str, Any]], str]] = {
     # Safe travel (when not evading)
     "hobbit_safe_travel": lambda d: (
         f"  Hobbit[{d['hobbit_index']}] safe - moving toward Rivendell "
-        f"from {d['hobbit']} to {d['rivendell']}"
+        f"from {d['hobbit']} to {d['exit_position']}"
     ),
     # Game outcomes
     "victory": lambda d: "🎉 Victory! All hobbits reached Rivendell!",
@@ -269,7 +268,7 @@ def emit_event(*, tick: int, event_type: str, **event_data: Any) -> None:
 
     # Add narrative to buffer
     narrative = event.to_narrative()
-    NarrativeBuffer.append(narrative)
+    NarrativeBuffer.append(message=narrative)
 
 
 def create_grid(*, dimensions: GridDimensions = (20, 20)) -> Grid:
@@ -683,7 +682,7 @@ def move_hobbit_one_step(
 
     Args:
         current: Hobbit's current position
-        goal: Rivendell position
+        goal: Target position (exit/goal)
         threats: List of Nazgûl positions
         terrain: Set of impassable positions
         dimensions: Grid bounds (width, height)
@@ -773,13 +772,13 @@ def all_hobbits_at_exit(*, hobbits: Hobbits, exit_position: Position) -> bool:
 def update_hobbits(
     *,
     hobbits: Hobbits,
-    rivendell: Position,
+    goal_position: Position,
     nazgul: EntityPositions,
     dimensions: GridDimensions,
     tick: int,
     terrain: set[Position] | None = None,
 ) -> Hobbits:
-    """Move all hobbits toward Rivendell at speed 2.
+    """Move all hobbits toward goal at speed 2.
 
     Each hobbit:
     1. Takes 2 steps (speed 2)
@@ -790,7 +789,7 @@ def update_hobbits(
     """
     return _update_hobbits_dict(
         hobbits=hobbits,
-        rivendell=rivendell,
+        goal_position=goal_position,
         nazgul=nazgul,
         dimensions=dimensions,
         tick=tick,
@@ -801,7 +800,7 @@ def update_hobbits(
 def _update_hobbits_dict(
     *,
     hobbits: Hobbits,
-    rivendell: Position,
+    goal_position: Position,
     nazgul: EntityPositions,
     dimensions: GridDimensions,
     tick: int,
@@ -809,7 +808,7 @@ def _update_hobbits_dict(
 ) -> Hobbits:
     """Internal dict-based version of update_hobbits.
 
-    Move all hobbits toward Rivendell at speed 2.
+    Move all hobbits toward goal at speed 2.
     Works with dict[HobbitId, Position] for explicit identity tracking.
 
     Each hobbit:
@@ -840,7 +839,7 @@ def _update_hobbits_dict(
         for step in range(HOBBIT_SPEED):
             next_pos = move_hobbit_one_step(
                 current=current,
-                goal=rivendell,
+                goal=goal_position,
                 threats=nazgul,
                 terrain=terrain,
                 dimensions=dimensions,
@@ -859,7 +858,7 @@ def _update_hobbits_dict(
 
         new_hobbits[hobbit_id] = current
         # Track this hobbit's position as occupied (unless at goal/Rivendell)
-        if current != rivendell:
+        if current != goal_position:
             occupied_positions.add(current)
 
     return new_hobbits
@@ -960,7 +959,6 @@ def create_map(*, map_id: int) -> WorldState:
         width=WORLD_WIDTH,
         height=WORLD_HEIGHT,
         map_id=config.map_id,
-        rivendell=config.exit_position,  # Legacy field
         entry_position=config.entry_position,
         exit_position=config.exit_position,
         entry_symbol=config.entry_symbol,
@@ -1055,7 +1053,7 @@ def _run_simulation_loop(
                     event_type="victory",
                     hobbits=world_state.hobbits,
                     nazgul=world_state.nazgul,
-                    rivendell=world_state.rivendell,
+                    exit_position=world_state.exit_position,
                 )
                 hobbits_escaped = len(world_state.hobbits)
                 hobbits_captured = world_state.starting_hobbit_count - len(world_state.hobbits)
@@ -1072,7 +1070,7 @@ def _run_simulation_loop(
                     event_type="map_transition",
                     hobbits=world_state.hobbits,
                     nazgul=world_state.nazgul,
-                    rivendell=world_state.rivendell,
+                    exit_position=world_state.exit_position,
                     from_map_id=world_state.map_id,
                     to_map_id=next_world_state.map_id,
                 )
@@ -1086,7 +1084,7 @@ def _run_simulation_loop(
                 event_type="defeat",
                 hobbits=world_state.hobbits,
                 nazgul=world_state.nazgul,
-                rivendell=world_state.rivendell,
+                exit_position=world_state.exit_position,
             )
             hobbit_positions = _hobbit_positions(hobbits=world_state.hobbits)
             hobbits_escaped = sum(1 for h in hobbit_positions if h == world_state.exit_position)
@@ -1101,7 +1099,7 @@ def _run_simulation_loop(
         # Move entities
         world_state.hobbits = update_hobbits(
             hobbits=world_state.hobbits,
-            rivendell=world_state.rivendell,
+            goal_position=world_state.exit_position,
             nazgul=world_state.nazgul,
             dimensions=world_state.dimensions,
             tick=world_state.tick,

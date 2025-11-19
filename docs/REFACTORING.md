@@ -1,6 +1,6 @@
 # REFACTORING.md
 
-**Last Updated**: 2025-11-13
+**Last Updated**: 2025-11-19
 **Purpose**: Bite-sized polish tasks for Zone 1 coding sessions when you want to code but have limited decision-making capacity.
 
 This document tracks polish opportunities for the **current working simulation** (hobbits fleeing Nazgûl). Tasks are sized for 15-60 minute sessions and ordered by value + ease.
@@ -29,12 +29,7 @@ Completed in ~35 minutes during low-capacity session:
 
 ## 🔜 Soon (After "Now" items - 30-60 min each)
 
-**📍 Cleanup tasks now in [NEXT_SESSION.md](NEXT_SESSION.md)**
-
-The following refactoring task is ready to tackle (deferred to separate session):
-- Complete rivendell cleanup (30 min) - Remove all `rivendell` references, standardize on `exit_position`
-
-See NEXT_SESSION.md for full details.
+*(All "Soon" items completed! See "Completed" section below)*
 
 ---
 
@@ -42,12 +37,12 @@ See NEXT_SESSION.md for full details.
 
 These might be YAGNI. Only tackle if you're feeling the pain.
 
-### Extract Landmark Positions (Probably YAGNI)
-**Current**: Shire at (1,1), Rivendell at (18,18) hardcoded
-**Question**: Is this YAGNI since `world.rivendell` already tracks this?
-**Concern**: Adding constants might duplicate WorldState fields
-**Insight**: Landmark positions will naturally evolve with map concepts (entrances, exits, multiple maps/dungeons, surface world)
-**Decision**: Wait until you need multiple map configurations
+### Extract Landmark Positions (YAGNI - Already Solved)
+**Current**: Positions are data-driven via `MapConfig` (entry_position, exit_position)
+**Previous concern**: Shire at (1,1), Rivendell at (18,18) hardcoded
+**Reality**: Map positions are parameterized in `MAP_DEFINITIONS` - no hardcoded logic exists
+**Result**: `WorldState` tracks `entry_position` and `exit_position` per map
+**Decision**: YAGNI confirmed - MapConfig handles this elegantly, no extraction needed
 
 ### Convert Position to Dataclass
 **Current**: `Position = tuple[int, int]` (type alias)
@@ -102,6 +97,7 @@ hobbit_sim/
 
 *(Move items here with completion date)*
 
+**2025-11-19**: Complete Rivendell Cleanup - Removed all `rivendell` parameter references (27 call sites), removed `WorldState.rivendell` field, standardized on `goal_position` parameter and `exit_position` field. Also fixed 4 style guide violations in class methods.
 **2025-11-13**: Documented Movement System - Added philosophy section comment + enhanced docstrings for `move_toward()` and `move_with_speed()` (makes Manhattan distance design explicit for contributors)
 **2025-11-12**: Extracted duplicate rendering logic to `_render_world_to_grid()` helper (DRY - eliminated 40 lines of duplication)
 **2025-11-12**: Removed `show_hobbit_ids` parameter (simplified API - always show IDs, consistent with production behavior)
